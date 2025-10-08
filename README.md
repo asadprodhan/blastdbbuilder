@@ -41,12 +41,40 @@ CGTAGC...
 
 ## Workflow
 
-1. **Verify unique sequence headers**
+### **1. Verify unique sequence headers**
 
 ```bash
 awk '/^>/{print $1}' combined_fasta.fna | sed 's/^>//' | sort | uniq -d
 ```
 
+**Explanation of each step:**
+
+- awk '/^>/{print $1}' combined_fasta.fna
+  Scans each line of combined_fasta.fna. If the line starts with > (FASTA header), it prints only the first word of the header (the sequence ID).
+
+- sed 's/^>//'
+  Removes the leading > from each printed ID.
+
+- sort
+  Sorts all the IDs alphabetically.
+
+- uniq -d
+  Prints only duplicate lines (IDs that appear more than once).
+
+**Interpretation:**
+
+- If all IDs are unique, the command produces no output.
+
+- If there are duplicates, the duplicated IDs will be listed.
+
+  Example headers:
+
+  >file1_seq1_NZ_JRKI01000001.1
+  >file1_seq2_NZ_JRKI01000002.1
+  >file1_seq3_NZ_JRKI01000003.1
+
+
+If your headers follow this pattern and are unique, the command will produce no output, confirming uniqueness.
 
 2. **Split large FASTA files safely**
 

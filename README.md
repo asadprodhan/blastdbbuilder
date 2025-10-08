@@ -1,4 +1,33 @@
-# Building a Custom BLAST Nucleotide Database: Troubleshooting Guide
+
+<h1 align="center">How to Build a Large Customised Blastn Database</h1>
+
+
+<h3 align="center">M. Asaduzzaman Prodhan<sup>*</sup> </h3>
+
+
+<div align="center"><b> DPIRD Diagnostics and Laboratory Services </b></div>
+
+
+<div align="center"><b> Department of Primary Industries and Regional Development </b></div>
+
+
+<div align="center"><b> 3 Baron-Hay Court, South Perth, WA 6151, Australia </b></div>
+
+
+<div align="center"><b> *Correspondence: prodhan82@gmail.com </b></div>
+
+
+<br />
+
+
+<p align="center">
+  <a href="https://github.com/asadprodhan/How_to_build_a_Customised_Kraken2_Database/blob/main/LICENSE"><img src="https://img.shields.io/badge/License-GPL%203.0-yellow.svg" alt="License GPL 3.0" style="display: inline-block;"></a>
+  <a href="https://orcid.org/0000-0002-1320-3486"><img src="https://img.shields.io/badge/ORCID-green?style=flat-square&logo=ORCID&logoColor=white" alt="ORCID" style="display: inline-block;"></a>
+</p>
+
+
+<br />
+
 
 This repository demonstrates how to build a BLAST nucleotide database from very large FASTA files using **NCBI BLAST+** inside a **Singularity container**. It also covers common errors and best practices when creating custom databases.
 
@@ -15,6 +44,8 @@ This repository demonstrates how to build a BLAST nucleotide database from very 
 
 ---
 
+<br />
+
 ## Introduction
 
 Custom BLAST databases are required for genomics or metagenomics projects. Large FASTA files and complex headers can trigger subtle errors, including **duplicate internal IDs**.
@@ -22,6 +53,8 @@ Custom BLAST databases are required for genomics or metagenomics projects. Large
 This guide focuses on **duplicate ID errors**, file size limits, and best practices for handling large nucleotide databases.
 
 ---
+
+<br />
 
 ## Prerequisites
 
@@ -36,8 +69,10 @@ ATGCGT...
 > file1_seq2_NZ_JRKI01000002.1 Streptomyces
 CGTAGC...
 
-
 ---
+
+<br />
+
 
 ## Workflow
 
@@ -76,9 +111,13 @@ awk '/^>/{print $1}' combined_fasta.fna | sed 's/^>//' | sort | uniq -d
 
 If your headers follow this pattern and are unique, the command will produce no output, confirming uniqueness.
 
+<br />
+
 ### **2. Split large FASTA files safely**
 
 Each chunk must start with a header (>). Example: 30 GB chunks.
+
+<br />
 
 ### **3. Build BLAST database for each chunk**
 
@@ -96,6 +135,8 @@ singularity exec ncbi-blast_2.16.0.sif makeblastdb \
 
 ⚠️ The key fix for Duplicate seq_ids are found: GNL|BL_ORD_ID|#### is to set -max_file_sz = 3000000000B. BLAST will split the database internally to avoid duplicate internal IDs.
 
+<br />
+
 ### **4. Combine chunk databases using an alias file (.pal)**
    
 The alias allows blastn to search across all chunks transparently.
@@ -103,6 +144,7 @@ The alias allows blastn to search across all chunks transparently.
 TITLE Combined_nt_database
 DBLIST nt_chunk_aa nt_chunk_ab nt_chunk_ac nt_chunk_ad
 
+<br />
 
 ### **5. Run BLAST queries against the alias database**
 
@@ -110,6 +152,8 @@ DBLIST nt_chunk_aa nt_chunk_ab nt_chunk_ac nt_chunk_ad
 singularity exec ncbi-blast_2.16.0.sif \
     blastn -db blastnDB/nt -query your_query.fna -out results.txt
 ```
+
+<br />
 
 ## Common Errors & Fixes
 
@@ -132,6 +176,8 @@ singularity exec ncbi-blast_2.16.0.sif \
 singularity exec ncbi-blast_2.16.0.sif blastdbcmd -info -db nt_chunk_aa
 ```
 
+<br />
+
 ## Best Practices
 
 - Always verify headers before building the database.  
@@ -140,6 +186,9 @@ singularity exec ncbi-blast_2.16.0.sif blastdbcmd -info -db nt_chunk_aa
 - Keep log files for each chunk to trace errors.  
 - For genomes with multiple contigs, include unique file/sequence identifiers.  
 
+---
+
+<br />
 
 ## Q&A: Duplicate seq_ids in Large BLAST Databases
 
@@ -167,6 +216,8 @@ singularity exec ncbi-blast_2.16.0.sif blastdbcmd -info -db nt_chunk_aa
 
 ---
 
+<br />
+
 **✅ Takeaways / Best Practices:**
 
 1. For very large FASTA files, **pre-split** into manageable chunks before building the database.
@@ -174,6 +225,7 @@ singularity exec ncbi-blast_2.16.0.sif blastdbcmd -info -db nt_chunk_aa
 3. Use `-max_file_sz` to control BLAST output file size, but chunking is the key to avoiding `GNL|BL_ORD_ID|####` duplicates.  
 4. Use alias databases to combine chunked DBs for searching.  
 
+<br />
 
 ## References
 

@@ -76,12 +76,13 @@ awk '/^>/{print $1}' combined_fasta.fna | sed 's/^>//' | sort | uniq -d
 
 If your headers follow this pattern and are unique, the command will produce no output, confirming uniqueness.
 
-2. **Split large FASTA files safely**
+### **2. Split large FASTA files safely**
 
 Each chunk must start with a header (>). Example: 30 GB chunks.
 
-3. **Build BLAST database for each chunk**
+### **3. Build BLAST database for each chunk**
 
+```
 singularity exec ncbi-blast_2.16.0.sif makeblastdb \
     -in chunk_aa.fna \
     -dbtype nucl \
@@ -91,10 +92,11 @@ singularity exec ncbi-blast_2.16.0.sif makeblastdb \
     -title "chunk_aa" \
     -hash_index \
     -logfile nt_chunk_aa.log
+```
 
 ⚠️ The key fix for Duplicate seq_ids are found: GNL|BL_ORD_ID|#### is to set -max_file_sz = 3000000000B. BLAST will split the database internally to avoid duplicate internal IDs.
 
-4. **Combine chunk databases using an alias file (.pal)**
+### **4. Combine chunk databases using an alias file (.pal)**
    
 The alias allows blastn to search across all chunks transparently.
 
@@ -102,7 +104,7 @@ TITLE Combined_nt_database
 DBLIST nt_chunk_aa nt_chunk_ab nt_chunk_ac nt_chunk_ad
 
 
-5. **Run BLAST queries against the alias database**
+### **5. Run BLAST queries against the alias database**
 
 ```
 singularity exec ncbi-blast_2.16.0.sif \
@@ -167,9 +169,10 @@ singularity exec ncbi-blast_2.16.0.sif blastdbcmd -info -db nt_chunk_aa
 
 **✅ Takeaways / Best Practices:**
 
-1. For very large FASTA files, **pre-split** into manageable chunks before building the database.  
-2. Use `-max_file_sz` to control BLAST output file size, but chunking is the key to avoiding `GNL|BL_ORD_ID|####` duplicates.  
-3. Use alias databases to combine chunked DBs for searching.  
+1. For very large FASTA files, **pre-split** into manageable chunks before building the database.
+2. Make sure each chunk starts with a fasta header 
+3. Use `-max_file_sz` to control BLAST output file size, but chunking is the key to avoiding `GNL|BL_ORD_ID|####` duplicates.  
+4. Use alias databases to combine chunked DBs for searching.  
 
 
 ## References

@@ -29,6 +29,14 @@
 <br />
 
 
+Reliable sequence-based diagnostics depend on a high-quality, relevant reference database—without it, even the best tools can give misleading results.
+
+In diagnostic workflows, a BLASTn database provides the reference against which query sequences are compared to identify pathogens or assign taxonomy. The quality and composition of the database directly affect accuracy.
+
+Public databases, while comprehensive, often contain redundant sequences, low-quality entries, and irrelevant taxa, which can cause duplicate IDs, slower searches, and ambiguous results.
+
+A customized BLASTn database solves these issues by including only relevant sequences, removing duplicates, and ensuring faster searches, and reproducible results.
+
 This repository demonstrates how to build a BLAST nucleotide database from very large FASTA files using **NCBI BLAST+** inside a **Singularity container**. It also covers common errors and best practices when creating custom databases.
 
 ---

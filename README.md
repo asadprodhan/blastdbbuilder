@@ -138,6 +138,40 @@ singularity exec ncbi-blast_2.16.0.sif blastdbcmd -info -db nt_chunk_aa
 - Keep log files for each chunk to trace errors.  
 - For genomes with multiple contigs, include unique file/sequence identifiers.  
 
+
+## Q&A: Duplicate seq_ids in Large BLAST Databases
+
+**Q:** Why do I get `Duplicate seq_ids are found: GNL|BL_ORD_ID|####` when building a large nucleotide BLAST database?  
+
+**A:** These IDs are internal BLAST identifiers. When a database contains tens of millions of sequences (e.g., from a 125 GB FASTA), BLAST can generate duplicate internal IDs, especially if everything is processed in a single `makeblastdb` run.  
+
+---
+
+**Q:** Does setting `-max_file_sz=3000000000B` fix this issue?  
+
+**A:** Not by itself. The `-max_file_sz` option only controls how BLAST splits the output files for very large databases. It does **not split your input FASTA**, so the internal sequence numbering may still produce duplicates if the input is extremely large.  
+
+---
+
+**Q:** What actually fixes the duplicate ID error?  
+
+**A:** Splitting the large FASTA into smaller chunks (e.g., 30 GB each) and building a separate BLAST database for each chunk. Each chunk gets independent internal IDs, avoiding collisions.  
+
+---
+
+**Q:** How can I search the whole dataset after splitting?  
+
+**A:** Use a BLAST alias (`.pal` file) that references all chunk databases. This allows you to query the full database seamlessly while preventing internal ID collisions.  
+
+---
+
+**✅ Takeaways / Best Practices:**
+
+1. For very large FASTA files, **pre-split** into manageable chunks before building the database.  
+2. Use `-max_file_sz` to control BLAST output file size, but chunking is the key to avoiding `GNL|BL_ORD_ID|####` duplicates.  
+3. Use alias databases to combine chunked DBs for searching.  
+
+
 ## References
 
 - [NCBI BLAST makeblastdb documentation](https://blast.ncbi.nlm.nih.gov/Blast.cgi)  

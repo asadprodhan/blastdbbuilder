@@ -1,5 +1,5 @@
 
-<h1 align="center">How to Build a Large Customised Blastn Database</h1>
+<h1 align="center">blastdbbuilder: Building a Customised Blastn Database</h1>
 
 
 <h3 align="center">M. Asaduzzaman Prodhan<sup>*</sup> </h3>
@@ -29,6 +29,8 @@
 <br />
 
 
+## **Introduction**
+
 Reliable sequence-based diagnostics depend on a high-quality, relevant reference database—without it, even the best tools can give misleading results.
 
 In diagnostic workflows, a BLASTn database provides the reference against which query sequences are compared to identify pathogens or assign taxonomy. The quality and composition of the database directly affect accuracy.
@@ -37,208 +39,71 @@ Public databases, while comprehensive, often contain redundant sequences, low-qu
 
 A customized BLASTn database solves these issues by including only relevant sequences, removing duplicates, and ensuring faster searches, and reproducible results.
 
-This repository demonstrates how to build a BLAST nucleotide database from very large FASTA files using **NCBI BLAST+** inside a **Singularity container**. It also covers common errors and best practices when creating custom databases.
-
----
-
-## Table of Contents
-
-- [Introduction](#introduction)  
-- [Prerequisites](#prerequisites)  
-- [Workflow](#workflow)  
-- [Common Errors & Fixes](#common-errors--fixes)  
-- [Best Practices](#best-practices)  
-- [References](#references)  
-
----
-
-<br />
-
-## Introduction
-
-Custom BLAST databases are required for genomics or metagenomics projects. Large FASTA files and complex headers can trigger subtle errors, including **duplicate internal IDs**.
-
-This guide focuses on **duplicate ID errors**, file size limits, and best practices for handling large nucleotide databases.
-
----
-
-<br />
-
-## Prerequisites
-
-- Linux machine with sufficient memory (≥128 GB recommended for very large FASTA files).  
-- **Singularity** installed (or Apptainer).  
-- **NCBI BLAST+ 2.16+** container image (`ncbi-blast_2.16.0.sif`).  
-- Input FASTA file(s) with **unique headers**, e.g., for genomes with multiple contigs:
-
-> file1_seq1_NZ_JRKI01000001.1 Streptomyces
-ATGCGT...
-
-> file1_seq2_NZ_JRKI01000002.1 Streptomyces
-CGTAGC...
-
----
 
 <br />
 
 
-## Workflow
+## **blastdbbuilder**
 
-### **1. Verify unique sequence headers**
+`blastdbbuilder` is a lightweight, command-line toolkit that automates the complete **BLASTn database preparation workflow**. It streamlines all steps — from downloading user-specified genomes and organizing datasets, to building optimized and up-to-date BLASTn databases.
 
-```bash
-awk '/^>/{print $1}' combined_fasta.fna | sed 's/^>//' | sort | uniq -d
-```
+Designed for **researchers and clinicians**, it provides a **reproducible, regularly updated, and portable solution** for constructing BLAST databases **without manual setup**. 
 
-**Explanation of each step:**
+The toolkit leverages:
+- **Pre-pulled Singularity containers**  
+- **Modular shell scripts**  
 
-- awk '/^>/{print $1}' combined_fasta.fna
-  Scans each line of combined_fasta.fna. If the line starts with > (FASTA header), it prints only the first word of the header (the sequence ID).
+This enables:
+- **Easy deployment**  
+- **No dependency installation**  
+- A **smooth user experience** across different computational environments  
+- **Automatic cleanup of intermediate files**, keeping only the final BLAST database, which **drastically reduces disk space requirements**
 
-- sed 's/^>//'
-  Removes the leading > from each printed ID.
+Furthermore, `blastdbbuilder` retrieves genomes directly from **NCBI’s FTP servers**, ensuring that all downloaded sequences are as **current as the runtime**.
 
-- sort
-  Sorts all the IDs alphabetically.
-
-- uniq -d
-  Prints only duplicate lines (IDs that appear more than once).
-
-**Interpretation:**
-
-- If all IDs are unique, the command produces no output.
-
-- If there are duplicates, the duplicated IDs will be listed.
-
-  Example headers:
-
-  >file1_seq1_NZ_JRKI01000001.1
-  >file1_seq2_NZ_JRKI01000002.1
-  >file1_seq3_NZ_JRKI01000003.1
-
-
-If your headers follow this pattern and are unique, the command will produce no output, confirming uniqueness.
 
 <br />
 
-### **2. Split large FASTA files safely**
+## **Features**
 
-Each chunk must start with a header (>). Example: 30 GB chunks.
-
-<br />
-
-### **3. Build BLAST database for each chunk**
-
-```
-singularity exec ncbi-blast_2.16.0.sif makeblastdb \
-    -in chunk_aa.fna \
-    -dbtype nucl \
-    -blastdb_version 5 \
-    -max_file_sz 3000000000B \
-    -out nt_chunk_aa \
-    -title "chunk_aa" \
-    -hash_index \
-    -logfile nt_chunk_aa.log
-```
-
-⚠️ The key fix for Duplicate seq_ids are found: GNL|BL_ORD_ID|#### is to set -max_file_sz = 3000000000B. BLAST will split the database internally to avoid duplicate internal IDs.
-
-<br />
-
-### **4. Combine chunk databases using an alias file (.pal)**
+- Automated genome download for Archaea, Bacteria, Fungi, and Viruses
+  
+- Resume-able BLASTn DB creation — continue from interrupted runs
    
-The alias allows blastn to search across all chunks transparently.
-
-TITLE Combined_nt_database
-DBLIST nt_chunk_aa nt_chunk_ab nt_chunk_ac nt_chunk_ad
+- Modular bash scripts for each task
+    
+- Optional use of pre-pulled Singularity containers for portability
+    
+- Lightweight installation (`pip install .`)
+  
+- Less disk space requirement 
+ 
 
 <br />
 
-### **5. Run BLAST queries against the alias database**
+## **Installation**
+
+Clone the GitHub Repository:
 
 ```
-singularity exec ncbi-blast_2.16.0.sif \
-    blastn -db blastnDB/nt -query your_query.fna -out results.txt
+git clone https://github.com/AsadProdhan/blastdbbuilder.git
 ```
 
-<br />
+Then, go to the blastdbbuilder directory 
 
-## Common Errors & Fixes
-
-### 1. `Duplicate seq_ids are found: GNL|BL_ORD_ID|####`
-
-- **Cause:** Internal BLAST IDs conflict for large databases.  
-- **Fix:** Use `-max_file_sz = 3000000000B` to let BLAST split the database internally and avoid collisions.
-
-### 2. `Input doesn't start with a defline or comment`
-
-- **Cause:** A chunk file does not begin with `>` due to naïve splitting.  
-- **Fix:** Ensure each chunk starts with a header line. The provided script handles safe splitting.
-
-### 3. `blastdbcmd: executable file not found`
-
-- **Cause:** Trying to run `blastdbcmd` outside the container or without the correct path.  
-- **Fix:** Always run BLAST commands inside the container:
-
-```bash
-singularity exec ncbi-blast_2.16.0.sif blastdbcmd -info -db nt_chunk_aa
+```
+cd blastdbbuilder
 ```
 
-<br />
+Install blastdbbuilder
 
-## Best Practices
-
-- Always verify headers before building the database.  
-- Split large FASTA files safely; do not cut sequences mid-way.  
-- Use chunk databases with an alias to handle files exceeding ~3 GB.  
-- Keep log files for each chunk to trace errors.  
-- For genomes with multiple contigs, include unique file/sequence identifiers.  
+```
+python3 -m pip install .
+```
 
 ---
 
 <br />
 
-## Q&A: Duplicate seq_ids in Large BLAST Databases
-
-**Q:** Why do I get `Duplicate seq_ids are found: GNL|BL_ORD_ID|####` when building a large nucleotide BLAST database?  
-
-**A:** These IDs are internal BLAST identifiers. When a database contains tens of millions of sequences (e.g., from a 125 GB FASTA), BLAST can generate duplicate internal IDs, especially if everything is processed in a single `makeblastdb` run.  
-
----
-
-**Q:** Does setting `-max_file_sz=3000000000B` fix this issue?  
-
-**A:** Not by itself. The `-max_file_sz` option only controls how BLAST splits the output files for very large databases. It does **not split your input FASTA**, so the internal sequence numbering may still produce duplicates if the input is extremely large.  
-
----
-
-**Q:** What actually fixes the duplicate ID error?  
-
-**A:** Splitting the large FASTA into smaller chunks (e.g., 30 GB each) and building a separate BLAST database for each chunk. Each chunk gets independent internal IDs, avoiding collisions.  
-
----
-
-**Q:** How can I search the whole dataset after splitting?  
-
-**A:** Use a BLAST alias (`.pal` file) that references all chunk databases. This allows you to query the full database seamlessly while preventing internal ID collisions.  
-
----
-
-<br />
-
-**✅ Takeaways / Best Practices:**
-
-1. For very large FASTA files, **pre-split** into manageable chunks before building the database.
-2. Make sure each chunk starts with a fasta header 
-3. Use `-max_file_sz` to control BLAST output file size, but chunking is the key to avoiding `GNL|BL_ORD_ID|####` duplicates.  
-4. Use alias databases to combine chunked DBs for searching.  
-
-<br />
-
-## References
-
-- [NCBI BLAST makeblastdb documentation](https://blast.ncbi.nlm.nih.gov/Blast.cgi)  
-- Camacho et al., *Building a BLAST database with your (local) sequences*, Bookshelf NBK569841  
-- [NCBI C++ Toolkit: ID Parser rules](https://ncbi.github.io/cxx-toolkit/pages/ch_demo#ch_demo.T5)
 
 

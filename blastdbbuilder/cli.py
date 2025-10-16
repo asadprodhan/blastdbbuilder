@@ -1,113 +1,93 @@
 #!/usr/bin/env python3
-"""
-blastdbbuilder CLI
-
-A lightweight command-line toolkit to automate:
-1. Downloading genomes for Archaea, Bacteria, Fungi, and Viruses
-2. Concatenating FASTA files
-3. Building BLAST databases from concatenated genomes
-"""
-
-import os
-import sys
 import argparse
+import os
 import subprocess
-from pathlib import Path
-import shutil
+import sys
 
+# -----------------------------
+# Define genome groups
+# -----------------------------
+GENOME_GROUPS = {
+    "archaea": "https://ftp.ncbi.nlm.nih.gov/genomes/refseq/archaea/assembly_summary.txt",
+    "bacteria": "https://ftp.ncbi.nlm.nih.gov/genomes/refseq/bacteria/assembly_summary.txt",
+    "fungi": "https://ftp.ncbi.nlm.nih.gov/genomes/refseq/fungi/assembly_summary.txt",
+    "virus": "https://ftp.ncbi.nlm.nih.gov/genomes/refseq/viral/assembly_summary.txt"
+}
 
-def run_script(script_name, *args):
-    """Run a shell script from the scripts directory inside the package."""
-    current_dir = Path(__file__).parent
-    scripts_dir = current_dir / "scripts"
-    script_path = scripts_dir / script_name
-
-    if not script_path.exists():
-        sys.exit(f"❌ Script not found: {script_path}")
-
-    print(f"🔹 Running {script_name} ...")
+def run_cmd(cmd, cwd=None):
+    """Run a shell command with error checking"""
     try:
-        subprocess.run(["bash", str(script_path), *args], check=True)
+        subprocess.run(cmd, shell=True, check=True, cwd=cwd)
     except subprocess.CalledProcessError as e:
-        sys.exit(f"❌ Script {script_name} failed with exit code {e.returncode}")
+        print(f"❌ Error running command: {cmd}")
+        sys.exit(1)
 
+def download_group(group, base_dir):
+    """Download genomes for a single group"""
+    print(f"\n📂 Downloading {group} genomes into {base_dir}/db/{group} ...")
+    group_dir = os.path.join(base_dir, "db", group)
+    os.makedirs(group_dir, exist_ok=True)
 
-def handle_download(args):
-    """Download genomes for the selected groups."""
-    cwd = Path.cwd()
-    db_dir = cwd / "db"
-    db_dir.mkdir(exist_ok=True)
+    # Containers directory shared across groups
+    container_dir = os.path.join(base_dir, "db", "containers")
+    os.makedirs(container_dir, exist_ok=True)
+    datasets_container = os.path.join(container_dir, "ncbi-datasets-cli.sif")
+    datasets_image = "docker://staphb/ncbi-datasets:latest"
 
-    if args.archaea:
-        target_dir = db_dir / "archaea"
-        target_dir.mkdir(exist_ok=True)
-        print(f"📂 Downloading Archaea genomes into {target_dir} ...")
-        run_script("archaea_ref_genomes_pipeline_bioinf_AP.sh", str(target_dir))
+    if not os.path.isfile(datasets_container):
+        print("📦 Pulling NCBI Datasets container...")
+        run_cmd(f"singularity pull {datasets_container} {datasets_image}")
 
-    if args.bacteria:
-        target_dir = db_dir / "bacteria"
-        target_dir.mkdir(exist_ok=True)
-        print(f"📂 Downloading Bacteria genomes into {target_dir} ...")
-        run_script("bacteria_ref_genomes_pipeline_resume_bioinf_AP.sh", str(target_dir))
+    datasets_exec = f"singularity exec {datasets_container} datasets"
 
-    if args.fungi:
-        target_dir = db_dir / "fungi"
-        target_dir.mkdir(exist_ok=True)
-        print(f"📂 Downloading Fungi genomes into {target_dir} ...")
-        run_script("fungi_ref_genomes_pipeline_bioinf_AP.sh", str(target_dir))
+    # Download assembly summary
+    assembly_file = os.path.join(group_dir, "assembly_summary.txt")
+    print(f"Downloading assembly_summary.txt for {group}...")
+    run_cmd(f"wget -O {assembly_file} {GENOME_GROUPS[group]}")
 
-    if args.virus:
-        target_dir = db_dir / "virus"
-        target_dir.mkdir(exist_ok=True)
-        print(f"📂 Downloading Virus genomes into {target_dir} ...")
-        run_script("virus_genomes_pipeline_bioinf_AP.sh", str(target_dir))
+    # Extract reference genomes
+    date_str = subprocess.getoutput("date +%F")
+    ref_csv = os.path.join(group_dir, f"{group}_reference_genome_{date_str}.csv")
+    awk_cmd = f"""awk -F "\\t" '$0 !~ /^#/ && $5=="reference genome" {{print $1","$2","$3","$5","$8}}' {assembly_file} > {ref_csv}"""
+    run_cmd(awk_cmd)
 
-    if not any([args.archaea, args.bacteria, args.fungi, args.virus]):
-        sys.exit("⚠️ Please specify at least one group with --archaea, --bacteria, --fungi, or --virus.")
+    # Split CSV into 5000-line chunks
+    run_cmd(f"split -l 5000 -d --additional-suffix=.csv {ref_csv} {group_dir}/temp_part_")
+    for i, f in enumerate(sorted(os.listdir(group_dir))):
+        if f.startswith("temp_part_") and f.endswith(".csv"):
+            os.rename(os.path.join(group_dir, f),
+                      os.path.join(group_dir, f"{group}_reference_genome_part{i+1}_{date_str}.csv"))
 
+    # Process each CSV sequentially
+    for metadata in sorted(os.listdir(group_dir)):
+        if metadata.startswith(f"{group}_reference_genome_part") and metadata.endswith(".csv"):
+            metadata_path = os.path.join(group_dir, metadata)
+            with open(metadata_path) as fh:
+                for line in fh:
+                    accession = line.strip().split(",")[0]
+                    if not accession:
+                        continue
+                    zip_file = os.path.join(group_dir, f"{accession}.zip")
+                    print(f"Downloading {accession} ...")
+                    run_cmd(f"{datasets_exec} download genome accession {accession} --filename {zip_file}")
+                    print(f"Extracting {zip_file} into {group_dir} ...")
+                    run_cmd(f"unzip -o {zip_file} -d {group_dir}")
+                    # Move all .fna to group_dir
+                    run_cmd(f"find {group_dir}/ncbi_dataset -name '*.fna' -exec mv {{}} {group_dir}/ \\;")
+                    # Cleanup zip and extraction dirs
+                    run_cmd(f"rm -rf {zip_file} {group_dir}/ncbi_dataset")
+    print(f"✅ Finished downloading {group} genomes. Files are in {group_dir}\n")
 
-def handle_concat():
-    """Concatenate all downloaded genomes into concat/ directory."""
-    cwd = Path.cwd()
-    db_dir = cwd / "db"
-    concat_dir = cwd / "concat"
-    concat_dir.mkdir(exist_ok=True)
-
-    groups = ["archaea", "bacteria", "fungi", "virus"]
-    for group in groups:
-        group_dir = db_dir / group
-        if group_dir.exists() and any(group_dir.iterdir()):
-            for fasta_file in group_dir.glob("*.[fF][aA]*"):
-                shutil.copy(fasta_file, concat_dir / fasta_file.name)
-    print(f"🔧 All genomes concatenated into {concat_dir}")
-
-
-def handle_build():
-    """Trigger the BLAST database build script."""
-    print("🧬 Building BLAST database...")
-    run_script("makeblastdb_bioinf_AP_20251003_v5_seqkit_RESUME_Alias_AutoDetect_v3_NameLikeNCBI2.sh")
-
-
-def handle_citation():
-    """Print citation information."""
-    print("""
-blastdbbuilder: Automated BLASTn database builder
-Asad Prodhan, 2025
-GitHub: https://github.com/AsadProdhan/blastdbbuilder
-Zenodo DOI: 10.5281/zenodo.YOUR_DOI
-    """)
-
-
+# -----------------------------
+# CLI arguments
+# -----------------------------
 def main():
     parser = argparse.ArgumentParser(
         description="blastdbbuilder: Automated genome download, concatenation, and BLAST database builder"
     )
-
     parser.add_argument("--download", action="store_true", help="Download genomes for selected groups")
-    parser.add_argument("--concat", action="store_true", help="Concatenate all genomes into concat/")
+    parser.add_argument("--concat", action="store_true", help="Concatenate all genomes into one FASTA")
     parser.add_argument("--build", action="store_true", help="Build BLAST database from concatenated FASTA")
-    parser.add_argument("--citation", action="store_true", help="Print citation information")
-
     parser.add_argument("--archaea", action="store_true", help="Include Archaea genomes")
     parser.add_argument("--bacteria", action="store_true", help="Include Bacteria genomes")
     parser.add_argument("--fungi", action="store_true", help="Include Fungi genomes")
@@ -115,17 +95,15 @@ def main():
 
     args = parser.parse_args()
 
-    if args.download:
-        handle_download(args)
-    elif args.concat:
-        handle_concat()
-    elif args.build:
-        handle_build()
-    elif args.citation:
-        handle_citation()
-    else:
-        parser.print_help()
+    base_dir = os.getcwd()
+    selected_groups = [g for g in ["archaea", "bacteria", "fungi", "virus"] if getattr(args, g)]
 
+    if args.download:
+        if not selected_groups:
+            print("⚠️ No group selected. Use --archaea, --bacteria, --fungi, or --virus")
+            sys.exit(1)
+        for group in selected_groups:
+            download_group(group, base_dir)
 
 if __name__ == "__main__":
     main()

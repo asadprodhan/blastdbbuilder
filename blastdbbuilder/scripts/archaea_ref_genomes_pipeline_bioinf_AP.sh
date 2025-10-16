@@ -8,10 +8,16 @@ mkdir -p "$OUTPUT_DIR"
 DATE=$(date +%F)  # YYYY-MM-DD format
 
 # -----------------------------
+# 0. Setup Archaea output directory
+# -----------------------------
+ARCHAEA_DIR="$OUTPUT_DIR/db/archaea"
+mkdir -p "$ARCHAEA_DIR"
+
+# -----------------------------
 # 1. Download the assembly summary 
 # -----------------------------
 echo "Downloading assembly_summary.txt..."
-if wget -O "$OUTPUT_DIR/assembly_summary.txt" https://ftp.ncbi.nlm.nih.gov/genomes/refseq/archaea/assembly_summary.txt; then
+if wget -O "$ARCHAEA_DIR/assembly_summary.txt" https://ftp.ncbi.nlm.nih.gov/genomes/refseq/archaea/assembly_summary.txt; then
     echo "✅ Download successful."
 else
     echo "❌ Download failed. Exiting."
@@ -21,9 +27,9 @@ fi
 # -----------------------------
 # 2. Extract columns for reference genomes only (skip header)
 # -----------------------------
-OUTPUT_CSV="archaeal_reference_genome_${DATE}.csv"
+OUTPUT_CSV="$ARCHAEA_DIR/archaeal_reference_genome_${DATE}.csv"
 echo "Filtering reference genomes and extracting columns..."
-awk -F "\t" '$0 !~ /^#/ && $5=="reference genome" {print $1","$2","$3","$5","$8}' assembly_summary.txt \
+awk -F "\t" '$0 !~ /^#/ && $5=="reference genome" {print $1","$2","$3","$5","$8}' "$ARCHAEA_DIR/assembly_summary.txt" \
     > "$OUTPUT_CSV"
 
 LINES=$(wc -l < "$OUTPUT_CSV")
@@ -37,21 +43,20 @@ echo "Extracted $LINES reference genomes into $OUTPUT_CSV"
 # 3. Split CSV into chunks of 5000 genomes
 # -----------------------------
 echo "Splitting CSV into 5000-line chunks..."
-split -l 5000 -d --additional-suffix=".csv" "$OUTPUT_CSV" temp_part_
+split -l 5000 -d --additional-suffix=".csv" "$OUTPUT_CSV" "$ARCHAEA_DIR/temp_part_"
 
 # Rename sequentially with date
 n=1
-for f in temp_part_*.csv; do
-    mv "$f" "archaeal_reference_genome_part${n}_${DATE}.csv"
+for f in "$ARCHAEA_DIR"/temp_part_*.csv; do
+    mv "$f" "$ARCHAEA_DIR/archaeal_reference_genome_part${n}_${DATE}.csv"
     ((n++))
 done
 
-echo "Done! Generated $(ls archaeal_reference_genome_part*_${DATE}.csv | wc -l) files."
+echo "Done! Generated $(ls "$ARCHAEA_DIR"/archaeal_reference_genome_part*_${DATE}.csv | wc -l) files."
 
 # -----------------------------
 # 4. Singularity + NCBI Datasets setup
 # -----------------------------
-#
 export SINGULARITY_CACHEDIR="$PWD/.singularity/cache"
 mkdir -p "$SINGULARITY_CACHEDIR"
 
@@ -70,7 +75,7 @@ datasets_exec="singularity exec $DATASETS_CONTAINER datasets"
 # -----------------------------
 # 5. Process split CSV files
 # -----------------------------
-for metadata in archaeal_reference_genome_part*_${DATE}.csv; do
+for metadata in "$ARCHAEA_DIR"/archaeal_reference_genome_part*_${DATE}.csv; do
     echo "======================================"
     echo " Processing CSV file: ${metadata}"
     echo "======================================"
@@ -96,8 +101,8 @@ for metadata in archaeal_reference_genome_part*_${DATE}.csv; do
         cd "ncbi_dataset/data/${accession}" || { echo "Error: Directory not found for ${accession}"; continue; }
 
         if ls *.fna 1> /dev/null 2>&1; then
-            echo "Moving ${accession} fasta file into working directory"
-            mv *.fna ../../../
+            echo "Moving ${accession} fasta file into $ARCHAEA_DIR"
+            mv *.fna "$ARCHAEA_DIR"/
         else
             echo "No .fna files found for ${accession}"
         fi

@@ -11,10 +11,10 @@ DATE=$(date +%F)  # YYYY-MM-DD format
 # 1. Download the assembly summary 
 # -----------------------------
 echo "Downloading assembly_summary.txt..."
-if wget -O assembly_summary.txt https://ftp.ncbi.nlm.nih.gov/genomes/refseq/archaea/assembly_summary.txt; then
-    echo "Download successful."
+if wget -O "$OUTPUT_DIR/assembly_summary.txt" https://ftp.ncbi.nlm.nih.gov/genomes/refseq/archaea/assembly_summary.txt; then
+    echo "✅ Download successful."
 else
-    echo "Download failed. Exiting."
+    echo "❌ Download failed. Exiting."
     exit 1
 fi
 

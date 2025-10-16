@@ -1,26 +1,30 @@
 #!/bin/bash --login
-# -----------------------------
-# Get current date
-# -----------------------------
+# ======================================
+# Fungal Reference Genome Downloader (RESUME mode)
+# ======================================
+
 DATE=$(date +%F)  # YYYY-MM-DD format
+BASE_DIR="$PWD/db/fungi"
+mkdir -p "$BASE_DIR"
 
 # -----------------------------
-# 1. Download the assembly summary (change bacteria → fungi/plants if needed)
+# 1. Download the assembly summary
 # -----------------------------
+ASSEMBLY_FILE="$BASE_DIR/assembly_summary.txt"
 echo "Downloading assembly_summary.txt..."
-if wget -O assembly_summary.txt https://ftp.ncbi.nlm.nih.gov/genomes/refseq/fungi/assembly_summary.txt; then
-    echo "Download successful."
+if wget -O "$ASSEMBLY_FILE" https://ftp.ncbi.nlm.nih.gov/genomes/refseq/fungi/assembly_summary.txt; then
+    echo "✅ Download successful."
 else
-    echo "Download failed. Exiting."
+    echo "❌ Download failed. Exiting."
     exit 1
 fi
 
 # -----------------------------
 # 2. Extract columns for reference genomes only (skip header)
 # -----------------------------
-OUTPUT_CSV="fungal_reference_genome_${DATE}.csv"
+OUTPUT_CSV="$BASE_DIR/fungal_reference_genome_${DATE}.csv"
 echo "Filtering reference genomes and extracting columns..."
-awk -F "\t" '$0 !~ /^#/ && $5=="reference genome" {print $1","$2","$3","$5","$8}' assembly_summary.txt \
+awk -F "\t" '$0 !~ /^#/ && $5=="reference genome" {print $1","$2","$3","$5","$8}' "$ASSEMBLY_FILE" \
     > "$OUTPUT_CSV"
 
 LINES=$(wc -l < "$OUTPUT_CSV")
@@ -34,7 +38,8 @@ echo "Extracted $LINES reference genomes into $OUTPUT_CSV"
 # 3. Split CSV into chunks of 5000 genomes
 # -----------------------------
 echo "Splitting CSV into 5000-line chunks..."
-split -l 5000 -d --additional-suffix=".csv" "$OUTPUT_CSV" temp_part_
+cd "$BASE_DIR"
+split -l 5000 -d --additional-suffix=".csv" "$(basename "$OUTPUT_CSV")" temp_part_
 
 # Rename sequentially with date
 n=1
@@ -48,11 +53,10 @@ echo "Done! Generated $(ls fungal_reference_genome_part*_${DATE}.csv | wc -l) fi
 # -----------------------------
 # 4. Singularity + NCBI Datasets setup
 # -----------------------------
-#
 export SINGULARITY_CACHEDIR="$PWD/.singularity/cache"
 mkdir -p "$SINGULARITY_CACHEDIR"
 
-CONTAINER_DIR="$PWD/containers"
+CONTAINER_DIR="$PWD/../containers"
 DATASETS_CONTAINER="$CONTAINER_DIR/ncbi-datasets-cli.sif"
 DATASETS_IMAGE="docker://staphb/ncbi-datasets:latest"
 mkdir -p "$CONTAINER_DIR"
@@ -75,6 +79,14 @@ for metadata in fungal_reference_genome_part*_${DATE}.csv; do
     while IFS=, read -r accession rest; do
         [ -z "$accession" ] && continue
 
+        # -----------------------------
+        # Resume check: skip if fasta already exists
+        # -----------------------------
+        if ls "${accession}"*.fna 1> /dev/null 2>&1; then
+            echo "Skipping ${accession} (already downloaded)"
+            continue
+        fi
+
         echo ""
         echo "Downloading: ${accession}"
 
@@ -93,8 +105,8 @@ for metadata in fungal_reference_genome_part*_${DATE}.csv; do
         cd "ncbi_dataset/data/${accession}" || { echo "Error: Directory not found for ${accession}"; continue; }
 
         if ls *.fna 1> /dev/null 2>&1; then
-            echo "Moving ${accession} fasta file into working directory"
-            mv *.fna ../../../
+            echo "Moving ${accession} fasta file into $BASE_DIR"
+            mv *.fna "$BASE_DIR/"
         else
             echo "No .fna files found for ${accession}"
         fi

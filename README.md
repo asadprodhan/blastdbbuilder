@@ -109,24 +109,24 @@ python3 -m pip install .
 
 <br />
 
-### **1. Download genomes**
+### **Step 1. Download genomes**
 
 You can download genomes for one or more groups (Archaea, Bacteria, Fungi, Virus) in a single command. Each group will have its own directory in the current working directory.
 
 
-#### Download Archaea genomes
+Download Archaea genomes
 
 ```
 blastdbbuilder --download --archaea
 ```
 
-#### Download Bacteria genomes
+Download Bacteria genomes
 
 ```
 blastdbbuilder --download --bacteria
 ```
 
-#### Download multiple groups simultaneously
+Download multiple groups simultaneously
 
 ```
 blastdbbuilder --download --archaea --bacteria --fungi --virus
@@ -134,7 +134,7 @@ blastdbbuilder --download --archaea --bacteria --fungi --virus
 
 <br />
 
-### **2. Concatenate genomes**
+### **Step 2. Concatenate genomes**
 
 After downloading, concatenate all genome FASTA files from the downloaded directories into a single combined dataset. The concatenated files are stored in a directory called `concat`.
 
@@ -144,7 +144,7 @@ blastdbbuilder --concat
 
 <br />
 
-### **3. Build BLAST database**
+### **Step 3. Build BLAST database**
 
 Finally, build the BLAST database from the concatenated FASTA file. The database will be created in a directory called `db`.
 

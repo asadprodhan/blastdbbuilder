@@ -1,5 +1,8 @@
 #!/bin/bash --login
 # -----------------------------
+OUTPUT_DIR="${1:-$PWD}"
+mkdir -p "$OUTPUT_DIR"
+# all download commands write into $OUTPUT_DIR
 # Get current date
 # -----------------------------
 DATE=$(date +%F)  # YYYY-MM-DD format

@@ -153,11 +153,39 @@ blastdbbuilder --build
 ```
 
 **Notes:**
-- `blastdbbuilder` automatically uses **pre-pulled Singularity containers** and internal shell scripts for reproducible execution.
-- **Intermediate files are cleaned up automatically**, keeping only the final database to reduce disk space usage.
-- The workflow can be executed **step by step** or combined into a pipeline using scripts or workflow managers.
+- `blastdbbuilder` automatically uses **pre-pulled Singularity containers** and internal shell scripts for reproducible execution
+  
+- **Intermediate files are cleaned up automatically**, keeping only the final database to reduce disk space usage
+  
+- The workflow can be executed **step by step** or combined into a pipeline using scripts or workflow managers
 
 <br />
+
+### **Final Files**
+
+After running, the directory structure will look like:
+
+```
+blastnDB/
+├─ nt.001.fna.gz
+├─ nt.002.fna.gz
+├─ nt.003.fna.gz
+├─ nt.004.fna.gz
+├─ nt.nl        <-- portable alias database
+├─ logs/
+│  ├─ nt.001.log
+│  ├─ nt.002.log
+│  ├─ nt.003.log
+│  └─ nt.004.log
+└─ tmp_chunks/   <-- temporary chunk directory (optional, can be deleted after run)
+```
+
+
+- `nt.nal` is the alias file pointing to all chunk databases with **relative paths**
+  
+- Each chunk has its own `.log` detailing BLASTn DB creation
+  
+- The database is **fully portable**, can be moved to other users/computers without breaking paths
 
 
 

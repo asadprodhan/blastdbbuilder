@@ -6,15 +6,20 @@
 DATE=$(date +%F)  # YYYY-MM-DD format
 
 # -----------------------------
+# 0. Setup output directory
+# -----------------------------
+BASE_DIR="$PWD"
+GROUP_DIR="$BASE_DIR/db/bacteria"
+mkdir -p "$GROUP_DIR"
+
+# -----------------------------
 # 1. Singularity + NCBI Datasets setup
 # -----------------------------
-export SINGULARITY_CACHEDIR="$PWD/.singularity/cache"
-mkdir -p "$SINGULARITY_CACHEDIR"
+CONTAINER_DIR="$BASE_DIR/db/containers"
+mkdir -p "$CONTAINER_DIR"
 
-CONTAINER_DIR="$PWD/containers"
 DATASETS_CONTAINER="$CONTAINER_DIR/ncbi-datasets-cli.sif"
 DATASETS_IMAGE="docker://staphb/ncbi-datasets:latest"
-mkdir -p "$CONTAINER_DIR"
 
 if [ ! -f "$DATASETS_CONTAINER" ]; then
   echo "Downloading NCBI Datasets container..."
@@ -37,7 +42,7 @@ for metadata in bacterial_reference_genome_part*.csv; do
         # -----------------------------
         # Resume check: skip if fasta already exists
         # -----------------------------
-        if ls ${accession}*.fna 1> /dev/null 2>&1; then
+        if ls "$GROUP_DIR/${accession}"*.fna 1> /dev/null 2>&1; then
             echo "Skipping ${accession} (already downloaded)"
             continue
         fi
@@ -45,36 +50,31 @@ for metadata in bacterial_reference_genome_part*.csv; do
         echo ""
         echo "Downloading: ${accession}"
 
-        if ! $datasets_exec download genome accession "${accession}" --filename "${accession}.zip"; then
+        zip_file="$GROUP_DIR/${accession}.zip"
+        if ! $datasets_exec download genome accession "${accession}" --filename "$zip_file"; then
             echo "Error downloading ${accession}"
             continue
         fi
 
-        echo "Extracting ${accession}.zip"
-        if ! unzip -o "${accession}.zip"; then
-            echo "Error extracting ${accession}.zip"
-            rm -f "${accession}.zip"
+        echo "Extracting $zip_file"
+        if ! unzip -o "$zip_file" -d "$GROUP_DIR"; then
+            echo "Error extracting $zip_file"
+            rm -f "$zip_file"
             continue
         fi
 
-        cd "ncbi_dataset/data/${accession}" || { echo "Error: Directory not found for ${accession}"; continue; }
+        # Move .fna files from extracted directory to GROUP_DIR
+        find "$GROUP_DIR/ncbi_dataset" -name "*.fna" -exec mv {} "$GROUP_DIR/" \;
 
-        if ls *.fna 1> /dev/null 2>&1; then
-            echo "Moving ${accession} fasta file into working directory"
-            mv *.fna ../../../
-        else
-            echo "No .fna files found for ${accession}"
-        fi
-
-        cd "../../../" || exit
-        rm -r "${accession}.zip" ncbi_dataset *.md
+        # Cleanup zip and extraction directories
+        rm -rf "$zip_file" "$GROUP_DIR/ncbi_dataset" *.md 2>/dev/null
 
         echo "Download completed: ${accession}"
         echo ""
-    done < "${metadata}"
+    done < "$metadata"
 
     echo "Finished processing ${metadata}"
     echo ""
 done
 
-echo "All CSV files have been processed."
+echo "All CSV files have been processed into $GROUP_DIR."

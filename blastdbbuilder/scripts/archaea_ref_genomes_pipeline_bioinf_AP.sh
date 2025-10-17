@@ -1,23 +1,24 @@
 #!/bin/bash --login
+# ======================================
+# Archaea Reference Genome Downloader (RESUME mode)
+# CLI-consistent version
+# ======================================
+
 set -euo pipefail
 
-# ======================================
-# Archaeal Reference Genome Downloader (Resume + Structured)
-# ======================================
-
-OUTPUT_DIR="${1:-$PWD}"
-ARCHAEA_DIR="$OUTPUT_DIR/db/archaea"
-mkdir -p "$ARCHAEA_DIR"
-
 # -----------------------------
-# Containers centralized
+# 0. Setup
 # -----------------------------
-CONTAINER_DIR="$OUTPUT_DIR/db/containers"
+DATE=$(date +%F)
+BASE_DIR="$PWD/db/archaea"
+mkdir -p "$BASE_DIR"
+
+CONTAINER_DIR="$PWD/db/containers"
 mkdir -p "$CONTAINER_DIR"
 DATASETS_CONTAINER="$CONTAINER_DIR/ncbi-datasets-cli.sif"
 DATASETS_IMAGE="docker://staphb/ncbi-datasets:latest"
 
-export SINGULARITY_CACHEDIR="$OUTPUT_DIR/db/.singularity/cache"
+export SINGULARITY_CACHEDIR="$PWD/db/.singularity/cache"
 mkdir -p "$SINGULARITY_CACHEDIR"
 
 if [ ! -f "$DATASETS_CONTAINER" ]; then
@@ -26,26 +27,21 @@ if [ ! -f "$DATASETS_CONTAINER" ]; then
 fi
 datasets_exec="singularity exec $DATASETS_CONTAINER datasets"
 
-DATE=$(date +%F)
-ASSEMBLY_SUMMARY="$ARCHAEA_DIR/assembly_summary.txt"
-
 # -----------------------------
-# 1. Download assembly_summary
+# 1. Download assembly_summary.txt
 # -----------------------------
-echo "Downloading assembly_summary.txt for Archaea..."
-if wget -O "$ASSEMBLY_SUMMARY" https://ftp.ncbi.nlm.nih.gov/genomes/refseq/archaea/assembly_summary.txt; then
-    echo "✅ Assembly summary downloaded successfully."
-else
-    echo "❌ Failed to download assembly_summary.txt. Exiting."
+ASSEMBLY_FILE="$BASE_DIR/assembly_summary.txt"
+echo "Downloading Archaea assembly_summary.txt..."
+if ! wget -O "$ASSEMBLY_FILE" https://ftp.ncbi.nlm.nih.gov/genomes/refseq/archaea/assembly_summary.txt; then
+    echo "❌ Download failed. Exiting."
     exit 1
 fi
 
 # -----------------------------
-# 2. Extract reference genomes into CSV
+# 2. Filter reference genomes and create CSV
 # -----------------------------
-OUTPUT_CSV="$ARCHAEA_DIR/archaeal_reference_genome_${DATE}.csv"
-echo "Filtering reference genomes and creating CSV..."
-awk -F "\t" '$0 !~ /^#/ && $5=="reference genome" {print $1","$2","$3","$5","$8}' "$ASSEMBLY_SUMMARY" \
+OUTPUT_CSV="$BASE_DIR/archaeal_reference_genome_${DATE}.csv"
+awk -F "\t" '$0 !~ /^#/ && $5=="reference genome" {print $1","$2","$3","$5","$8}' "$ASSEMBLY_FILE" \
     > "$OUTPUT_CSV"
 
 LINES=$(wc -l < "$OUTPUT_CSV")
@@ -53,67 +49,69 @@ if [ "$LINES" -eq 0 ]; then
     echo "No reference genomes found. Exiting."
     exit 1
 fi
-echo "Extracted $LINES reference genomes into $OUTPUT_CSV"
+echo "✅ Extracted $LINES reference genomes into $OUTPUT_CSV"
 
 # -----------------------------
-# 3. Split CSV into chunks of 5000 genomes
+# 3. Split CSV into chunks of 5000
 # -----------------------------
-echo "Splitting CSV into 5000-line chunks..."
-split -l 5000 -d --additional-suffix=".csv" "$OUTPUT_CSV" "$ARCHAEA_DIR/temp_part_"
+split -l 5000 -d --additional-suffix=".csv" "$OUTPUT_CSV" "$BASE_DIR/temp_part_"
 n=1
-for f in "$ARCHAEA_DIR"/temp_part_*.csv; do
-    mv "$f" "$ARCHAEA_DIR/archaeal_reference_genome_part${n}_${DATE}.csv"
+for f in "$BASE_DIR"/temp_part_*.csv; do
+    mv "$f" "$BASE_DIR/archaeal_reference_genome_part${n}_${DATE}.csv"
     ((n++))
 done
-echo "Done! Generated $(ls "$ARCHAEA_DIR"/archaeal_reference_genome_part*_${DATE}.csv | wc -l) files."
+echo "✅ CSV split into $(ls "$BASE_DIR"/archaeal_reference_genome_part*_${DATE}.csv | wc -l) chunks"
 
 # -----------------------------
-# 4. Process each CSV sequentially
+# 4. Download genomes from CSV
 # -----------------------------
-for metadata in "$ARCHAEA_DIR"/archaeal_reference_genome_part*_${DATE}.csv; do
+for metadata in "$BASE_DIR"/archaeal_reference_genome_part*_${DATE}.csv; do
     echo "======================================"
-    echo " Processing CSV file: ${metadata}"
+    echo "Processing CSV: $metadata"
     echo "======================================"
+
+    total_lines=$(wc -l < "$metadata")
+    counter=0
 
     while IFS=, read -r accession rest; do
         [ -z "$accession" ] && continue
+        counter=$((counter + 1))
+        echo "[Progress] $counter/$total_lines genomes downloaded for this CSV"
 
-        ZIP_FILE="$ARCHAEA_DIR/${accession}.zip"
-
-        # Skip if genome already downloaded
-        if ls "$ARCHAEA_DIR/${accession}"*.fna 1> /dev/null 2>&1; then
-            echo "Skipping ${accession} (already downloaded)"
+        # Skip if genome already exists
+        if ls "$BASE_DIR/"*"$accession"*.fna "$BASE_DIR/"*"$accession"*.fa "$BASE_DIR/"*"$accession"*.fasta 1> /dev/null 2>&1; then
+            echo "Skipping $accession (already downloaded)"
             continue
         fi
 
-        echo "Downloading ${accession}..."
+        ZIP_FILE="$BASE_DIR/${accession}.zip"
+        echo "Downloading $accession..."
         if ! $datasets_exec download genome accession "$accession" --filename "$ZIP_FILE"; then
-            echo "Error downloading ${accession}"
+            echo "❌ Error downloading $accession, skipping..."
             continue
         fi
 
-        echo "Extracting ${accession}.zip..."
-        if ! unzip -o "$ZIP_FILE" -d "$ARCHAEA_DIR"; then
-            echo "Error extracting ${ZIP_FILE}"
+        echo "Extracting $ZIP_FILE..."
+        if ! unzip -o "$ZIP_FILE" -d "$BASE_DIR"; then
+            echo "❌ Error extracting $ZIP_FILE, skipping..."
             rm -f "$ZIP_FILE"
             continue
         fi
 
-        # Move all .fna files to ARCHAEA_DIR
-        find "$ARCHAEA_DIR/ncbi_dataset/data/$accession" -name "*.fna" -exec mv {} "$ARCHAEA_DIR/" \;
+        # Move genome files to BASE_DIR
+        NESTED_DIR="$BASE_DIR/ncbi_dataset/data/$accession"
+        if [ -d "$NESTED_DIR" ]; then
+            find "$NESTED_DIR" -type f \( -iname "*.fna" -o -iname "*.fa" -o -iname "*.fasta" \) -exec mv {} "$BASE_DIR/" \;
+        fi
 
-        # Clean up
-        rm -rf "$ARCHAEA_DIR/ncbi_dataset"
-        rm -f "$ZIP_FILE"
-        rm -f "$ARCHAEA_DIR"/*.md 2>/dev/null
+        # Cleanup
+        rm -rf "$ZIP_FILE" "$BASE_DIR/ncbi_dataset" *.md 2>/dev/null
 
-        echo "✅ Download completed: ${accession}"
-        echo ""
+        echo "✅ Download completed: $accession"
     done < "$metadata"
 
-    echo "Finished processing ${metadata}"
-    echo ""
+    echo "Finished processing $metadata"
 done
 
-echo "✅ All Archaeal genomes are now in $ARCHAEA_DIR"
+echo "✅ All Archaea genomes are now in $BASE_DIR"
 echo "Containers are in $CONTAINER_DIR"

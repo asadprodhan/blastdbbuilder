@@ -91,7 +91,8 @@ mv "$COMBINED_FASTA" "$TARGET_FASTA"
 echo "📂 Moved concatenated FASTA to $TARGET_FASTA"
 
 # Step 7: Remove db directory
-rm -rf "$PROJECT_ROOT/db/concat/*"
+# rm -rf "$PROJECT_ROOT/db/concat/*"
+find "$PROJECT_ROOT/db/concat" -mindepth 1 -delete
 echo "🗑 content in concat directory removed for clean up"
 
 echo "✅ Concatenation completed. Master summary.log updated at $SUMMARY_LOG"

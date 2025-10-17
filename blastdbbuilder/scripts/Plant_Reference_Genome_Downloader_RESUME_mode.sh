@@ -32,7 +32,7 @@ datasets_exec="singularity exec $DATASETS_CONTAINER datasets"
 # -----------------------------
 ASSEMBLY_FILE="$BASE_DIR/assembly_summary.txt"
 echo "Downloading Plant assembly_summary.txt..."
-if ! wget -O "$ASSEMBLY_FILE" https://ftp.ncbi.nlm.nih.gov/genomes/refseq/plants/assembly_summary.txt; then
+if ! wget -O "$ASSEMBLY_FILE" https://ftp.ncbi.nlm.nih.gov/genomes/refseq/plant/assembly_summary.txt; then
     echo "❌ Download failed. Exiting."
     exit 1
 fi
@@ -115,3 +115,4 @@ done
 
 echo "✅ All Plant reference genomes are now in $BASE_DIR"
 echo "Containers are in $CONTAINER_DIR"
+

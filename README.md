@@ -109,6 +109,38 @@ blastdbbuilder --help
 
 <br />
 
+### If you see the following usage flags, then 
+
+- the **installation** has been successful
+  
+- you can run ***blastdbbuilder*** from any directory in your computer 
+
+
+
+<br />
+
+
+```
+usage: blastdbbuilder [-h] [--download] [--concat] [--build] [--citation] [--archaea] [--bacteria] [--fungi]
+                      [--virus] [--plants]
+
+blastdbbuilder: Automated genome download, concatenation, and BLAST database builder
+
+options:
+  -h, --help  show this help message and exit
+  --download  Download genomes for selected groups
+  --concat    Concatenate all genomes into one FASTA
+  --build     Build BLAST database from concatenated FASTA
+  --citation  Print citation information
+  --archaea   Include Archaea genomes
+  --bacteria  Include Bacteria genomes
+  --fungi     Include Fungi genomes
+  --virus     Include Virus genomes (all)
+  --plants    Include Plant genomes
+```
+
+<br />
+
 ## Usage
 
 `blastdbbuilder` provides a simple command-line interface to automate genome downloads, concatenation, and BLASTn database construction.  

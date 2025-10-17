@@ -139,11 +139,28 @@ options:
   --plants    Include Plant genomes
 ```
 
+Close your terminal.
+
 <br />
 
 ## Usage
 
-`blastdbbuilder` provides a simple command-line interface to automate genome downloads, concatenation, and BLASTn database construction.  
+- There are three steps from downloading the genomes to building a BLASTn database
+  
+- Open a terminal
+  
+- Make a directory. Name it based on which group/s you are going to download. For example
+  
+
+```
+mkdir bacteria
+```   
+
+Or, maybe something like this if you are going to download archaea (a), bacteria (b), fungi (f), virus (v), and plants (p). This will help remember what are in the database files which will look like nt.001, nt.002, nt.003 and so on
+
+```
+mkdir abfvp
+```
 
 <br />
 

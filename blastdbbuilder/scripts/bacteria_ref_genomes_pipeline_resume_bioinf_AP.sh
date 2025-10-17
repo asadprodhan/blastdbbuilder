@@ -1,125 +1,117 @@
 #!/bin/bash --login
 # ======================================
-# Bacterial Reference Genome Downloader (RESUME mode)
+# Bacteria Reference Genome Downloader (RESUME mode)
+# CLI-consistent version
 # ======================================
 
-DATE=$(date +%F)  # YYYY-MM-DD format
+set -euo pipefail
 
 # -----------------------------
-# 0. Setup output directories
+# 0. Setup
 # -----------------------------
-BASE_DIR="$PWD"
-GROUP_DIR="$BASE_DIR/db/bacteria"
-CONTAINER_DIR="$BASE_DIR/db/containers"
-LOG_FILE="$BASE_DIR/master_log_${DATE}.txt"
+DATE=$(date +%F)
+BASE_DIR="$PWD/db/bacteria"
+mkdir -p "$BASE_DIR"
 
-mkdir -p "$GROUP_DIR" "$CONTAINER_DIR"
-
-# -----------------------------
-# 1. Download the assembly summary
-# -----------------------------
-ASSEMBLY_FILE="$GROUP_DIR/assembly_summary.txt"
-echo "[$(date)] Downloading assembly_summary.txt for bacteria..." | tee -a "$LOG_FILE"
-if wget -q -O "$ASSEMBLY_FILE" https://ftp.ncbi.nlm.nih.gov/genomes/refseq/bacteria/assembly_summary.txt; then
-    echo "✅ Download successful." | tee -a "$LOG_FILE"
-else
-    echo "❌ Download failed. Exiting." | tee -a "$LOG_FILE"
-    exit 1
-fi
-
-# -----------------------------
-# 2. Extract reference genomes only (skip header)
-# -----------------------------
-OUTPUT_CSV="$GROUP_DIR/bacterial_reference_genome_${DATE}.csv"
-echo "Filtering reference genomes and extracting columns..." | tee -a "$LOG_FILE"
-
-awk -F "\t" '$0 !~ /^#/ && $5=="reference genome" {print $1","$2","$3","$5","$8}' "$ASSEMBLY_FILE" > "$OUTPUT_CSV"
-
-LINES=$(wc -l < "$OUTPUT_CSV")
-if [ "$LINES" -eq 0 ]; then
-    echo "No reference genomes found. Exiting." | tee -a "$LOG_FILE"
-    exit 1
-fi
-echo "Extracted $LINES reference genomes into $OUTPUT_CSV" | tee -a "$LOG_FILE"
-
-# -----------------------------
-# 3. Split CSV into chunks of 5000 genomes
-# -----------------------------
-echo "Splitting CSV into 5000-line chunks..." | tee -a "$LOG_FILE"
-cd "$GROUP_DIR"
-split -l 5000 -d --additional-suffix=".csv" "$(basename "$OUTPUT_CSV")" temp_part_
-
-n=1
-for f in temp_part_*.csv; do
-    mv "$f" "bacterial_reference_genome_part${n}_${DATE}.csv"
-    ((n++))
-done
-
-NUM_PARTS=$(ls bacterial_reference_genome_part*_${DATE}.csv | wc -l)
-echo "Done! Generated ${NUM_PARTS} CSV files." | tee -a "$LOG_FILE"
-
-# -----------------------------
-# 4. Singularity + NCBI Datasets setup
-# -----------------------------
+CONTAINER_DIR="$PWD/db/containers"
+mkdir -p "$CONTAINER_DIR"
 DATASETS_CONTAINER="$CONTAINER_DIR/ncbi-datasets-cli.sif"
 DATASETS_IMAGE="docker://staphb/ncbi-datasets:latest"
 
+export SINGULARITY_CACHEDIR="$PWD/db/.singularity/cache"
+mkdir -p "$SINGULARITY_CACHEDIR"
+
 if [ ! -f "$DATASETS_CONTAINER" ]; then
-    echo "Downloading NCBI Datasets container..." | tee -a "$LOG_FILE"
+    echo "Downloading NCBI Datasets container..."
     singularity pull "$DATASETS_CONTAINER" "$DATASETS_IMAGE"
 fi
-
 datasets_exec="singularity exec $DATASETS_CONTAINER datasets"
 
 # -----------------------------
-# 5. Process split CSV files
+# 1. Download assembly_summary.txt
 # -----------------------------
-for metadata in bacterial_reference_genome_part*_${DATE}.csv; do
-    echo "======================================" | tee -a "$LOG_FILE"
-    echo " Processing CSV file: ${metadata}" | tee -a "$LOG_FILE"
-    echo "======================================" | tee -a "$LOG_FILE"
+ASSEMBLY_FILE="$BASE_DIR/assembly_summary.txt"
+echo "Downloading Bacteria assembly_summary.txt..."
+if ! wget -O "$ASSEMBLY_FILE" https://ftp.ncbi.nlm.nih.gov/genomes/refseq/bacteria/assembly_summary.txt; then
+    echo "❌ Download failed. Exiting."
+    exit 1
+fi
+
+# -----------------------------
+# 2. Filter reference genomes and create CSV
+# -----------------------------
+OUTPUT_CSV="$BASE_DIR/bacterial_reference_genome_${DATE}.csv"
+awk -F "\t" '$0 !~ /^#/ && $5=="reference genome" {print $1","$2","$3","$5","$8}' "$ASSEMBLY_FILE" \
+    > "$OUTPUT_CSV"
+
+LINES=$(wc -l < "$OUTPUT_CSV")
+if [ "$LINES" -eq 0 ]; then
+    echo "No reference genomes found. Exiting."
+    exit 1
+fi
+echo "✅ Extracted $LINES reference genomes into $OUTPUT_CSV"
+
+# -----------------------------
+# 3. Split CSV into chunks of 5000
+# -----------------------------
+split -l 5000 -d --additional-suffix=".csv" "$OUTPUT_CSV" "$BASE_DIR/temp_part_"
+n=1
+for f in "$BASE_DIR"/temp_part_*.csv; do
+    mv "$f" "$BASE_DIR/bacterial_reference_genome_part${n}_${DATE}.csv"
+    ((n++))
+done
+echo "✅ CSV split into $(ls "$BASE_DIR"/bacterial_reference_genome_part*_${DATE}.csv | wc -l) chunks"
+
+# -----------------------------
+# 4. Download genomes from CSV
+# -----------------------------
+for metadata in "$BASE_DIR"/bacterial_reference_genome_part*_${DATE}.csv; do
+    echo "======================================"
+    echo "Processing CSV: $metadata"
+    echo "======================================"
+
+    total_lines=$(wc -l < "$metadata")
+    counter=0
 
     while IFS=, read -r accession rest; do
         [ -z "$accession" ] && continue
+        counter=$((counter + 1))
+        echo "[Progress] $counter/$total_lines genomes downloaded for this CSV"
 
-        # Resume check: skip if fasta already exists
-        if ls "$GROUP_DIR/${accession}"*.fna 1> /dev/null 2>&1; then
-            echo "Skipping ${accession} (already downloaded)" | tee -a "$LOG_FILE"
+        # Skip if genome already exists
+        if ls "$BASE_DIR/"*"$accession"*.fna "$BASE_DIR/"*"$accession"*.fa "$BASE_DIR/"*"$accession"*.fasta 1> /dev/null 2>&1; then
+            echo "Skipping $accession (already downloaded)"
             continue
         fi
 
-        echo "Downloading: ${accession}" | tee -a "$LOG_FILE"
-        zip_file="$GROUP_DIR/${accession}.zip"
-
-        if ! $datasets_exec download genome accession "${accession}" --filename "$zip_file"; then
-            echo "Error downloading ${accession}" | tee -a "$LOG_FILE"
+        ZIP_FILE="$BASE_DIR/${accession}.zip"
+        echo "Downloading $accession..."
+        if ! $datasets_exec download genome accession "$accession" --filename "$ZIP_FILE"; then
+            echo "❌ Error downloading $accession, skipping..."
             continue
         fi
 
-        echo "Extracting ${accession}.zip" | tee -a "$LOG_FILE"
-        if ! unzip -qo "$zip_file" -d "$GROUP_DIR"; then
-            echo "Error extracting ${accession}.zip" | tee -a "$LOG_FILE"
-            rm -f "$zip_file"
+        echo "Extracting $ZIP_FILE..."
+        if ! unzip -o "$ZIP_FILE" -d "$BASE_DIR"; then
+            echo "❌ Error extracting $ZIP_FILE, skipping..."
+            rm -f "$ZIP_FILE"
             continue
         fi
 
-        # Move .fna files from extracted directory to group dir
-        find "$GROUP_DIR/ncbi_dataset" -name "*.fna" -exec mv {} "$GROUP_DIR/" \;
+        # Move genome files to BASE_DIR
+        NESTED_DIR="$BASE_DIR/ncbi_dataset/data/$accession"
+        if [ -d "$NESTED_DIR" ]; then
+            find "$NESTED_DIR" -type f \( -iname "*.fna" -o -iname "*.fa" -o -iname "*.fasta" \) -exec mv {} "$BASE_DIR/" \;
+        fi
 
-        # Cleanup temporary files
-        rm -rf "$zip_file" "$GROUP_DIR/ncbi_dataset" *.md 2>/dev/null
+        # Cleanup
+        rm -rf "$ZIP_FILE" "$BASE_DIR/ncbi_dataset" *.md 2>/dev/null
 
-        echo "✅ Completed: ${accession}" | tee -a "$LOG_FILE"
-        echo ""
+        echo "✅ Download completed: $accession"
     done < "$metadata"
 
-    echo "Finished processing ${metadata}" | tee -a "$LOG_FILE"
-    echo ""
+    echo "Finished processing $metadata"
 done
 
-# -----------------------------
-# 6. Summary
-# -----------------------------
-TOTAL_FASTA=$(find "$GROUP_DIR" -maxdepth 1 -name "*.fna" | wc -l)
-echo "[$(date)] ✅ Bacterial download completed: $TOTAL_FASTA genomes." | tee -a "$LOG_FILE"
-echo "All data saved in: $GROUP_DIR" | tee -a "$LOG_FILE"
+echo "✅ All Bacteria genomes are now in $BASE_DIR"
+echo "Containers are in $CONTAINER_DIR"

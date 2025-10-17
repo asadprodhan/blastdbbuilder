@@ -233,9 +233,9 @@ def main():
         if args.fungi:
             groups.append(("fungi", "https://ftp.ncbi.nlm.nih.gov/genomes/refseq/fungi/assembly_summary.txt"))
         if args.virus:
-            groups.append(("virus", "https://ftp.ncbi.nlm.nih.gov/genomes/virus/assembly_summary.txt"))
+            groups.append(("virus", "https://ftp.ncbi.nlm.nih.gov/genomes/refseq/viral/assembly_summary.txt"))
         if args.plants:
-            groups.append(("plants", "https://ftp.ncbi.nlm.nih.gov/genomes/refseq/plants/assembly_summary.txt"))
+            groups.append(("plants", "https://ftp.ncbi.nlm.nih.gov/genomes/refseq/plant/assembly_summary.txt"))
 
         for name, url in groups:
             download_group(name, url, db_dir, container_dir, summary_log)
@@ -267,4 +267,5 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 

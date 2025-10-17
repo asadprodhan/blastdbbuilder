@@ -151,12 +151,14 @@ def concat_genomes(db_dir, summary_log):
                     if line.startswith(">"):
                         total_sequences += 1
 
-    # Move concatenated file two levels up
-    project_root = os.path.abspath(os.path.join(db_dir, "..", ".."))
-    final_fasta = os.path.join(project_root, "combined_fasta.fasta")
+    # 🔹 Move concatenated file into project/blastdbbuilder/
+    project_root = os.path.abspath(os.path.join(db_dir, ".."))
+    final_fasta = os.path.join(project_root, "blastdbbuilder", "combined_fasta.fasta")
+    os.makedirs(os.path.dirname(final_fasta), exist_ok=True)
     shutil.move(output_fasta, final_fasta)
     shutil.rmtree(concat_dir, ignore_errors=True)
     shutil.rmtree(db_dir, ignore_errors=True)
+
     write_summary(summary_log, f"✅ Concatenated {len(fasta_files)} files, {total_sequences} sequences into {final_fasta}")
     print(f"✅ Concatenation done. File moved to {final_fasta}")
     return final_fasta
@@ -178,7 +180,6 @@ def build_blast_db(fasta_file, summary_log):
         print(f"❌ BLAST container not found: {blast_container}")
         return
 
-    # Auto-detect FASTA file extensions
     fasta_file_name = os.path.basename(fasta_file)
     db_prefix = os.path.join(blast_dir, os.path.splitext(fasta_file_name)[0])
 
@@ -221,9 +222,6 @@ def main():
     os.makedirs(db_dir, exist_ok=True)
     os.makedirs(container_dir, exist_ok=True)
 
-    # -----------------------------
-    # Downloads
-    # -----------------------------
     if args.download:
         groups = []
         if args.archaea:
@@ -240,28 +238,18 @@ def main():
         for name, url in groups:
             download_group(name, url, db_dir, container_dir, summary_log)
 
-    # -----------------------------
-    # Concatenate
-    # -----------------------------
     final_fasta = None
     if args.concat:
         final_fasta = concat_genomes(db_dir, summary_log)
 
-    # -----------------------------
-    # Build BLAST DB
-    # -----------------------------
     if args.build:
         if not final_fasta:
-            # Attempt to find concatenated FASTA two levels up
-            project_root = os.path.abspath(os.path.join(db_dir, "..", ".."))
-            candidate = os.path.join(project_root, "combined_fasta.fasta")
+            project_root = os.path.abspath(os.path.join(db_dir, ".."))
+            candidate = os.path.join(project_root, "blastdbbuilder", "combined_fasta.fasta")
             if os.path.isfile(candidate):
                 final_fasta = candidate
         build_blast_db(final_fasta, summary_log)
 
-    # -----------------------------
-    # Citation
-    # -----------------------------
     if args.citation:
         print("blastdbbuilder (Asad Prodhan, 2025). Please cite as needed.")
 

@@ -1,29 +1,47 @@
 #!/bin/bash --login
+# ======================================
+# Virus Genome Downloader (RESUME mode)
+# CLI-consistent version
+# Downloads ALL viral genomes
+# ======================================
+
+set -euo pipefail
 
 # -----------------------------
-# Get current date
+# 0. Setup
 # -----------------------------
-DATE=$(date +%F)  # YYYY-MM-DD format
+DATE=$(date +%F)
 BASE_DIR="$PWD/db/virus"
 mkdir -p "$BASE_DIR"
 
+CONTAINER_DIR="$PWD/db/containers"
+mkdir -p "$CONTAINER_DIR"
+DATASETS_CONTAINER="$CONTAINER_DIR/ncbi-datasets-cli.sif"
+DATASETS_IMAGE="docker://staphb/ncbi-datasets:latest"
+
+export SINGULARITY_CACHEDIR="$PWD/db/.singularity/cache"
+mkdir -p "$SINGULARITY_CACHEDIR"
+
+if [ ! -f "$DATASETS_CONTAINER" ]; then
+    echo "Downloading NCBI Datasets container..."
+    singularity pull "$DATASETS_CONTAINER" "$DATASETS_IMAGE"
+fi
+datasets_exec="singularity exec $DATASETS_CONTAINER datasets"
+
 # -----------------------------
-# 1. Download the viral assembly summary
+# 1. Download assembly_summary.txt
 # -----------------------------
 ASSEMBLY_FILE="$BASE_DIR/assembly_summary.txt"
-echo "Downloading assembly_summary.txt..."
-if wget -O "$ASSEMBLY_FILE" https://ftp.ncbi.nlm.nih.gov/genomes/refseq/viral/assembly_summary.txt; then
-    echo "✅ Download successful."
-else
+echo "Downloading Virus assembly_summary.txt..."
+if ! wget -O "$ASSEMBLY_FILE" https://ftp.ncbi.nlm.nih.gov/genomes/refseq/viral/assembly_summary.txt; then
     echo "❌ Download failed. Exiting."
     exit 1
 fi
 
 # -----------------------------
-# 2. Extract columns 1,2,3,5,8 from all assemblies, skip header
+# 2. Extract columns 1,2,3,5,8 (ALL genomes, no reference filtering)
 # -----------------------------
 OUTPUT_CSV="$BASE_DIR/viral_genomes_${DATE}.csv"
-echo "Extracting columns 1,2,3,5,8 from all viral assemblies..."
 awk -F "\t" '$0 !~ /^#/ {print $1","$2","$3","$5","$8}' "$ASSEMBLY_FILE" \
     > "$OUTPUT_CSV"
 
@@ -32,94 +50,69 @@ if [ "$LINES" -eq 0 ]; then
     echo "No viral genomes found. Exiting."
     exit 1
 fi
-echo "Extracted $LINES viral genomes into $OUTPUT_CSV"
+echo "✅ Extracted $LINES viral genomes into $OUTPUT_CSV"
 
 # -----------------------------
-# 3. Split CSV into chunks of 5000 genomes with date-stamped filenames
+# 3. Split CSV into chunks of 5000
 # -----------------------------
-echo "Splitting CSV into 5000-line chunks..."
-cd "$BASE_DIR"
-split -l 5000 -d --additional-suffix=".csv" "$(basename "$OUTPUT_CSV")" temp_part_
-
-# Rename sequentially with date
+split -l 5000 -d --additional-suffix=".csv" "$OUTPUT_CSV" "$BASE_DIR/temp_part_"
 n=1
-for f in temp_part_*.csv; do
-    mv "$f" "viral_genomes_part${n}_${DATE}.csv"
+for f in "$BASE_DIR"/temp_part_*.csv; do
+    mv "$f" "$BASE_DIR/viral_genomes_part${n}_${DATE}.csv"
     ((n++))
 done
-
-echo "Done! Generated $(ls viral_genomes_part*_${DATE}.csv | wc -l) chunk files."
-
-# -----------------------------
-# 4. Singularity + NCBI Datasets setup
-# -----------------------------
-export SINGULARITY_CACHEDIR="$PWD/.singularity/cache"
-mkdir -p "$SINGULARITY_CACHEDIR"
-
-CONTAINER_DIR="$PWD/../containers"
-DATASETS_CONTAINER="$CONTAINER_DIR/ncbi-datasets-cli.sif"
-DATASETS_IMAGE="docker://staphb/ncbi-datasets:latest"
-mkdir -p "$CONTAINER_DIR"
-
-if [ ! -f "$DATASETS_CONTAINER" ]; then
-  echo "Downloading NCBI Datasets container..."
-  singularity pull "$DATASETS_CONTAINER" "$DATASETS_IMAGE"
-fi
-
-datasets_exec="singularity exec $DATASETS_CONTAINER datasets"
+echo "✅ CSV split into $(ls "$BASE_DIR"/viral_genomes_part*_${DATE}.csv | wc -l) chunks"
 
 # -----------------------------
-# 5. Process split CSV files
+# 4. Download genomes from CSV
 # -----------------------------
-for metadata in viral_genomes_part*_${DATE}.csv; do
+for metadata in "$BASE_DIR"/viral_genomes_part*_${DATE}.csv; do
     echo "======================================"
-    echo " Processing CSV file: ${metadata}"
+    echo "Processing CSV: $metadata"
     echo "======================================"
+
+    total_lines=$(wc -l < "$metadata")
+    counter=0
 
     while IFS=, read -r accession rest; do
         [ -z "$accession" ] && continue
+        counter=$((counter + 1))
+        echo "[Progress] $counter/$total_lines genomes downloaded for this CSV"
 
-        # -----------------------------
-        # Resume check: skip if fasta already exists
-        # -----------------------------
-        if ls "${accession}"*.fna 1> /dev/null 2>&1; then
-            echo "Skipping ${accession} (already downloaded)"
+        # Skip if genome already exists
+        if ls "$BASE_DIR/"*"$accession"*.fna "$BASE_DIR/"*"$accession"*.fa "$BASE_DIR/"*"$accession"*.fasta 1> /dev/null 2>&1; then
+            echo "Skipping $accession (already downloaded)"
             continue
         fi
 
-        echo ""
-        echo "Downloading: ${accession}"
-
-        if ! $datasets_exec download genome accession "${accession}" --filename "${accession}.zip"; then
-            echo "Error downloading ${accession}"
+        ZIP_FILE="$BASE_DIR/${accession}.zip"
+        echo "Downloading $accession..."
+        if ! $datasets_exec download genome accession "$accession" --filename "$ZIP_FILE"; then
+            echo "❌ Error downloading $accession, skipping..."
             continue
         fi
 
-        echo "Extracting ${accession}.zip"
-        if ! unzip -o "${accession}.zip"; then
-            echo "Error extracting ${accession}.zip"
-            rm -f "${accession}.zip"
+        echo "Extracting $ZIP_FILE..."
+        if ! unzip -o "$ZIP_FILE" -d "$BASE_DIR"; then
+            echo "❌ Error extracting $ZIP_FILE, skipping..."
+            rm -f "$ZIP_FILE"
             continue
         fi
 
-        cd "ncbi_dataset/data/${accession}" || { echo "Error: Directory not found for ${accession}"; continue; }
-
-        if ls *.fna 1> /dev/null 2>&1; then
-            echo "Moving ${accession} fasta file into $BASE_DIR"
-            mv *.fna "$BASE_DIR/"
-        else
-            echo "No .fna files found for ${accession}"
+        # Move genome files to BASE_DIR
+        NESTED_DIR="$BASE_DIR/ncbi_dataset/data/$accession"
+        if [ -d "$NESTED_DIR" ]; then
+            find "$NESTED_DIR" -type f \( -iname "*.fna" -o -iname "*.fa" -o -iname "*.fasta" \) -exec mv {} "$BASE_DIR/" \;
         fi
 
-        cd "../../../" || exit
-        rm -r "${accession}.zip" ncbi_dataset *.md
+        # Cleanup
+        rm -rf "$ZIP_FILE" "$BASE_DIR/ncbi_dataset" *.md 2>/dev/null
 
-        echo "Download completed: ${accession}"
-        echo ""
-    done < "${metadata}"
+        echo "✅ Download completed: $accession"
+    done < "$metadata"
 
-    echo "Finished processing ${metadata}"
-    echo ""
+    echo "Finished processing $metadata"
 done
 
-echo "All CSV files have been processed."
+echo "✅ All Virus genomes are now in $BASE_DIR"
+echo "Containers are in $CONTAINER_DIR"

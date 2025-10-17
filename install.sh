@@ -1,58 +1,57 @@
-#!/bin/bash
-# ========================================================
-# blastdbbuilder Installer
-# Copies the CLI entrypoint to ~/bin for global access
-# ========================================================
+#!/usr/bin/env bash
+# =================================================
+# BlastDBBuilder Installer
+# =================================================
 
 set -euo pipefail
 
 # -----------------------------
-# 1. Check for ~/bin in PATH
+# Variables
 # -----------------------------
-if [[ ":$PATH:" != *":$HOME/bin:"* ]]; then
-    echo "⚠️ Warning: ~/bin is not in your PATH."
-    echo "Add the following line to your ~/.bashrc or ~/.zshrc:"
-    echo 'export PATH="$HOME/bin:$PATH"'
-    echo ""
+REPO_ROOT="$(cd "$(dirname "$0")" && pwd)"
+BIN_DIR="$HOME/bin"  # target for the executable
+
+mkdir -p "$BIN_DIR"
+
+CLI_WRAPPER="$REPO_ROOT/blastdbbuilder/blastdbbuilder"
+
+# -----------------------------
+# Create wrapper executable if it doesn't exist
+# -----------------------------
+if [ ! -f "$CLI_WRAPPER" ]; then
+    echo "Creating CLI wrapper executable at $CLI_WRAPPER..."
+    cat > "$CLI_WRAPPER" <<'EOF'
+#!/usr/bin/env python3
+from blastdbbuilder.cli import main
+if __name__ == "__main__":
+    main()
+EOF
+    chmod +x "$CLI_WRAPPER"
 fi
 
 # -----------------------------
-# 2. Ensure ~/bin exists
+# Copy wrapper to ~/bin
 # -----------------------------
-mkdir -p "$HOME/bin"
+echo "Copying CLI to $BIN_DIR..."
+cp "$CLI_WRAPPER" "$BIN_DIR/"
 
 # -----------------------------
-# 3. Determine repo root
+# Add ~/bin to PATH if not already
 # -----------------------------
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-REPO_ROOT="$SCRIPT_DIR"
-
-# -----------------------------
-# 4. Copy CLI script to ~/bin
-# -----------------------------
-CLI_SCRIPT="$REPO_ROOT/blastdbbuilder"  # your CLI entrypoint
-if [[ ! -f "$CLI_SCRIPT" ]]; then
-    echo "❌ Error: CLI script '$CLI_SCRIPT' not found!"
-    exit 1
+SHELL_RC=""
+if [ -n "$BASH_VERSION" ]; then
+    SHELL_RC="$HOME/.bashrc"
+elif [ -n "$ZSH_VERSION" ]; then
+    SHELL_RC="$HOME/.zshrc"
 fi
 
-cp "$CLI_SCRIPT" "$HOME/bin/"
-chmod +x "$HOME/bin/blastdbbuilder"
-
-# -----------------------------
-# 5. Optional: Install dependencies via pip
-# -----------------------------
-if [[ -f "$REPO_ROOT/setup.py" ]]; then
-    echo "📦 Installing Python package dependencies..."
-    python3 -m pip install --user .
+if ! echo "$PATH" | grep -q "$BIN_DIR"; then
+    echo "Adding $BIN_DIR to PATH in $SHELL_RC..."
+    echo "" >> "$SHELL_RC"
+    echo "# Added by BlastDBBuilder installer" >> "$SHELL_RC"
+    echo "export PATH=\"$BIN_DIR:\$PATH\"" >> "$SHELL_RC"
+    echo "✅ Please run 'source $SHELL_RC' or restart your terminal to update PATH."
 fi
 
-# -----------------------------
-# 6. Completion message
-# -----------------------------
-echo ""
 echo "✅ Installation complete!"
-echo "You can now run 'blastdbbuilder' from any directory."
-echo "If 'blastdbbuilder' is not found, add ~/bin to your PATH:"
-echo '  export PATH="$HOME/bin:$PATH"'
-echo "Then, try: blastdbbuilder --help"
+echo "You can now run 'blastdbbuilder --help' from any directory."

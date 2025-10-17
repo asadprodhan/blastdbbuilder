@@ -69,8 +69,9 @@ def concat_genomes():
     if not os.path.exists(CONCAT_DIR):
         os.makedirs(CONCAT_DIR)
     genome_files = []
-    for ext in ("*.fna", "*.fa", "*.fasta"):
-        genome_files.extend(os.path.join(DB_DIR, f) for f in os.listdir(DB_DIR) if f.endswith(ext[1:]))
+    for f in os.listdir(DB_DIR):
+        if f.endswith((".fna", ".fa", ".fasta")):
+            genome_files.append(os.path.join(DB_DIR, f))
     if not genome_files:
         log("❌ No genome files found to concatenate")
         return
@@ -81,7 +82,7 @@ def concat_genomes():
             with open(fpath) as in_f:
                 out_f.write(in_f.read())
             log(f"  [{i}/{len(genome_files)}] {os.path.basename(fpath)}")
-    # Move to final destination
+    # Move to final destination (blastdbbuilder root)
     shutil.move(concat_temp, COMBINED_FASTA_FINAL)
     log(f"✅ Concatenation done. File moved to {COMBINED_FASTA_FINAL}")
 
@@ -111,22 +112,31 @@ def build_blastdb():
 # -----------------------------
 def main():
     parser = argparse.ArgumentParser(description="BlastDBBuilder CLI")
-    parser.add_argument("--archaea", action="store_true")
-    parser.add_argument("--bacteria", action="store_true")
-    parser.add_argument("--fungi", action="store_true")
-    parser.add_argument("--virus", action="store_true")
-    parser.add_argument("--plants", action="store_true")
+    parser.add_argument("--download", action="store_true", help="Download selected genome groups")
+    parser.add_argument("--archaea", action="store_true", help="Download archaea genomes")
+    parser.add_argument("--bacteria", action="store_true", help="Download bacteria genomes")
+    parser.add_argument("--fungi", action="store_true", help="Download fungi genomes")
+    parser.add_argument("--virus", action="store_true", help="Download virus genomes")
+    parser.add_argument("--plants", action="store_true", help="Download plant genomes")
     parser.add_argument("--concat", action="store_true", help="Concatenate downloaded genomes")
     parser.add_argument("--build", action="store_true", help="Build BLAST DB from concatenated genomes")
     args = parser.parse_args()
 
-    for group, func in DOWNLOAD_FUNCTIONS.items():
-        if getattr(args, group):
-            func()
+    # Handle downloads
+    if args.download:
+        any_selected = False
+        for group, func in DOWNLOAD_FUNCTIONS.items():
+            if getattr(args, group):
+                any_selected = True
+                func()
+        if not any_selected:
+            log("⚠️  No genome groups selected for download. Use with --archaea, --bacteria, etc.")
 
+    # Handle concatenation
     if args.concat:
         concat_genomes()
 
+    # Handle BLAST DB build
     if args.build:
         build_blastdb()
 

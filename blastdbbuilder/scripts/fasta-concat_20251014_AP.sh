@@ -90,8 +90,10 @@ TARGET_FASTA="$PROJECT_ROOT/../../combined_fasta.fna"
 mv "$COMBINED_FASTA" "$TARGET_FASTA"
 echo "📂 Moved concatenated FASTA to $TARGET_FASTA"
 
+# Step 7: Delete the individual genome files to free up disk space
+rm -rf *
 # Step 7: Remove db directory
-rm -rf "$CONCAT_DIR"
-echo "🗑 concat directory removed for clean up"
+#rm -rf "$CONCAT_DIR"
+#echo "🗑 concat directory removed for clean up"
 
 echo "✅ Concatenation completed. Master summary.log updated at $SUMMARY_LOG"

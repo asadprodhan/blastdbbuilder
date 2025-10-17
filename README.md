@@ -98,7 +98,13 @@ cd blastdbbuilder
 Install blastdbbuilder
 
 ```
-python3 -m pip install .
+python3 -m pip install --editable .
+```
+
+Check if the installation has been successful
+
+```
+blastdbbuilder --help
 ```
 
 <br />

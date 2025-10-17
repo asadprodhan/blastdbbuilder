@@ -13,13 +13,19 @@ BIN_DIR="$HOME/bin"  # target for the executable
 
 mkdir -p "$BIN_DIR"
 
-CLI_WRAPPER="$REPO_ROOT/blastdbbuilder/blastdbbuilder"
+CLI_WRAPPER="$BIN_DIR/blastdbbuilder"
 
 # -----------------------------
-# Create wrapper executable if it doesn't exist
+# 1. Install the Python package in user space
+# -----------------------------
+echo "📦 Installing blastdbbuilder Python package..."
+python3 -m pip install --user -e "$REPO_ROOT"
+
+# -----------------------------
+# 2. Create CLI wrapper in ~/bin
 # -----------------------------
 if [ ! -f "$CLI_WRAPPER" ]; then
-    echo "Creating CLI wrapper executable at $CLI_WRAPPER..."
+    echo "⚡ Creating CLI wrapper executable at $CLI_WRAPPER..."
     cat > "$CLI_WRAPPER" <<'EOF'
 #!/usr/bin/env python3
 from blastdbbuilder.cli import main
@@ -30,13 +36,7 @@ EOF
 fi
 
 # -----------------------------
-# Copy wrapper to ~/bin
-# -----------------------------
-echo "Copying CLI to $BIN_DIR..."
-cp "$CLI_WRAPPER" "$BIN_DIR/"
-
-# -----------------------------
-# Add ~/bin to PATH if not already
+# 3. Add ~/bin to PATH if missing
 # -----------------------------
 SHELL_RC=""
 if [ -n "$BASH_VERSION" ]; then
@@ -46,11 +46,11 @@ elif [ -n "$ZSH_VERSION" ]; then
 fi
 
 if ! echo "$PATH" | grep -q "$BIN_DIR"; then
-    echo "Adding $BIN_DIR to PATH in $SHELL_RC..."
+    echo "🔧 Adding $BIN_DIR to PATH in $SHELL_RC..."
     echo "" >> "$SHELL_RC"
     echo "# Added by BlastDBBuilder installer" >> "$SHELL_RC"
     echo "export PATH=\"$BIN_DIR:\$PATH\"" >> "$SHELL_RC"
-    echo "✅ Please run 'source $SHELL_RC' or restart your terminal to update PATH."
+    echo "⚠️ Please run 'source $SHELL_RC' or open a new terminal to use blastdbbuilder"
 fi
 
 echo "✅ Installation complete!"

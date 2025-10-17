@@ -156,7 +156,7 @@ def concat_genomes(db_dir, summary_log):
     final_fasta = os.path.join(project_root, "combined_fasta.fasta")
     shutil.move(output_fasta, final_fasta)
     shutil.rmtree(concat_dir, ignore_errors=True)
-    shutil.rmtree(db_dir, ignore_errors=True)
+    #shutil.rmtree(db_dir, ignore_errors=True)
     write_summary(summary_log, f"✅ Concatenated {len(fasta_files)} files, {total_sequences} sequences into {final_fasta}")
     print(f"✅ Concatenation done. File moved to {final_fasta}")
     return final_fasta
@@ -267,3 +267,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+

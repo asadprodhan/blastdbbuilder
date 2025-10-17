@@ -50,14 +50,14 @@ A customized BLASTn database solves these issues by including only relevant sequ
 Designed for **researchers and clinicians**, it provides a **reproducible, regularly updated, and portable solution** for constructing BLAST databases **without manual setup**. 
 
 The toolkit leverages:
-- **Pre-pulled Singularity containers**  
-- **Modular shell scripts**  
+  - **Pre-pulled Singularity containers**  
+  - **Modular shell scripts**  
 
 This enables:
-- **Easy deployment**  
-- **No dependency installation**  
-- A **smooth user experience** across different computational environments  
-- **Automatic cleanup of intermediate files**, keeping only the final BLAST database, which **drastically reduces disk space requirements**
+  - **Easy deployment**  
+  - **No dependency installation**  
+  - A **smooth user experience** across different computational environments  
+  - **Automatic cleanup of intermediate files**, keeping only the final BLAST database, which **drastically reduces disk space requirements**
 
 Furthermore, `blastdbbuilder` retrieves genomes directly from **NCBI’s FTP servers**, ensuring that all downloaded sequences are as **current as the runtime**.
 
@@ -109,35 +109,35 @@ Furthermore, `blastdbbuilder` retrieves genomes directly from **NCBI’s FTP ser
 
 Clone the GitHub Repository:
 
-```
-git clone https://github.com/AsadProdhan/blastdbbuilder.git
-```
+  ```
+  git clone https://github.com/AsadProdhan/blastdbbuilder.git
+  ```
 
 Then, go to the blastdbbuilder directory 
 
-```
-cd blastdbbuilder
-```
+  ```
+  cd blastdbbuilder
+  ```
 
 Install blastdbbuilder
 
-```
-python3 -m pip install --editable .
-```
+  ```
+  python3 -m pip install --editable .
+  ```
 
 Check if the installation has been successful
 
-```
-blastdbbuilder --help
-```
+  ```
+  blastdbbuilder --help
+  ```
 
 <br />
 
 ### If you see the following usage flags, then 
 
-- the **installation** has been successful
+  - the **installation** has been successful
   
-- you can run ***blastdbbuilder*** from any directory in your computer 
+  - you can run ***blastdbbuilder*** from any directory in your computer 
 
 
 
@@ -169,30 +169,30 @@ Close your terminal.
 
 ## Usage
 
-- There are three steps from downloading the genomes to building a BLASTn database
+  - There are three steps from downloading the genomes to building a BLASTn database
   
-- Open a terminal
+  - Open a terminal
   
-- Make a directory. Name it based on which group/s you are going to download. For example
+  - Make a directory. Name it based on which group/s you are going to download. For example
   
 
-  ```
-  mkdir bacteria
-  ```   
+    ```
+    mkdir bacteria
+    ```   
 
 Or, maybe something like this if you are going to download archaea (a), bacteria (b), fungi (f), virus (v), and plants (p). This will help remember what are in the database files which will look like nt.001, nt.002, nt.003 and so on
 
-  ```
-  mkdir abfvp
-  ```
+    ```
+    mkdir abfvp
+    ```
 
-- Now cd to that directory
+  - Now cd to that directory
 
-  ```
-  cd abfvp
-  ```
+    ```
+    cd abfvp
+    ```
 
-- In this directory, run the following three steps- download, concat and build - sequentially
+  - In this directory, run the following three steps- download, concat and build - sequentially
    
 <br />
 
@@ -202,50 +202,50 @@ Or, maybe something like this if you are going to download archaea (a), bacteria
 
 Download Archaea genomes
 
-```
-blastdbbuilder --download --archaea
-```
+  ```
+  blastdbbuilder --download --archaea
+  ```
 
-- This will create an "archaea" directory (db/archaea) and download the  archaeal genomes there. Same for the other groups as well
+  - This will create an "archaea" directory (db/archaea) and download the  archaeal genomes there. Same for the other groups as well
 
 
 Download Bacteria genomes
 
-```
-blastdbbuilder --download --bacteria
-```
+  ```
+  blastdbbuilder --download --bacteria
+  ```
 
 Download Fungal genomes
 
-```
-blastdbbuilder --download --fungi
-```
+  ```
+  blastdbbuilder --download --fungi
+  ```
 
 Download Viral genomes
 
-```
-blastdbbuilder --download --virus
-```
+  ```
+  blastdbbuilder --download --virus
+  ```
 
 Download Plant genomes
 
-```
-blastdbbuilder --download --plants
-```
+  ```
+  blastdbbuilder --download --plants
+  ```
 
 Download multiple groups simultaneously in varius combinations of your interest
 
 
-```
-blastdbbuilder --download --archaea --bacteria 
-```
+  ```
+  blastdbbuilder --download --archaea --bacteria 
+  ```
 
-Or,
+  Or,
 
 
-```
-blastdbbuilder --download --archaea --bacteria --fungi --virus --plants
-```
+  ```
+  blastdbbuilder --download --archaea --bacteria --fungi --virus --plants
+  ```
 
 <br />
 
@@ -254,11 +254,11 @@ blastdbbuilder --download --archaea --bacteria --fungi --virus --plants
 
 After downloading, run the following command. 
 
-```
-blastdbbuilder --concat
-```
+  ```
+  blastdbbuilder --concat
+  ```
 
-- This will create a directory called `concat` and put the concatenated file (containing all the downloaded genomes) in there 
+  - This will create a directory called `concat` and put the concatenated file (containing all the downloaded genomes) in there 
 
 <br />
 
@@ -267,14 +267,17 @@ blastdbbuilder --concat
 
 Finally, run the following command.
 
-```
-blastdbbuilder --build
-```
+  ```
+  blastdbbuilder --build
+  ```
 
-- This will build a BLASTn database from the concatenated FASTA file
-- When the run finished, you will clean up all the intermediate files and directories to reduce disk space usage
-- You will see only one directory named blastnDB
-- blastnDB will contain all the database files
+  - This will build a BLASTn database from the concatenated FASTA file
+    
+  - When the run finished, you will clean up all the intermediate files and directories to reduce disk space usage
+    
+  - You will see only one directory named blastnDB
+    
+  - blastnDB will contain all the database files
 
 <br />
 
@@ -283,19 +286,19 @@ blastdbbuilder --build
 
 After running, the directory structure will look like:
 
-```
-blastnDB/
-├─ nt.001.fna.gz
-├─ nt.002.fna.gz
-├─ nt.003.fna.gz
-├─ nt.004.fna.gz
-├─ nt.nl        
-├─ logs/
-  ├─ nt.001.log
-  ├─ nt.002.log
-  ├─ nt.003.log
-  └─ nt.004.log
-```
+  ```
+  blastnDB/
+  ├─ nt.001.fna.gz
+  ├─ nt.002.fna.gz
+  ├─ nt.003.fna.gz
+  ├─ nt.004.fna.gz
+  ├─ nt.nl        
+  ├─ logs/
+    ├─ nt.001.log
+    ├─ nt.002.log
+    ├─ nt.003.log
+    └─ nt.004.log
+  ```
 
 
 

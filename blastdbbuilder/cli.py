@@ -202,7 +202,7 @@ def main():
             (args.bacteria, "bacteria", "https://ftp.ncbi.nlm.nih.gov/genomes/refseq/bacteria/assembly_summary.txt"),
             (args.fungi, "fungi", "https://ftp.ncbi.nlm.nih.gov/genomes/refseq/fungi/assembly_summary.txt"),
             (args.virus, "virus", "https://ftp.ncbi.nlm.nih.gov/genomes/refseq/viral/assembly_summary.txt"),
-            (args.plants, "plants", "https://ftp.ncbi.nlm.nih.gov/genomes/refseq/plants/assembly_summary.txt"),
+            (args.plants, "plants", "https://ftp.ncbi.nlm.nih.gov/genomes/refseq/plant/assembly_summary.txt"),
         ]:
             if group_flag:
                 download_group(group_name, url, db_dir, container_dir, summary)
@@ -231,3 +231,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+

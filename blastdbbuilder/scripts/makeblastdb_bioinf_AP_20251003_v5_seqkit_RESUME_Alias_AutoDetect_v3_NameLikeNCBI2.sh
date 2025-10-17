@@ -1,12 +1,36 @@
 #!/bin/bash
 # ================================================================
 # Building a Large Customised Blastn Database
+# Fully integrated with blastdbbuilder CLI
 # Author: Asad Prodhan
-# Date: 2025-10-15
-# Description: Safe, resume-capable, chunked BLAST DB build
+# Date: 2025-10-17
 # ================================================================
 
 set -euo pipefail
+
+# -----------------------------
+# Project root
+# -----------------------------
+PROJECT_ROOT="$PWD"
+SUMMARY_LOG="$PROJECT_ROOT/summary.log"
+
+# -----------------------------
+# Default settings (can override via flags)
+# -----------------------------
+CHUNK_SIZE_B=3000000000          # 3G bases in bytes
+OUTPUT_DIR="$PROJECT_ROOT/blastnDB"
+DB_BASENAME="nt"
+SEQKIT_CONTAINER="$PROJECT_ROOT/containers/seqkit_2.10.1.sif"
+BLAST_CONTAINER="$PROJECT_ROOT/containers/ncbi-blast_2.16.0.sif"
+COMPRESS_CHUNKS=false            # optional compression
+
+# -----------------------------
+# Setup directories
+# -----------------------------
+CHUNK_TMP="$OUTPUT_DIR/tmp_chunks"
+LOG_DIR="$OUTPUT_DIR/logs"
+mkdir -p "$OUTPUT_DIR" "$CHUNK_TMP" "$LOG_DIR"
+mkdir -p "$PROJECT_ROOT/containers"
 
 # -----------------------------
 # Banner
@@ -14,222 +38,140 @@ set -euo pipefail
 echo "
 🧬 B L A S T D B   B U I L D E R
 Building a Large Customised Blastn Database
-Asad Prodhan PhD
+Project root: $PROJECT_ROOT
 =======================================
-"
+" | tee -a "$SUMMARY_LOG"
 
 # -----------------------------
-# Default settings (can be overridden by flags)
+# Step 0 — Detect concatenated FASTA
 # -----------------------------
-CHUNK_SIZE_B=3000000000          # 3G bases in bytes
-OUTPUT_DIR="$PWD/blastnDB"
-DB_BASENAME="nt"
-SEQKIT_CONTAINER="$PWD/containers/seqkit_2.10.1.sif"
-BLAST_CONTAINER="$PWD/containers/ncbi-blast_2.16.0.sif"
-COMPRESS_CHUNKS=false           # compression disabled
+COMBINED_FASTA=$(find "$PROJECT_ROOT" -maxdepth 1 -type f \( -iname "*.fna" -o -iname "*.fa" -o -iname "*.fasta" \) | head -n 1)
 
-# -----------------------------
-# Usage function
-# -----------------------------
-usage() {
-    echo "Usage: $0 [OPTIONS]"
-    echo ""
-    echo "Options:"
-    echo "  -c, --chunk-size   <size>      Chunk size in bytes (default: 3000000000 for 3G)"
-    echo "  -o, --output-dir   <dir>       Output directory (default: $PWD/blastnDB)"
-    echo "  -b, --db-basename  <name>      Base name for DB and alias (default: nt)"
-    echo "  --seqkit           <path>      Path to SeqKit Singularity container"
-    echo "  --blast            <path>      Path to BLAST+ Singularity container"
-    echo "  -h, --help                     Show this help message"
-    echo ""
-    exit 1
-}
-
-# -----------------------------
-# Parse command line arguments
-# -----------------------------
-while [[ $# -gt 0 ]]; do
-    case "$1" in
-        -c|--chunk-size)
-            CHUNK_SIZE_B="$2"
-            shift 2
-            ;;
-        -o|--output-dir)
-            OUTPUT_DIR="$2"
-            shift 2
-            ;;
-        -b|--db-basename)
-            DB_BASENAME="$2"
-            shift 2
-            ;;
-        --seqkit)
-            SEQKIT_CONTAINER="$2"
-            shift 2
-            ;;
-        --blast)
-            BLAST_CONTAINER="$2"
-            shift 2
-            ;;
-        -h|--help)
-            usage
-            ;;
-        *)
-            echo "❌ Unknown option: $1"
-            usage
-            ;;
-    esac
-done
-
-# -----------------------------
-# Step 0 — Setup directories and log
-# -----------------------------
-CHUNK_TMP="$OUTPUT_DIR/tmp_chunks"
-LOG_DIR="$OUTPUT_DIR/logs"
-mkdir -p "$OUTPUT_DIR" "$CHUNK_TMP" "$LOG_DIR"
-
-LOGFILE="${LOG_DIR}/makeblastdb_pipeline_$(date +%Y%m%d_%H%M%S).log"
-
-echo "🧬 Starting BLAST DB pipeline" | tee -a "$LOGFILE"
-echo "Output directory: $OUTPUT_DIR" | tee -a "$LOGFILE"
-echo "Temp chunk directory: $CHUNK_TMP" | tee -a "$LOGFILE"
-echo "Logs directory: $LOG_DIR" | tee -a "$LOGFILE"
-echo "SeqKit container: $SEQKIT_CONTAINER" | tee -a "$LOGFILE"
-echo "BLAST container: $BLAST_CONTAINER" | tee -a "$LOGFILE"
-echo "Pipeline log: $LOGFILE" | tee -a "$LOGFILE"
-echo "Chunk size (bytes): $CHUNK_SIZE_B" | tee -a "$LOGFILE"
-echo "---------------------------------------------" | tee -a "$LOGFILE"
-
-# -----------------------------
-# Step 1 — Auto-detect input FASTA
-# -----------------------------
-INPUT_FASTA=$(find "$PWD" -maxdepth 1 -type f \( -iname "*combined*.fasta" -o -iname "*combined*.fna" -o -iname "*combined*.fa" \) | head -n 1)
-if [ -z "$INPUT_FASTA" ]; then
-    echo "❌ ERROR: No input FASTA file found with 'combined' in the name (*.fasta, *.fna, *.fa)" | tee -a "$LOGFILE"
+if [ -z "$COMBINED_FASTA" ]; then
+    echo "❌ ERROR: No concatenated FASTA found in project root ($PROJECT_ROOT)" | tee -a "$SUMMARY_LOG"
     exit 1
 else
-    echo "✅ Auto-detected input FASTA: $INPUT_FASTA" | tee -a "$LOGFILE"
+    echo "✅ Using concatenated FASTA: $COMBINED_FASTA" | tee -a "$SUMMARY_LOG"
 fi
 
 # -----------------------------
-# Step 2 — Split FASTA safely with SeqKit if DB not yet exist
+# Step 1 — Setup containers
 # -----------------------------
-if ! ls "$OUTPUT_DIR"/nt.*.nhr &>/dev/null; then
-    echo "➡️ Splitting FASTA safely with SeqKit by total bases..." | tee -a "$LOGFILE"
-    singularity exec "$SEQKIT_CONTAINER" seqkit split2 \
-        --by-length "$CHUNK_SIZE_B" \
-        -O "$CHUNK_TMP" \
-        --force \
-        "$INPUT_FASTA" \
-        2>&1 | tee -a "$LOGFILE"
-else
-    echo "⏩ BLAST DBs already exist. Skipping splitting." | tee -a "$LOGFILE"
+if [ ! -f "$SEQKIT_CONTAINER" ]; then
+    echo "Downloading SeqKit container..." | tee -a "$SUMMARY_LOG"
+    singularity pull "$SEQKIT_CONTAINER" "docker://shenwei356/seqkit:2.10.1"
+fi
+
+if [ ! -f "$BLAST_CONTAINER" ]; then
+    echo "Downloading BLAST+ container..." | tee -a "$SUMMARY_LOG"
+    singularity pull "$BLAST_CONTAINER" "docker://ncbi/blast:2.16.0"
 fi
 
 # -----------------------------
-# Step 3 — Rename chunks to nt.XXX.fna format
+# Step 2 — Split concatenated FASTA into chunks
 # -----------------------------
-CHUNKS=($CHUNK_TMP/*)
+echo "➡️ Splitting FASTA into ~$(($CHUNK_SIZE_B/1000000)) MB chunks..." | tee -a "$SUMMARY_LOG"
+
+CHUNKS=()
 COUNT=1
-CHUNKS_RENAMED=()
-for CHUNK in "${CHUNKS[@]}"; do
+
+for CHUNK_FILE in $(singularity exec "$SEQKIT_CONTAINER" seqkit split2 --by-length "$CHUNK_SIZE_B" -O "$CHUNK_TMP" --force "$COMBINED_FASTA" -j 4 | awk '{print $NF}'); do
     NEW_NAME=$(printf "%s/nt.%03d.fna" "$OUTPUT_DIR" "$COUNT")
-    mv "$CHUNK" "$NEW_NAME"
-    CHUNKS_RENAMED+=("$NEW_NAME")
-    echo "  $CHUNK → $NEW_NAME" | tee -a "$LOGFILE"
+    mv "$CHUNK_FILE" "$NEW_NAME"
+    CHUNKS+=("$NEW_NAME")
+    echo "  Chunk created: $NEW_NAME" | tee -a "$SUMMARY_LOG"
     COUNT=$((COUNT+1))
 done
 
-CHUNKS=("${CHUNKS_RENAMED[@]}")
-echo "✅ Created ${#CHUNKS[@]} chunks:" | tee -a "$LOGFILE"
-printf '  %s\n' "${CHUNKS[@]}" | tee -a "$LOGFILE"
-echo "---------------------------------------------" | tee -a "$LOGFILE"
+echo "✅ Total chunks created: ${#CHUNKS[@]}" | tee -a "$SUMMARY_LOG"
 
 # -----------------------------
-# Step 4 — Build BLAST DB for each chunk (resume-capable)
+# Step 3 — Build BLAST DBs for each chunk (resume-capable)
 # -----------------------------
-echo "➡️ Building BLAST databases for each chunk..." | tee -a "$LOGFILE"
+echo "➡️ Building BLAST databases for each chunk..." | tee -a "$SUMMARY_LOG"
+TOTAL_CHUNKS=${#CHUNKS[@]}
+CURRENT_CHUNK=0
 DB_LIST=()
+
 for CHUNK_FILE in "${CHUNKS[@]}"; do
-    BASENAME=$(basename "$CHUNK_FILE")
-    BASENAME=${BASENAME%.fna*} # remove .fna
+    CURRENT_CHUNK=$((CURRENT_CHUNK+1))
+    BASENAME=$(basename "$CHUNK_FILE" .fna)
     DB_PREFIX="$OUTPUT_DIR/$BASENAME"
     DB_LIST+=("$DB_PREFIX")
     CHUNK_LOG="$LOG_DIR/$BASENAME.log"
 
-    # Skip if DB already exists
-    if [ -f "$DB_PREFIX.nhr" ] || [ -f "$DB_PREFIX.nin" ] || [ -f "$DB_PREFIX.nsq" ]; then
-        echo "⏩ DB for $BASENAME already exists. Skipping..." | tee -a "$LOGFILE"
+    # Skip if DB exists
+    if [ -f "$DB_PREFIX.nhr" ]; then
+        echo "⏩ [$CURRENT_CHUNK/$TOTAL_CHUNKS] DB already exists: $BASENAME" | tee -a "$SUMMARY_LOG"
         continue
     fi
 
-    echo "🔹 Building DB for: $BASENAME" | tee -a "$LOGFILE"
-    echo "   Log: $CHUNK_LOG" | tee -a "$LOGFILE"
-
+    echo "🔹 [$CURRENT_CHUNK/$TOTAL_CHUNKS] Building DB for: $BASENAME" | tee -a "$SUMMARY_LOG"
     singularity exec "$BLAST_CONTAINER" makeblastdb \
         -in "$CHUNK_FILE" \
         -dbtype nucl \
         -blastdb_version 5 \
-        -max_file_sz "$CHUNK_SIZE_B"B \
+        -max_file_sz "${CHUNK_SIZE_B}B" \
         -out "$DB_PREFIX" \
         -title "$BASENAME" \
         -logfile "$CHUNK_LOG" \
         -hash_index
 
-    if [ $? -eq 0 ]; then
-        echo "✅ DB built for $BASENAME" | tee -a "$LOGFILE"
-        # Delete the original chunk to save space
-        rm -f "$CHUNK_FILE"
-        echo "🗑️ Deleted original FASTA chunk: $CHUNK_FILE" | tee -a "$LOGFILE"
-    else
-        echo "❌ ERROR building DB for $BASENAME. Check $CHUNK_LOG" | tee -a "$LOGFILE"
-    fi
+    echo "✅ DB built for $BASENAME" | tee -a "$SUMMARY_LOG"
+
+    # Optionally remove chunk to save space
+    rm -f "$CHUNK_FILE"
 done
 
 # -----------------------------
-# Step 5 — Integrity check
+# Step 4 — Verify all chunks
 # -----------------------------
-echo "➡️ Checking integrity of all chunk DBs..." | tee -a "$LOGFILE"
+echo "➡️ Verifying all BLAST DB chunks..." | tee -a "$SUMMARY_LOG"
 for DB in "${DB_LIST[@]}"; do
     if [ ! -f "$DB.nhr" ] || [ ! -f "$DB.nin" ] || [ ! -f "$DB.nsq" ]; then
-        echo "❌ Missing files for $DB. Cannot create alias. Aborting." | tee -a "$LOGFILE"
+        echo "❌ Missing files for $DB. Aborting." | tee -a "$SUMMARY_LOG"
         exit 1
     fi
 done
-echo "✅ All chunks have required BLAST DB files." | tee -a "$LOGFILE"
+echo "✅ All chunks verified successfully." | tee -a "$SUMMARY_LOG"
 
 # -----------------------------
-# Step 6 — Create portable alias database
+# Step 5 — Create combined alias database
 # -----------------------------
-ALIAS_FILE="$OUTPUT_DIR/$DB_BASENAME"   # no extension
+ALIAS_FILE="$OUTPUT_DIR/$DB_BASENAME"
 DBLIST_FILE=$(mktemp)
 for DB in "${DB_LIST[@]}"; do
     REL_PATH=$(realpath --relative-to="$OUTPUT_DIR" "$DB")
     echo "$REL_PATH" >> "$DBLIST_FILE"
 done
 
-echo "➡️ Creating combined alias database (portable)..." | tee -a "$LOGFILE"
+echo "➡️ Creating combined alias database..." | tee -a "$SUMMARY_LOG"
 singularity exec "$BLAST_CONTAINER" blastdb_aliastool \
     -title "$DB_BASENAME" \
     -dblist_file "$DBLIST_FILE" \
     -out "$ALIAS_FILE" \
     -dbtype nucl
-
 rm "$DBLIST_FILE"
-echo "✅ Alias created successfully: $ALIAS_FILE" | tee -a "$LOGFILE"
-echo "---------------------------------------------" | tee -a "$LOGFILE"
+
+echo "✅ Alias database created: $ALIAS_FILE" | tee -a "$SUMMARY_LOG"
 
 # -----------------------------
-# Step 7 — Summary usage
+# Step 6 — Update master summary.log
 # -----------------------------
-echo "🎯 All done! You can now run BLAST like this:"
-echo "singularity exec \"$BLAST_CONTAINER\" \\"
-echo "    blastn -db $ALIAS_FILE -query your_query.fna -out results.txt"
-echo "📄 Detailed log saved to: $LOGFILE"
+DATE_STR=$(date +%F)
+TOTAL_SEQS=$(singularity exec "$SEQKIT_CONTAINER" seqkit stats "$COMBINED_FASTA" -T | awk 'NR==2{print $2}')
+echo "" >> "$SUMMARY_LOG"
+echo "BLAST DB build summary ($DATE_STR)" >> "$SUMMARY_LOG"
+echo "---------------------------------------" >> "$SUMMARY_LOG"
+echo "Concatenated FASTA: $COMBINED_FASTA" >> "$SUMMARY_LOG"
+echo "Total sequences concatenated: $TOTAL_SEQS" >> "$SUMMARY_LOG"
+echo "Chunks processed: ${#CHUNKS[@]}" >> "$SUMMARY_LOG"
+echo "DB basename: $DB_BASENAME" >> "$SUMMARY_LOG"
+echo "Database build completed at: $(date +'%Y-%m-%d %H:%M:%S')" >> "$SUMMARY_LOG"
+echo "---------------------------------------" >> "$SUMMARY_LOG"
+
 # -----------------------------
-# Step 8 — Clean up intermediate files
+# Step 7 — Done
 # -----------------------------
-echo "🧹 Cleaning up intermediate files..." | tee -a "$LOGFILE"
-rm -fv "$PWD"/*.fna "$PWD"/*.fa "$PWD"/*.fasta 2>/dev/null
-rm -rf "$CHUNK_TMP" 2>/dev/null
-rm -rf "$PWD/containers" 2>/dev/null
-echo "✅ Cleanup complete." | tee -a "$LOGFILE"
+echo "🎯 BLAST DB build complete!" | tee -a "$SUMMARY_LOG"
+echo "Master summary log updated at: $SUMMARY_LOG"

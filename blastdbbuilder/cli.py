@@ -35,14 +35,13 @@ def write_summary(summary_log, message):
         f.write(f"[{timestamp}] {message}\n")
 
 # -----------------------------
-# Ensure container exists, otherwise download
+# Ensure container exists
 # -----------------------------
-def ensure_container(container_dir, name, image):
-    """Ensure a Singularity container exists in db/containers, otherwise download it."""
-    os.makedirs(container_dir, exist_ok=True)
-    container_path = os.path.join(container_dir, name)
+def ensure_container(container_dir, container_name, image):
+    container_path = os.path.join(container_dir, container_name)
     if not os.path.isfile(container_path):
-        print(f"📦 Downloading container: {name}")
+        print(f"📦 Downloading container: {container_name}")
+        os.makedirs(container_dir, exist_ok=True)
         run_cmd(["singularity", "pull", container_path, image])
     return container_path
 
@@ -85,7 +84,9 @@ def download_group(group_name, assembly_url, db_dir, container_dir, summary_log)
     create_csv_from_summary(assembly_file, csv_file, group_name)
     write_summary(summary_log, f"✅ Created CSV for {group_name}: {csv_file}")
 
-    # Step 3: Ensure NCBI Datasets container exists
+    # -----------------------------
+    # Setup NCBI Datasets container
+    # -----------------------------
     datasets_container = ensure_container(
         container_dir,
         "ncbi-datasets-cli.sif",
@@ -93,7 +94,7 @@ def download_group(group_name, assembly_url, db_dir, container_dir, summary_log)
     )
     datasets_exec = f"singularity exec {datasets_container} datasets"
 
-    # Step 4: Download genomes
+    # Step 3: Download genomes
     with open(csv_file) as f:
         reader = csv.reader(f)
         for row in reader:
@@ -160,17 +161,17 @@ def concat_genomes(db_dir, summary_log):
                     if line.startswith(">"):
                         total_sequences += 1
 
-    # Move concatenated file one level up
+    # Move concatenated file one level up (project/combined_fasta.fasta)
     project_root = os.path.abspath(os.path.join(db_dir, ".."))
     final_fasta = os.path.join(project_root, "combined_fasta.fasta")
     shutil.move(output_fasta, final_fasta)
     shutil.rmtree(concat_dir, ignore_errors=True)
 
-    # Delete all subdirectories in db/ except containers
-    for sub in os.listdir(db_dir):
-        sub_path = os.path.join(db_dir, sub)
-        if os.path.isdir(sub_path) and sub != "containers":
-            shutil.rmtree(sub_path, ignore_errors=True)
+    # Delete all subdirectories in db except containers
+    for entry in os.listdir(db_dir):
+        path = os.path.join(db_dir, entry)
+        if os.path.isdir(path) and entry != "containers":
+            shutil.rmtree(path, ignore_errors=True)
 
     write_summary(summary_log, f"✅ Concatenated {len(fasta_files)} files, {total_sequences} sequences into {final_fasta}")
     print(f"✅ Concatenation done. File moved to {final_fasta}")
@@ -179,7 +180,7 @@ def concat_genomes(db_dir, summary_log):
 # -----------------------------
 # Build BLAST database
 # -----------------------------
-def build_blast_db(fasta_file, summary_log):
+def build_blast_db(fasta_file, summary_log, container_dir, db_dir):
     if not fasta_file or not os.path.isfile(fasta_file):
         print("❌ FASTA file for BLAST DB not found.")
         return
@@ -189,7 +190,6 @@ def build_blast_db(fasta_file, summary_log):
     os.makedirs(blast_dir, exist_ok=True)
 
     # Ensure BLAST container exists
-    container_dir = os.path.join(project_root, "db", "containers")
     blast_container = ensure_container(
         container_dir,
         "ncbi-blast_2.16.0.sif",
@@ -214,6 +214,17 @@ def build_blast_db(fasta_file, summary_log):
     run_cmd(cmd)
     write_summary(summary_log, f"✅ BLAST DB built: {db_prefix}")
     print(f"✅ BLAST database built at {db_prefix}")
+
+    # -----------------------------
+    # Cleanup: delete db directory and genome FASTA files
+    # -----------------------------
+    if os.path.isdir(db_dir):
+        shutil.rmtree(db_dir, ignore_errors=True)
+
+    # Delete any .fna, .fa, .fasta in project root
+    for ext in ("*.fna", "*.fa", "*.fasta"):
+        for f in glob.glob(os.path.join(project_root, ext)):
+            os.remove(f)
 
 # -----------------------------
 # Main CLI
@@ -275,7 +286,7 @@ def main():
             candidate = os.path.join(project_root, "combined_fasta.fasta")
             if os.path.isfile(candidate):
                 final_fasta = candidate
-        build_blast_db(final_fasta, summary_log)
+        build_blast_db(final_fasta, summary_log, container_dir, db_dir)
 
     # -----------------------------
     # Citation

@@ -126,10 +126,34 @@ Download Bacteria genomes
 blastdbbuilder --download --bacteria
 ```
 
-Download multiple groups simultaneously
+Download Fungal genomes
 
 ```
-blastdbbuilder --download --archaea --bacteria --fungi --virus
+blastdbbuilder --download --fungi
+```
+
+Download Viral genomes
+
+```
+blastdbbuilder --download --virus
+```
+
+Download Plant genomes
+
+```
+blastdbbuilder --download --plants
+```
+
+Download multiple groups simultaneously in varius combinations of your interest
+
+
+```
+blastdbbuilder --download --archaea --bacteria 
+```
+
+
+```
+blastdbbuilder --download --archaea --bacteria --fungi --virus --plants
 ```
 
 <br />

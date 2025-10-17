@@ -81,6 +81,30 @@ Furthermore, `blastdbbuilder` retrieves genomes directly from **NCBI’s FTP ser
 
 <br />
 
+## **Pre-requisite**
+
+- Install pip
+
+  ```
+  conda install anaconda::pip
+  ```
+
+- Install Singularity
+
+  ```
+  conda install bioconda::singularity
+  ```
+
+  Or,
+
+
+  ```
+  conda install bioconda/label/cf201901::singularity
+  ```
+
+<br />
+
+
 ## **Installation**
 
 Clone the GitHub Repository:
@@ -152,21 +176,28 @@ Close your terminal.
 - Make a directory. Name it based on which group/s you are going to download. For example
   
 
-```
-mkdir bacteria
-```   
+  ```
+  mkdir bacteria
+  ```   
 
 Or, maybe something like this if you are going to download archaea (a), bacteria (b), fungi (f), virus (v), and plants (p). This will help remember what are in the database files which will look like nt.001, nt.002, nt.003 and so on
 
-```
-mkdir abfvp
-```
+  ```
+  mkdir abfvp
+  ```
 
+- Now cd to that directory
+
+  ```
+  cd abfvp
+  ```
+
+- In this directory, run the following three steps- download, concat and build - sequentially
+   
 <br />
 
-### **Step 1. Download genomes**
 
-You can download genomes for one or more groups (Archaea, Bacteria, Fungi, Virus) in a single command. Each group will have its own directory in the current working directory.
+### **Step 1. Download genomes**
 
 
 Download Archaea genomes
@@ -174,6 +205,9 @@ Download Archaea genomes
 ```
 blastdbbuilder --download --archaea
 ```
+
+- This will create an "archaea" directory (db/archaea) and download the  archaeal genomes there. Same for the other groups as well
+
 
 Download Bacteria genomes
 
@@ -206,6 +240,8 @@ Download multiple groups simultaneously in varius combinations of your interest
 blastdbbuilder --download --archaea --bacteria 
 ```
 
+Or,
+
 
 ```
 blastdbbuilder --download --archaea --bacteria --fungi --virus --plants
@@ -213,32 +249,35 @@ blastdbbuilder --download --archaea --bacteria --fungi --virus --plants
 
 <br />
 
+
 ### **Step 2. Concatenate genomes**
 
-After downloading, concatenate all genome FASTA files from the downloaded directories into a single combined dataset. The concatenated files are stored in a directory called `concat`.
+After downloading, run the following command. 
 
 ```
 blastdbbuilder --concat
 ```
 
+- This will create a directory called `concat` and put the concatenated file (containing all the downloaded genomes) in there 
+
 <br />
+
 
 ### **Step 3. Build BLAST database**
 
-Finally, build the BLAST database from the concatenated FASTA file. The database will be created in a directory called `db`.
+Finally, run the following command.
 
 ```
 blastdbbuilder --build
 ```
 
-**Notes:**
-- `blastdbbuilder` automatically uses **pre-pulled Singularity containers** and internal shell scripts for reproducible execution
-  
-- **Intermediate files are cleaned up automatically**, keeping only the final database to reduce disk space usage
-  
-- The workflow can be executed **step by step** or combined into a pipeline using scripts or workflow managers
+- This will build a BLASTn database from the concatenated FASTA file
+- When the run finished, you will clean up all the intermediate files and directories to reduce disk space usage
+- You will see only one directory named blastnDB
+- blastnDB will contain all the database files
 
 <br />
+
 
 ### **Final Files**
 
@@ -250,21 +289,17 @@ blastnDB/
 ├─ nt.002.fna.gz
 ├─ nt.003.fna.gz
 ├─ nt.004.fna.gz
-├─ nt.nl        <-- portable alias database
+├─ nt.nl        
 ├─ logs/
-│  ├─ nt.001.log
-│  ├─ nt.002.log
-│  ├─ nt.003.log
-│  └─ nt.004.log
-└─ tmp_chunks/   <-- temporary chunk directory (optional, can be deleted after run)
+  ├─ nt.001.log
+  ├─ nt.002.log
+  ├─ nt.003.log
+  └─ nt.004.log
 ```
 
 
-- `nt.nal` is the alias file pointing to all chunk databases with **relative paths**
-  
-- Each chunk has its own `.log` detailing BLASTn DB creation
-  
-- The database is **fully portable**, can be moved to other users/computers without breaking paths
+
+### You have just created your customised BLASTn database. It is **fully portable**, can be moved to other users/computers and used without making any changes
 
 
 

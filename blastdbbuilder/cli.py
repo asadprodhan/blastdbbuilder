@@ -193,9 +193,10 @@ def build_blast_db(fasta_file, summary_log, container_dir, db_dir):
     blast_container = ensure_container(
         container_dir,
         "ncbi-blast_2.16.0.sif",
-        "docker://staphb/ncbi-blast:2.16.0"
+        "docker://quay.io/biocontainers/blast:2.16.0--h6f7f691_0"
     )
-
+    blast_exec = f"singularity exec {blast_container} blastn"
+    
     # Auto-detect FASTA file extensions
     fasta_file_name = os.path.basename(fasta_file)
     db_prefix = os.path.join(blast_dir, os.path.splitext(fasta_file_name)[0])
@@ -296,3 +297,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+

@@ -181,13 +181,14 @@ Close your terminal.
     mkdir bacteria
     ```   
 
-Or, maybe something like this if you are going to download archaea (a), bacteria (b), fungi (f), virus (v), and plants (p). This will help remember what are in the database files which will look like nt.001, nt.002, nt.003 and so on
+  - Or, maybe something like this if you are going to download archaea (a), bacteria (b), fungi (f), virus (v), and plants (p). This will help remember what are in the database files which will look like nt.001, nt.002, nt.003 and so on
 
     ```
     mkdir abfvp
     ```
 
   - Now cd to that directory
+
 
     ```
     cd abfvp

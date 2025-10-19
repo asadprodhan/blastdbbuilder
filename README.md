@@ -31,35 +31,35 @@
 
 ## **Introduction**
 
-Reliable sequence-based diagnostics depend on a high-quality, relevant reference database—without it, even the best tools can give misleading results.
+A BLASTn database provides the essential reference framework for comparing query sequences, forming the backbone of any sequence-based analysis. Accurate results—whether in diagnostics, biosecurity surveillance, microbial studies, evolutionary research, environmental surveys, or functional genomics—depend on a high-quality, well-curated database; without it, even the most sophisticated tools can yield ambiguous outcomes.
 
-In diagnostic workflows, a BLASTn database provides the reference against which query sequences are compared to identify pathogens or assign taxonomy. The quality and composition of the database directly affect accuracy.
+Public databases are comprehensive but often contain redundant or low-quality entries and irrelevant taxa, resulting in slower searches and reduced resolution. Building custom databases addresses these issues by creating lighter, faster, and more precise reference sets.
 
-Public databases, while comprehensive, often contain redundant sequences, low-quality entries, and irrelevant taxa, which can cause duplicate IDs, slower searches, and ambiguous results.
+However, manually constructing large custom databases from numerous genomes is tedious, error-prone, and frequently triggers the notorious “Duplicate ID Found” error, with little guidance on resolution.
 
-A customized BLASTn database solves these issues by including only relevant sequences, removing duplicates, and ensuring faster searches, and reproducible results.
-
+blastdbbuilder was created to overcome these challenges of manual database construction. It automates download, curation, and BLASTn database creation, producing reproducible, error-free, and optimized databases suitable for diagnostics, biosecurity surveillance, microbial studies, and any research that relies on robust sequence comparison.
 
 <br />
 
 
 ## **blastdbbuilder**
 
-`blastdbbuilder` is a lightweight, command-line toolkit that automates the complete **BLASTn database preparation workflow**. It streamlines all steps — from downloading user-specified genomes and organizing datasets, to building optimized and up-to-date BLASTn databases.
 
-Designed for **researchers and clinicians**, it provides a **reproducible, regularly updated, and portable solution** for constructing BLAST databases **without manual setup**. 
+`blastdbbuilder` is a lightweight, command-line toolkit that automates the complete **BLASTn database preparation workflow**. It streamlines every step — from downloading user-specified genomes and organizing datasets to building **optimized, up-to-date BLASTn databases**.
 
-The toolkit leverages:
-  - **Pre-pulled Singularity containers**  
-  - **Modular shell scripts**  
+Designed for **researchers and clinicians**, it provides a **reproducible, portable, and regularly updated solution** for constructing BLAST databases **without manual setup**.
 
-This enables:
-  - **Easy deployment**  
-  - **No dependency installation**  
-  - A **smooth user experience** across different computational environments  
-  - **Automatic cleanup of intermediate files**, keeping only the final BLAST database, which **drastically reduces disk space requirements**
+The toolkit leverages:  
+- **Singularity containers**  
+- **Modular shell scripts**  
 
-Furthermore, `blastdbbuilder` retrieves genomes directly from **NCBI’s FTP servers**, ensuring that all downloaded sequences are as **current as the runtime**.
+Which enables:  
+- **Easy deployment** across diverse computational environments  
+- **No dependency installation**  
+- A **smooth and user-friendly experience**  
+- **Automatic cleanup of intermediate files**, retaining only the final BLASTn database and **significantly reducing disk space requirements**  
+
+Additionally, `blastdbbuilder` retrieves genomes directly from **NCBI’s FTP servers**, ensuring that all sequences are **as current as the time of download**.
 
 
 <br />
@@ -328,6 +328,11 @@ After running, the directory structure will look like:
 
 
 ### You have just created your customised BLASTn database. It is **fully portable**, can be moved to other users/computers and used without making any changes
+
+
+## **Support**
+
+For issues, bug reports, or feature requests, please contact: Asad Prodhan, prodhan82@gmail.com
 
 
 

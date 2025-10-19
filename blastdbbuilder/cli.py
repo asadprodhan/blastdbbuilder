@@ -186,7 +186,7 @@ def build_blast_db(fasta_file, summary_log, container_dir, db_dir):
         return
 
     project_root = os.path.dirname(fasta_file)
-    blast_dir = os.path.join(project_root, "blastdb")
+    blast_dir = os.path.join(project_root, "blastnDB")
     os.makedirs(blast_dir, exist_ok=True)
 
     # Ensure BLAST container exists
@@ -206,7 +206,7 @@ def build_blast_db(fasta_file, summary_log, container_dir, db_dir):
 
     cmd = [
         "singularity", "exec", blast_container,
-        "makeblastdb",
+        "makeblastnDB",
         "-in", fasta_file,
         "-dbtype", "nucl",
         "-out", db_prefix
@@ -297,5 +297,6 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
 

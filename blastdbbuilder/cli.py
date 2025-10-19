@@ -206,7 +206,7 @@ def build_blast_db(fasta_file, summary_log, container_dir, db_dir):
 
     cmd = [
         "singularity", "exec", blast_container,
-        "makeblastnDB",
+        "makeblastdb",
         "-in", fasta_file,
         "-dbtype", "nucl",
         "-out", db_prefix
@@ -297,6 +297,7 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
 
 

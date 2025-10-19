@@ -140,6 +140,21 @@ Check if the installation has been successful
   blastdbbuilder --help
   ```
 
+If you want to uninstall blastdbbuilder, run the following command in the same directory where you have installed blastdbbuilder
+
+  ```
+  pip uninstall blastdbbuilder -y
+  ```
+
+Check if the uninstallation has been successful
+
+  ```
+  blastdbbuilder --help
+  ```
+
+Now, you will see an error
+
+
 <br />
 
 ### If you see the following usage flags, then 

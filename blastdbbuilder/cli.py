@@ -161,9 +161,9 @@ def concat_genomes(db_dir, summary_log):
                     if line.startswith(">"):
                         total_sequences += 1
 
-    # Move concatenated file one level up (project/combined_fasta.fasta)
+    # Move concatenated file one level up (project/nt.fasta)
     project_root = os.path.abspath(os.path.join(db_dir, ".."))
-    final_fasta = os.path.join(project_root, "combined_fasta.fasta")
+    final_fasta = os.path.join(project_root, "nt.fasta")
     shutil.move(output_fasta, final_fasta)
     shutil.rmtree(concat_dir, ignore_errors=True)
 
@@ -284,7 +284,7 @@ def main():
         if not final_fasta:
             # Attempt to find concatenated FASTA one level up
             project_root = os.path.abspath(os.path.join(db_dir, ".."))
-            candidate = os.path.join(project_root, "combined_fasta.fasta")
+            candidate = os.path.join(project_root, "nt.fasta")
             if os.path.isfile(candidate):
                 final_fasta = candidate
         build_blast_db(final_fasta, summary_log, container_dir, db_dir)
@@ -297,4 +297,5 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 

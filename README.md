@@ -140,21 +140,6 @@ Check if the installation has been successful
   blastdbbuilder --help
   ```
 
-If you want to uninstall blastdbbuilder, run the following command in the same directory where you have installed blastdbbuilder
-
-  ```
-  pip uninstall blastdbbuilder -y
-  ```
-
-Check if the uninstallation has been successful
-
-  ```
-  blastdbbuilder --help
-  ```
-
-Now, you will see an error
-
-
 <br />
 
 ### If you see the following usage flags, then 
@@ -189,7 +174,24 @@ options:
 
 Close your terminal.
 
+
+If you want to uninstall blastdbbuilder, run the following command in the same directory where you have installed blastdbbuilder.
+
+  ```
+  pip uninstall blastdbbuilder -y
+  ```
+
+Check if the uninstallation has been successful
+
+  ```
+  blastdbbuilder --help
+  ```
+
+Now, you will see an error.
+
+
 <br />
+
 
 ## Usage
 
@@ -328,6 +330,10 @@ After running, the directory structure will look like:
 
 
 ### You have just created your customised BLASTn database. It is **fully portable**, can be moved to other users/computers and used without making any changes
+
+
+## **Citation**
+
 
 
 ## **Support**

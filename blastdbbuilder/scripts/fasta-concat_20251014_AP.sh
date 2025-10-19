@@ -8,7 +8,7 @@
 
 PROJECT_ROOT="$PWD"
 CONCAT_DIR="$PROJECT_ROOT/db/concat"
-COMBINED_FASTA="$CONCAT_DIR/combined_fasta.fna"
+COMBINED_FASTA="$CONCAT_DIR/nt.fna"
 CHECKPOINT="$CONCAT_DIR/checkpoint.log"
 SUMMARY_LOG="$PROJECT_ROOT/summary.log"
 
@@ -86,7 +86,7 @@ echo "[Integrity] Combined FASTA contains $SEQ_COUNT sequences"
 } >> "$SUMMARY_LOG"
 
 # Step 6: Move combined FASTA two levels up
-TARGET_FASTA="$PROJECT_ROOT/../../combined_fasta.fna"
+TARGET_FASTA="$PROJECT_ROOT/../../nt.fna"
 mv "$COMBINED_FASTA" "$TARGET_FASTA"
 echo "📂 Moved concatenated FASTA to $TARGET_FASTA"
 

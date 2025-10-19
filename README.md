@@ -84,6 +84,14 @@ Furthermore, `blastdbbuilder` retrieves genomes directly from **NCBI’s FTP ser
 
 ## **Pre-requisite**
 
+
+- Install git
+
+  ```
+  conda install anaconda::git
+  ```
+
+
 - Install pip
 
   ```

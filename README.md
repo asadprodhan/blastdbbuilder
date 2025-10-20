@@ -1,5 +1,5 @@
 
-<h1 align="center">blastdbbuilder: Building a Customised Blastn Database</h1>
+<h1 align="center">blastdbbuilder: Building a Customised BLASTn Database</h1>
 
 
 <h3 align="center">M. Asaduzzaman Prodhan<sup>*</sup> </h3>
@@ -24,6 +24,35 @@
   <a href="https://github.com/asadprodhan/blastdbbuilder/blob/main/LICENSE"><img src="https://img.shields.io/badge/License-GPL%203.0-yellow.svg" alt="License GPL 3.0" style="display: inline-block;"></a>
   <a href="https://orcid.org/0000-0002-1320-3486"><img src="https://img.shields.io/badge/ORCID-green?style=flat-square&logo=ORCID&logoColor=white" alt="ORCID" style="display: inline-block;"></a>
 </p>
+
+
+<br />
+
+## **Content**
+
+- [Introduction](#introduction)
+  
+- [blastdbbuilder](#blastdbbuilder)
+  
+- [Features](#features)
+  
+- [Pre-requisite](#pre-requisite)
+  
+- [Installation](#installation)
+  
+- [Usage](#usage)
+  
+  - [Step 1. Download Genomes](#step-1-download-genomes)
+    
+  - [Step 2. Concatenate Genomes](#step-2-concatenate-genomes)
+    
+  - [Step 3. Build BLAST Database](#step-3-build-blast-database)
+    
+  - [Final Files](#final-files)
+    
+- [Citation](#citation)
+  
+- [Support](#support)
 
 
 <br />

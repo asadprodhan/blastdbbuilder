@@ -33,11 +33,13 @@
 
 A BLASTn database provides the essential reference framework for comparing query sequences, forming the backbone of any sequence-based analysis. Accurate results—whether in diagnostics, biosecurity surveillance, microbial studies, evolutionary research, environmental surveys, or functional genomics—depend on a high-quality, well-curated database; without it, even the most sophisticated tools can yield ambiguous outcomes.
 
-Public databases are comprehensive but often contain redundant or low-quality entries and irrelevant taxa, resulting in slower searches and reduced resolution. Building custom databases addresses these issues by creating lighter, faster, and more precise reference sets.
+Public databases are comprehensive but rapidly expanding, often containing redundant or low-quality and irrelevant entries. This leads to slower searches and reduced search resolution. 
 
-However, manually constructing large custom databases from numerous genomes is tedious, error-prone, and frequently triggers the notorious “Duplicate ID Found” error, with little guidance on resolution.
+In contrast, a custom database is like a well-organised library where every book is precisely indexed— smaller in volume, faster to search, and more focused in results.
 
-blastdbbuilder was created to overcome these challenges of manual database construction. It automates download, curation, and BLASTn database creation, producing reproducible, error-free, and optimized databases suitable for diagnostics, biosecurity surveillance, microbial studies, and any research that relies on robust sequence comparison.
+However, manually constructing a custom database from numerous genomes is tedious, error-prone, and frequently interrupted by the “Duplicate ID Found” error— with little guidance available on how to resolve it.
+
+To bridge this gap, I developed the blastdbbuilder package — an automated solution for genome download, curation, and database construction. It eliminates common errors, ensures reproducibility, and delivers an optimized, high-quality BLASTn database tailored for diagnostics, biosecurity surveillance, microbial research, and any study that relies on robust sequence comparison.
 
 <br />
 

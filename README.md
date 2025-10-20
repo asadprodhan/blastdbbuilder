@@ -327,11 +327,11 @@ Finally, run the following command.
 
   - This will build a BLASTn database from the concatenated FASTA file
     
-  - When the run finished, you will clean up all the intermediate files and directories to reduce disk space usage
+  - When the run finished, it will clean up all the intermediate files and directories to reduce disk space usage
     
   - You will see only one directory named blastnDB
     
-  - blastnDB will contain all the database files
+  - blastnDB will contain all the database files, nt.001, nt.002 etc
 
 <br />
 
@@ -354,7 +354,7 @@ After running, the directory structure will look like:
     └─ nt.004.log
   ```
 
-
+<br />
 
 ### You have just created your customised BLASTn database. It is **fully portable**, can be moved to other users/computers and used without making any changes
 

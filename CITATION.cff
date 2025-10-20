@@ -6,7 +6,7 @@ authors:
   orcid: "https://orcid.org/0000-0002-1320-3486"
 title: "blastdbbuilder: Building a Customised BLASTn Database"
 version: v1.0.0
-doi: https://doi.org/10.5281/zenodo.17394138
+doi: 10.5281/zenodo.17394138
 date-released: '2025-10-20'
 repository-code: "https://github.com/asadprodhan/blastdbbuilder"
 preferred-citation:
@@ -15,7 +15,8 @@ preferred-citation:
   - family-names: "Prodhan"
     given-names: "M. Asaduzzaman"
     orcid: "https://orcid.org/0000-0002-1320-3486"
-  doi: "https://doi.org/10.5281/zenodo.17394138"
+  doi: "10.5281/zenodo.17394138"
   journal: "Zenodo"
   title: "blastdbbuilder: Building a Customised BLASTn Database"
+
   year: 2025

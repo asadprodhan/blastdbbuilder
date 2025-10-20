@@ -31,27 +31,16 @@
 ## **Content**
 
 - [Introduction](#introduction)
-  
 - [blastdbbuilder](#blastdbbuilder)
-  
 - [Features](#features)
-  
 - [Pre-requisite](#pre-requisite)
-  
 - [Installation](#installation)
-  
 - [Usage](#usage)
-  
-  - [Step 1. Download Genomes](#step-1-download-genomes)
-    
+  - [Step 1. Download Genomes](#step-1-download-genomes)  
   - [Step 2. Concatenate Genomes](#step-2-concatenate-genomes)
-    
   - [Step 3. Build BLAST Database](#step-3-build-blast-database)
-    
   - [Final Files](#final-files)
-    
 - [Citation](#citation)
-  
 - [Support](#support)
 
 

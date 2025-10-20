@@ -234,6 +234,13 @@ def main():
     parser = argparse.ArgumentParser(
         description="blastdbbuilder: Automated genome download, concatenation, and BLAST database builder"
     )
+    parser.add_argument(
+        "--version",
+        action="version",
+        version="blastdbbuilder v1.0.0",
+        help="Show version number and exit"
+    )
+
     parser.add_argument("--download", action="store_true", help="Download genomes for selected groups")
     parser.add_argument("--concat", action="store_true", help="Concatenate all genomes into one FASTA")
     parser.add_argument("--build", action="store_true", help="Build BLAST database from concatenated FASTA")
@@ -297,6 +304,7 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
 
 

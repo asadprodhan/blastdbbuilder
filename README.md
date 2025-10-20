@@ -359,6 +359,9 @@ After running, the directory structure will look like:
 ### You have just created your customised BLASTn database. It is **fully portable**, can be moved to other users/computers and used without making any changes
 
 
+<br />
+
+
 ## **Citation**
 
 Cite this repository
@@ -367,6 +370,7 @@ If you use this software in your work, please cite it as follows:
 
 Prodhan, M. A. (2025). blastdbbuilder: Building a Customised BLASTn Database. https://doi.org/10.5281/zenodo.17394138
 
+<br />
 
 ## **Support**
 

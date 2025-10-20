@@ -358,7 +358,7 @@ After running, the directory structure will look like:
 
 ## **Support**
 
-For issues, bug reports, or feature requests, please contact: Asad Prodhan, prodhan82@gmail.com
+For issues, bug reports, or feature requests, please contact: **Asad Prodhan, prodhan82@gmail.com**
 
 
 

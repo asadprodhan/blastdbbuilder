@@ -160,6 +160,13 @@ Check if the installation has been successful
   blastdbbuilder --help
   ```
 
+Check the version
+
+  ```
+  blastdbbuilder --version
+  ```
+
+
 <br />
 
 ### If you see the following usage flags, then 

@@ -14,7 +14,7 @@
 <div align="center"><b> 3 Baron-Hay Court, South Perth, WA 6151, Australia </b></div>
 
 
-<div align="center"><b> *Correspondence: prodhan82@gmail.com </b></div>
+<div align="center"><b> *Correspondence: asad.prodhan@dpird.wa.gov.au; prodhan82@gmail.com </b></div>
 
 
 <br />
@@ -358,7 +358,7 @@ After running, the directory structure will look like:
 
 ## **Support**
 
-For issues, bug reports, or feature requests, please contact: **Asad Prodhan, prodhan82@gmail.com**
+For issues, bug reports, or feature requests, please contact: **Asad Prodhan. E-mail: asad.prodhan@dpird.wa.gov.au, prodhan82@gmail.com**
 
 
 

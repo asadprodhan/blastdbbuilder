@@ -86,7 +86,7 @@ Additionally, `blastdbbuilder` retrieves genomes directly from **NCBI’s FTP se
 
 ## **Features**
 
-- Automated download all genomes for virus and the reference genomes for Archaea, Bacteria, Fungi, and Plants
+- Automated download of all genomes for virus and the reference genomes for Archaea, Bacteria, Fungi, and Plants
   
 - Resume-able BLASTn database creation — continue from interrupted runs
    

@@ -67,7 +67,7 @@ To bridge this gap, I developed the blastdbbuilder package — an automated solu
 
 `blastdbbuilder` is a lightweight, command-line toolkit that automates the complete **BLASTn database preparation workflow**. It streamlines every step — from downloading user-specified genomes and organizing datasets to building **optimized, up-to-date BLASTn databases**.
 
-Designed for **researchers and clinicians**, it provides a **reproducible, portable, and regularly updated solution** for constructing BLAST databases **without manual setup**.
+Designed for **researchers and clinicians**, it provides a **reproducible, portable, and regularly updated solution** for constructing BLASTn databases **without manual setup**.
 
 The toolkit leverages:  
 - **Singularity containers**  

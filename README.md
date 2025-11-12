@@ -368,7 +368,7 @@ Cite this repository
 
 If you use this software in your work, please cite it as follows:
 
-Prodhan, M. A. (2025). blastdbbuilder: Building a Customised BLASTn Database. https://doi.org/10.5281/zenodo.17394138
+Prodhan, M. A. (2025). blastdbbuilder: Building a Customised BLASTn Database. https://doi.org/10.5281/zenodo.17394137
 
 <br />
 

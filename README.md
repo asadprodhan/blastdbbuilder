@@ -63,7 +63,7 @@ To bridge this gap, I developed the blastdbbuilder package — an automated solu
 <br />
 
 
-## **blastdbbuilder**
+## **blastdbbuilderCLI**
 
 
 `blastdbbuilder` is a lightweight, command-line toolkit that automates the complete **BLASTn database preparation workflow**. It streamlines every step — from downloading user-specified genomes and organizing datasets to building **optimized, up-to-date BLASTn databases**.
@@ -357,10 +357,14 @@ After running, the directory structure will look like:
 
 <br />
 
-### You have just created your customised BLASTn database. It is **fully portable**, can be moved to other users/computers and used without making any changes
+**You have just created your customised BLASTn database. It is **fully portable**, can be moved to other users/computers and used without making any changes**
 
 
-<br />
+---
+
+## **blastdbbuilderCLI**
+
+
 
 
 ## **Citation**

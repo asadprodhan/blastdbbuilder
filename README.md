@@ -359,13 +359,13 @@ After running, the directory structure will look like:
 
 **You have just created your customised BLASTn database. It is **fully portable**, can be moved to other users/computers and used without making any changes**
 
-
----
+<br />
 
 ## **blastdbbuilder Graphical User Interface (GUI)**
 
 https://github.com/asadprodhan/blastdbbuilder/tree/main/GUI
 
+<br />
 
 ## **Citation**
 

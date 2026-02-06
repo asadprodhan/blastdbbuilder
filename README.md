@@ -63,7 +63,7 @@ To bridge this gap, I developed the blastdbbuilder package — an automated solu
 <br />
 
 
-## **blastdbbuilderCLI**
+## **blastdbbuilder Command Line Interface (CLI)**
 
 
 `blastdbbuilder` is a lightweight, command-line toolkit that automates the complete **BLASTn database preparation workflow**. It streamlines every step — from downloading user-specified genomes and organizing datasets to building **optimized, up-to-date BLASTn databases**.
@@ -362,9 +362,9 @@ After running, the directory structure will look like:
 
 ---
 
-## **blastdbbuilderCLI**
+## **blastdbbuilder Graphical User Interface (GUI)**
 
-
+https://github.com/asadprodhan/blastdbbuilder/tree/main/GUI
 
 
 ## **Citation**

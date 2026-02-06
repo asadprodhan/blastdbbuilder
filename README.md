@@ -365,7 +365,7 @@ After running, the directory structure will look like:
 
 The blastdbbuilder GUI provides a simple, guided desktop interface for building customised BLASTn databases without requiring command-line experience, making the workflow more accessible for routine diagnostics and research users. It wraps the same reproducible and containerised backend as the CLI, ensuring identical, high-quality database outputs.
 
-👉 GUI User Manual: https://github.com/asadprodhan/blastdbbuilder/tree/main/GUI
+👉 **GUI User Manual:** https://github.com/asadprodhan/blastdbbuilder/tree/main/GUI
 
 
 <br />

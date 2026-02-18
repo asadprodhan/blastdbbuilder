@@ -90,21 +90,47 @@ The GUI internally executes the same backend commands as the original `blastdbbu
 
 ---
 
-## **Pre-requisite**
+## **Recommended Computer Setup (Using Conda)**
 
-The GUI package is fully self-contained and ships all required containers. No manual installation of BLAST, datasets, or auxiliary tools is required.
+The GUI package is fully self-contained and ships all required scientific tools. However, your computer still needs a basic software foundation so the graphical user interface (GUI) can open and run reliably. Think of this as setting up the room, not the equipment inside it.
 
-You only need: 
+You need: 
 - Linux computer or Mac Laptop or Windows Subsystem for Linux (WSL) activated in your windows laptop
-- Singularity installed on your system. You can install it by running the following command in the terminal
+- Python 3.9 – runs the GUI
+- tkinter – displays the window and buttons
+- Singularity – runs the built-in containers in the background
+
+You do not need to understand or use these softwares directly.
 
 ```
 conda install bioconda::singularity
 ```
+## **Step 1: Create a clean environment**
+
+```
+conda create -n blastdbbuilder python=3.9 -y
+```
+## **Step 2: Activate the environment**
+
+```
+conda activate blastdbbuilder
+```
+
+## **Step 3: Install tkinter**
+
+```
+conda install tk || conda install -c conda-forge tk
+```
+
+## **Step 4: Install Singularity**
+
+```
+conda install -c bioconda singularity -y
+```
 
 ---
 
-## **Installation**
+## **blastdbbuilder Installation**
 
 1. [Download the Linux GUI installer](https://github.com/asadprodhan/blastdbbuilder/releases)
   
@@ -126,10 +152,18 @@ cd blastdbbuilder_package_gui
 ./install.sh
 ```
   
-Or, right-click on `install.sh` and run as program
+Or, right-click on `install.sh` and run as program if you are in front of your computer.
 
 
-After installation, a desktop icon named blastdbbuilder will be created. 
+After installation, run the following command in the terminal
+
+```
+blastdbbuilder-gui
+```
+
+Or double-click on the blastdbbuilder icon on the Desktop. 
+
+blastdbbuilder app will pop up in front of you- regardless you are working remotely or in front of your computer.
 
 ---
 
@@ -238,4 +272,5 @@ For issues, bug reports, or feature requests, please contact:
 
 **Asad Prodhan**  
 E-mail: asad.prodhan@dpird.wa.gov.au, prodhan82@gmail.com
+
 

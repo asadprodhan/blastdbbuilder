@@ -90,7 +90,7 @@ The GUI internally executes the same backend commands as the original `blastdbbu
 
 ---
 
-## **Recommended Computer Setup (Using Conda)**
+## **Computer Setup (Using Conda)**
 
 The GUI package is fully self-contained and ships all required scientific tools. However, your computer still needs a basic software foundation so the graphical user interface (GUI) can open and run reliably. Think of this as setting up the room, not the equipment inside it.
 
@@ -105,6 +105,7 @@ You do not need to understand or use these softwares directly.
 ```
 conda install bioconda::singularity
 ```
+
 ## **Step 1: Create a clean environment**
 
 ```
@@ -272,5 +273,6 @@ For issues, bug reports, or feature requests, please contact:
 
 **Asad Prodhan**  
 E-mail: asad.prodhan@dpird.wa.gov.au, prodhan82@gmail.com
+
 
 

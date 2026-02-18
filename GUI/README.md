@@ -92,9 +92,15 @@ The GUI internally executes the same backend commands as the original `blastdbbu
 
 ## **Pre-requisite**
 
-- The GUI package is fully self-contained and ships all required containers.
-- You only need: i) Linux computer and ii) Singularity installed on the system
-- No manual installation of BLAST, datasets, or auxiliary tools is required
+The GUI package is fully self-contained and ships all required containers. No manual installation of BLAST, datasets, or auxiliary tools is required.
+
+You only need: 
+- Linux computer or Mac Laptop or Windows Subsystem for Linux (WSL) activated in your windows laptop
+- Singularity installed on your system. You can install it by running the following command in the terminal
+
+```
+conda install bioconda::singularity
+```
 
 ---
 
@@ -232,3 +238,4 @@ For issues, bug reports, or feature requests, please contact:
 
 **Asad Prodhan**  
 E-mail: asad.prodhan@dpird.wa.gov.au, prodhan82@gmail.com
+

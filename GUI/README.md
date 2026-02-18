@@ -168,8 +168,10 @@ blastdbbuilder app will pop up in front of you- regardless you are working remot
 
 ---
 
+
 <br /> <p align="center"> <img src="https://github.com/asadprodhan/blastdbbuilderGUI/blob/main/blastdbbuilderGUI_v3.png" width="100%" > </p> <p> <strong>Figure 1. blastdbbuilder graphical user interface (GUI).</strong> 
 The main window of blastdbbuilder (GUI) showing the end-to-end workflow controller for building custom BLAST databases. The interface allows users to select a **working directory** (top), choose genome groups to **download** (Archaea, Bacteria, Fungi, Virus and Plants), and select the **execution** step (Download only, Concat only, Build only, or Run all steps sequentially). A command preview panel displays the exact command that will be executed. The right-hand panel streams the **live log** output from running jobs. Users can run jobs in **background mode** (safe to close the GUI) and control execution using the **Run**, **Stop**, **Force Kill**, **Clear log view**, and **Exit** buttons. The **status bar** at the bottom reports whether a running job is detected in the selected working directory. </p> <br />
+
 
 ---
 
@@ -273,6 +275,7 @@ For issues, bug reports, or feature requests, please contact:
 
 **Asad Prodhan**  
 E-mail: asad.prodhan@dpird.wa.gov.au, prodhan82@gmail.com
+
 
 
 

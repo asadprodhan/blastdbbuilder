@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "blastdbbuilder-gui"
-version = "1.0.0"
+version = "1.0.2"
 description = "GUI for blastdbbuilder"
 readme = "README.md"
 requires-python = ">=3.9"
@@ -20,6 +20,9 @@ urls = {Homepage="https://github.com/asadprodhan/blastdbbuilder"}
 
 [project.scripts]
 blastdbbuilder-gui = "blastdbbuilder_gui.gui:main"
+blastdbbuilder-gui-desktop = "blastdbbuilder_gui.desktop:main"
+blastdbbuilder-gui-desktop-uninstall = "blastdbbuilder_gui.desktop:uninstall_main"
+
 
 [tool.setuptools.packages.find]
 where = ["."]

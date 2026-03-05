@@ -11,8 +11,6 @@
 <br />
 
 <p align="center">
-  <a href="https://pypi.org/project/blastdbbuilder-gui/"><img src="https://img.shields.io/pypi/v/blastdbbuilder-gui.svg" alt="PyPI version"></a>
-  <a href="https://pypi.org/project/blastdbbuilder-gui/"><img src="https://img.shields.io/pypi/dm/blastdbbuilder-gui.svg" alt="PyPI downloads"></a>
   <a href="https://github.com/asadprodhan/blastdbbuilder/blob/main/LICENSE"><img src="https://img.shields.io/badge/License-GPL%203.0-yellow.svg" alt="License GPL 3.0"></a>
   <a href="https://orcid.org/0000-0002-1320-3486"><img src="https://img.shields.io/badge/ORCID-green?style=flat-square&logo=ORCID&logoColor=white" alt="ORCID"></a>
   <a href="https://doi.org/10.5281/zenodo.17394137"><img src="https://img.shields.io/badge/DOI-10.5281%2Fzenodo.17394137-blue?style=flat-square&logo=Zenodo&logoColor=white" alt="DOI"></a>

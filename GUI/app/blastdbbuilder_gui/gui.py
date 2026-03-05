@@ -33,6 +33,7 @@ import queue
 import tkinter as tk
 from tkinter import ttk, filedialog, messagebox
 from pathlib import Path
+from importlib.resources import files
 
 BASE_DIR = Path(__file__).resolve().parent
 
@@ -176,11 +177,14 @@ def write_pidfile(pid_path: str, pid: int, status=None):
     except Exception:
         pass
 
+
 class App(tk.Tk):
     def __init__(self):
         super().__init__()
         self.title(APP_TITLE)
-        icon_path = os.path.join(os.path.dirname(__file__), "icons", "blastdbbuilder.png")
+
+        icon_path = files("blastdbbuilder_gui").joinpath("icons/blastdbbuilder.png")
+
         try:
             self.iconphoto(True, tk.PhotoImage(file=str(icon_path)))
         except Exception as e:
@@ -1802,5 +1806,9 @@ class App(tk.Tk):
         self._detect_and_attach(silent=True)
 
 
-if __name__ == "__main__":
+def main():
     App().mainloop()
+
+if __name__ == "__main__":
+    main()
+

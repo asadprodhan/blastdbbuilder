@@ -1,0 +1,29 @@
+[build-system]
+requires = ["setuptools", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "blastdbbuilder-gui"
+version = "1.0.0"
+description = "GUI for blastdbbuilder"
+readme = "README.md"
+requires-python = ">=3.9"
+dependencies = [
+    "blastdbbuilder",
+    "customtkinter"
+]
+
+authors = [{name="M. Asaduzzaman Prodhan"}]
+license = {text="GPL-3.0"}
+urls = {Homepage="https://github.com/asadprodhan/blastdbbuilder"}
+
+
+[project.scripts]
+blastdbbuilder-gui = "blastdbbuilder_gui.gui:main"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["blastdbbuilder_gui*"]
+
+[tool.setuptools.package-data]
+blastdbbuilder_gui = ["icons/*.png"]

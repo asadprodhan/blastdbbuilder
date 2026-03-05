@@ -28,3 +28,4 @@ Repository = "https://github.com/AsadProdhan/blastdbbuilder"
 
 [project.scripts]
 blastdbbuilder = "blastdbbuilder.cli:main"
+

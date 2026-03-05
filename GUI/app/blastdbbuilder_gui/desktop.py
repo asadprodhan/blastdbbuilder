@@ -80,3 +80,12 @@ Categories=Science;Bioinformatics;
     os.system("update-desktop-database ~/.local/share/applications >/dev/null 2>&1 || true")
 
     print("Done. You can now double-click the Desktop icon.")
+
+
+def main():
+    # entry point for: blastdbbuilder-gui-desktop
+    return install_desktop_shortcut()
+
+if __name__ == "__main__":
+    raise SystemExit(main())
+

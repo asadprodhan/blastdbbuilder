@@ -1,21 +1,21 @@
+
 <h1 align="center">blastdbbuilder GUI: Building a Customised BLASTn Database</h1>
 
 <h3 align="center">M. Asaduzzaman Prodhan<sup>*</sup> </h3>
 
 <div align="center"><b> DPIRD Diagnostics and Laboratory Services </b></div>
-
 <div align="center"><b> Department of Primary Industries and Regional Development </b></div>
-
 <div align="center"><b> 31 Cedric St, Stirling WA 6021, Australia </b></div>
-
 <div align="center"><b> *Correspondence: asad.prodhan@dpird.wa.gov.au; prodhan82@gmail.com </b></div>
 
 <br />
 
 <p align="center">
-  <a href="https://github.com/asadprodhan/blastdbbuilder/blob/main/LICENSE"><img src="https://img.shields.io/badge/License-GPL%203.0-yellow.svg" alt="License GPL 3.0" style="display: inline-block;"></a>
-  <a href="https://orcid.org/0000-0002-1320-3486"><img src="https://img.shields.io/badge/ORCID-green?style=flat-square&logo=ORCID&logoColor=white" alt="ORCID" style="display: inline-block;"></a>
-  <a href="https://doi.org/10.5281/zenodo.17394137"><img src="https://img.shields.io/badge/DOI-10.5281%2Fzenodo.17394137-blue?style=flat-square&logo=Zenodo&logoColor=white" alt="DOI: 10.5281/zenodo.17394137" style="display: inline-block;"></a>
+  <a href="https://pypi.org/project/blastdbbuilder-gui/"><img src="https://img.shields.io/pypi/v/blastdbbuilder-gui.svg" alt="PyPI version"></a>
+  <a href="https://pypi.org/project/blastdbbuilder-gui/"><img src="https://img.shields.io/pypi/dm/blastdbbuilder-gui.svg" alt="PyPI downloads"></a>
+  <a href="https://github.com/asadprodhan/blastdbbuilder/blob/main/LICENSE"><img src="https://img.shields.io/badge/License-GPL%203.0-yellow.svg" alt="License GPL 3.0"></a>
+  <a href="https://orcid.org/0000-0002-1320-3486"><img src="https://img.shields.io/badge/ORCID-green?style=flat-square&logo=ORCID&logoColor=white" alt="ORCID"></a>
+  <a href="https://doi.org/10.5281/zenodo.17394137"><img src="https://img.shields.io/badge/DOI-10.5281%2Fzenodo.17394137-blue?style=flat-square&logo=Zenodo&logoColor=white" alt="DOI"></a>
 </p>
 
 ---
@@ -25,36 +25,32 @@
 - [Introduction](#introduction)
 - [blastdbbuilder GUI](#blastdbbuilder-gui)
 - [Features](#features)
-- [Pre-requisite](#pre-requisite)
+- [Computer Setup](#computer-setup-using-conda)
 - [Installation](#installation)
-- [Using the GUI](#using-the-gui)
-  - [Working directory](#working-directory-very-important)
-  - [Selecting a directory](#selecting-a-directory-important-note)
-  - [Genome group selection](#genome-group-selection)
-  - [Action selection](#action-selection)
-  - [Buttons and their meaning](#buttons-and-their-meaning)
-  - [Running a job](#running-a-job)
-  - [Checking progress later](#checking-progress-later)
-  - [Stopping a job](#stopping-a-job)
+- [Using the GUI](#how-to-use-the-gui-locally)
+- [Running Remotely](#how-to-use-the-gui-remotely)
+- [Checking progress later](#checking-progress-later)
+- [Stopping a job](#stopping-a-job)
 - [Citation](#citation)
 - [Support](#support)
+
 ---
 
 ## **Introduction**
 
-A BLASTn database provides the essential reference framework for comparing query sequences, forming the backbone of any sequence-based analysis. Accurate results—whether in diagnostics, biosecurity surveillance, microbial studies, evolutionary research, environmental surveys, or functional genomics—depend on a high-quality, well-curated database; without it, even the most sophisticated tools can yield ambiguous outcomes.
+A BLASTn database provides the essential reference framework for comparing query sequences, forming the backbone of any sequence-based analysis. Accurate results—whether in diagnostics, biosecurity surveillance, microbial studies, evolutionary research, environmental surveys, or functional genomics—depend on a high-quality, well-curated database.
 
 Public databases are comprehensive but rapidly expanding, often containing redundant, low-quality or irrelevant entries. This leads to slower searches and reduced search resolution.
 
-In contrast, a custom database is like a well-organised library where every book is precisely indexed—smaller in volume, faster to search, and more focused in results.
+In contrast, a custom database is like a well‑organised library where every book is precisely indexed—smaller in volume, faster to search, and more focused in results.
 
-To simplify this process for end users, **blastdbbuilder GUI** provides a graphical interface to the proven `blastdbbuilder` backend, allowing fully reproducible database construction without requiring command-line interaction.
+To simplify this process for end users, **blastdbbuilder GUI** provides a graphical interface to the proven `blastdbbuilder` backend, allowing fully reproducible database construction without requiring command‑line interaction.
 
 ---
 
 ## **blastdbbuilder GUI**
 
-`blastdbbuilder GUI` is a Linux graphical front-end for the `blastdbbuilder` command-line toolkit.
+`blastdbbuilder GUI` is a Linux graphical front‑end for the `blastdbbuilder` command‑line toolkit.
 
 It enables users to:
 
@@ -64,13 +60,6 @@ It enables users to:
 
 using an interactive graphical interface.
 
-The GUI is specifically designed for:
-
-- long-running downloads (many hours to days)
-- remote Linux and HPC systems
-- safe background execution
-- reconnecting to running jobs after closing the interface
-
 The GUI internally executes the same backend commands as the original `blastdbbuilder` toolkit.
 
 ---
@@ -78,100 +67,74 @@ The GUI internally executes the same backend commands as the original `blastdbbu
 ## **Features**
 
 - Graphical selection of genome groups (Archaea, Bacteria, Fungi, Virus, Plants)
-- Graphical execution of:
-  - genome download
-  - FASTA concatenation
-  - BLASTn database construction
+- Graphical execution of genome download, FASTA concatenation and BLAST database building
 - Background execution (safe to close the GUI)
-- Reconnect to running jobs at any time
+- Reconnect to running jobs
 - Live log monitoring
 - Safe termination and emergency kill options
-- Directory-based job management (multiple jobs can run simultaneously in different folders)
+- Directory‑based job management
 
 ---
 
 ## **Computer Setup (Using Conda)**
 
-The GUI package is fully self-contained and ships all required scientific tools. However, your computer still needs a basic software foundation so the graphical user interface (GUI) can open and run reliably. Think of this as setting up the room, not the equipment inside it.
+You need:
 
-You need: 
-- Linux computer or Mac Laptop or Windows Subsystem for Linux (WSL) activated in your windows laptop
-- Python 3.9 – runs the GUI
-- tkinter – displays the window and buttons
-- Singularity – runs the built-in containers in the background
+- Linux computer, Mac, or Windows using **WSL**
+- Python ≥ 3.9
+- tkinter
+- Singularity / Apptainer
 
-You do not need to understand or use these softwares directly.
+Example setup:
 
-```
-conda install bioconda::singularity
-```
-
-## **Step 1: Create a clean environment**
-
-```
+```bash
 conda create -n blastdbbuilder python=3.9 -y
-```
-## **Step 2: Activate the environment**
-
-```
 conda activate blastdbbuilder
-```
-
-## **Step 3: Install tkinter**
-
-```
-conda install tk || conda install -c conda-forge tk
-```
-
-## **Step 4: Install Singularity**
-
-```
-conda install -c bioconda singularity -y
+conda install tk
+conda install -c bioconda singularity
 ```
 
 ---
 
-## **blastdbbuilder Installation**
+## **Installation**
 
-1. [Download the Linux GUI installer](https://github.com/asadprodhan/blastdbbuilder/releases)
-  
-2. Extract the downloaded file
+### Recommended installation (PyPI)
 
-```
-unzip blastdbbuilder-gui-linux.zip
-```
-  
-3. Navigate the packae directory
+Install using pip:
 
+```bash
+pip install blastdbbuilder-gui
 ```
-cd blastdbbuilder_package_gui
-```
-  
-4. Install
 
-```
-./install.sh
-```
-  
-Or, right-click on `install.sh` and run as program if you are in front of your computer.
+Launch the GUI:
 
-
-After installation, run the following command in the terminal
-
-```
+```bash
 blastdbbuilder-gui
 ```
 
-Or double-click on the blastdbbuilder icon on the Desktop. 
+### Optional: Create a Desktop launcher (Linux)
 
-blastdbbuilder app will pop up in front of you- regardless you are working remotely or in front of your computer.
+Run once:
+
+```bash
+blastdbbuilder-gui-desktop
+```
+
+This creates:
+
+```
+~/.local/share/applications/blastdbbuilder-gui.desktop
+~/.local/share/icons/hicolor/256x256/apps/blastdbbuilder-gui.png
+~/Desktop/blastdbbuilder-gui.desktop
+```
+
+You can then **double‑click the Desktop icon** to start the GUI.
 
 ---
 
+<br /> <p align="center"> <img src="https://github.com/asadprodhan/blastdbbuilderGUI/blob/main/blastdbbuilderGUI_v3.png" width="100%" > </p>
 
-<br /> <p align="center"> <img src="https://github.com/asadprodhan/blastdbbuilderGUI/blob/main/blastdbbuilderGUI_v3.png" width="100%" > </p> <p> <strong>Figure 1. blastdbbuilder graphical user interface (GUI).</strong> 
-The main window of blastdbbuilder (GUI) showing the end-to-end workflow controller for building custom BLAST databases. The interface allows users to select a **working directory** (top), choose genome groups to **download** (Archaea, Bacteria, Fungi, Virus and Plants), and select the **execution** step (Download only, Concat only, Build only, or Run all steps sequentially). A command preview panel displays the exact command that will be executed. The right-hand panel streams the **live log** output from running jobs. Users can run jobs in **background mode** (safe to close the GUI) and control execution using the **Run**, **Stop**, **Force Kill**, **Clear log view**, and **Exit** buttons. The **status bar** at the bottom reports whether a running job is detected in the selected working directory. </p> <br />
-
+<p><strong>Figure 1.</strong> blastdbbuilder graphical user interface (GUI) controlling the complete workflow for building customised BLAST databases.</p>
 
 ---
 
@@ -179,40 +142,51 @@ The main window of blastdbbuilder (GUI) showing the end-to-end workflow controll
 
 **Browse...** Select the working directory.
 
-**Detect running job** Reconnects the GUI to an already running job in the selected directory and attaches to its log.
+**Detect running job** Reconnect to a running job in the selected directory.
 
-**Run** Starts the selected action(s).
+**Run** Starts the selected action.
 
-**Stop** Sends a graceful termination request to the running job in the selected directory.
+**Stop** Gracefully stops the running job.
 
-**Force Kill** Immediately kills the running job and all related processes. Use only if the job does not stop using *Stop*.
+**Force Kill** Immediately terminates the job and all related processes.
 
-**Clear log view** Clears the log display inside the GUI window only. The log file on disk is not deleted.
+**Clear log view** Clears the GUI log window only.
 
-**Exit** Closes the GUI window only. If the job is running in background mode, it continues running.
+**Exit** Closes the GUI window.
 
 ---
 
 ## **How to use the GUI locally**
 
-1. Launch the program by double-clicking the desktop icon.
-2 Select the working directory through navigating into the directory and DOUBLE-CLICK the folder** to select it, and then pressing OK
-3. Select one or more groups:
-    - Archaea
-    - Bacteria
-    - Fungi
-    - Virus
-    - Plants
-4. Select action (usually *Run all*)
-    - Download only (Step 1)
-    - Concat only (Step 2)
-    - Build only (Step 3)
-    - Run all (1 → 2 → 3)
-5. Ensure *Run in background* is enabled (recommended)
-6. Click **Run**
+1. Launch the program using the desktop icon or:
 
-**The job will start and logs will appear in the right-hand panel. You can safely close the GUI after starting a job and check progress later**
- 
+```
+blastdbbuilder-gui
+```
+
+2. Select the working directory through navigating into the directory and DOUBLE-CLICK the folder to select it, and then pressing OK
+
+3. Choose genome groups:
+
+- Archaea
+- Bacteria
+- Fungi
+- Virus
+- Plants
+
+4. Select action:
+
+- Download only
+- Concat only
+- Build only
+- Run all
+
+5. Enable **Run in background**.
+
+6. Click **Run**.
+
+Jobs continue running even if the GUI is closed.
+
 ---
 
 ## **How to use the GUI remotely**
@@ -275,7 +249,3 @@ For issues, bug reports, or feature requests, please contact:
 
 **Asad Prodhan**  
 E-mail: asad.prodhan@dpird.wa.gov.au, prodhan82@gmail.com
-
-
-
-

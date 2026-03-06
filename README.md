@@ -105,76 +105,90 @@ Additionally, `blastdbbuilder` retrieves genomes directly from **NCBI’s FTP se
 
 ## **Pre-requisite**
 
+**System requirements**
 
-- Install git
+Before installing `blastdbbuilder`, make sure the following are available on your system:
 
-  ```
-  conda install anaconda::git
-  ```
+**Python ≥ 3.9**
+
+Check your Python version:
+
+```
+python3 --version
+```
+
+If Python is older than 3.9, install a newer Python using your system package manager.
+
+Example (Ubuntu):
+
+```
+sudo apt install python3
+```
+
+This installs the latest Python version supported by your operating system.
+
+You do not need to remove the existing Python installation, because Ubuntu uses Python internally for many system tools.
 
 
-- Install pip
+**unzip**
 
-  ```
-  conda install anaconda::pip
-  ```
+The program requires the unzip utility to extract downloaded genome archives.
 
-- Install Singularity
+Check if `unzip` is installed:
 
-  ```
-  conda install bioconda::singularity
-  ```
+```
+unzip -v
+```
 
-  Or,
+If the command is not found, install it:
 
+```
+sudo apt install unzip
+```
 
-  ```
-  conda install bioconda/label/cf201901::singularity
-  ```
+**Container engine**
+
+One of the following container engines must be installed:
+
+- Apptainer
+
+- SingularityCE ≥ 3.x
+
+Example installation on Ubuntu / Debian:
+
+```
+sudo apt install singularity-container
+```
+
+The program automatically detects which container engine is available on your system and uses it.
+
+On HPC systems (for example ARDC Nectar), Singularity or Apptainer is typically already installed.
+
 
 <br />
 
 
 ## **Installation**
 
-Clone the GitHub Repository:
+Install `blastdbbuilder` directly from PyPI:
 
-  ```
-  git clone https://github.com/AsadProdhan/blastdbbuilder.git
-  ```
+```
+pip install blastdbbuilder
+```
 
-Then, go to the blastdbbuilder directory 
+Verify installation
 
-  ```
-  cd blastdbbuilder
-  ```
+Check if the installation was successful:
 
-Install blastdbbuilder
+```
+blastdbbuilder --help
+```
 
-  ```
-  python3 -m pip install --editable .
-  ```
+If you see the following usage flags, then 
 
-Check if the installation has been successful
-
-  ```
-  blastdbbuilder --help
-  ```
-
-Check the version
-
-  ```
-  blastdbbuilder --version
-  ```
-
-
-<br />
-
-### If you see the following usage flags, then 
-
-  - the **installation** has been successful
+  - the `installation` has been successful
   
-  - you can run ***blastdbbuilder*** from any directory in your computer 
+  - you can run `blastdbbuilder` from any directory in your computer 
 
 
 
@@ -200,7 +214,29 @@ options:
   --plants    Include Plant genomes
 ```
 
-Close your terminal.
+Check the installed version:
+
+```
+blastdbbuilder --version
+```
+
+Upgrade blastdbbuilder
+
+```
+pip install --upgrade blastdbbuilder
+```
+
+
+**Optional: Install from GitHub (development version)**
+
+If you want to install the latest development version from GitHub:
+
+
+```
+git clone https://github.com/AsadProdhan/blastdbbuilder.git
+cd blastdbbuilder
+pip install -e .
+```
 
 
 If you want to uninstall blastdbbuilder, run the following command in the same directory where you have installed blastdbbuilder.

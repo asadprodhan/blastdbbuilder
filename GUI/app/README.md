@@ -74,59 +74,128 @@ The GUI internally executes the same backend commands as the original `blastdbbu
 
 ---
 
-## **Computer Setup (Using Conda)**
+## **Pre-requisite**
 
-You need:
+**System requirements**
 
-- Linux computer, Mac, or Windows using **WSL**
-- Python ≥ 3.9
-- tkinter
-- Singularity / Apptainer
+Before installing `blastdbbuilder`, make sure the following are available on your system:
 
-Example setup:
+**Python ≥ 3.9**
 
-```bash
-conda create -n blastdbbuilder python=3.9 -y
-conda activate blastdbbuilder
-conda install tk
-conda install -c bioconda singularity
+Check your Python version:
+
+```
+python3 --version
 ```
 
----
+If Python is older than 3.9, install a newer Python using your system package manager.
+
+Example (Ubuntu):
+
+```
+sudo apt install python3
+```
+
+This installs the latest Python version supported by your operating system.
+
+You do not need to remove the existing Python installation, because Ubuntu uses Python internally for many system tools.
+
+
+**tkinter**
+
+The GUI requires the `tkinter` library for the graphical interface.
+
+To check if tkinter is available:
+
+
+```
+python3 -m tkinter
+```
+
+If a small window appears, tkinter is installed.
+
+
+If tkinter is missing (Ubuntu):
+
+
+```
+sudo apt install python3-tk
+```
+
+
+**unzip**
+
+The program requires the unzip utility to extract downloaded genome archives.
+
+Check if `unzip` is installed:
+
+```
+unzip -v
+```
+
+If the command is not found, install it:
+
+```
+sudo apt install unzip
+```
+
+**Container engine**
+
+One of the following container engines must be installed:
+
+- Apptainer
+
+- SingularityCE ≥ 3.x
+
+Example installation on Ubuntu / Debian:
+
+```
+sudo apt install singularity-container
+```
+
+The program automatically detects which container engine is available on your system and uses it.
+
+On HPC systems (for example ARDC Nectar), Singularity or Apptainer is typically already installed.
+
+
+<br />
+
 
 ## **Installation**
 
-### Recommended installation (PyPI)
+Install `blastdbbuilder-gui` directly from PyPI:
 
-Install using pip:
-
-```bash
+```
 pip install blastdbbuilder-gui
 ```
 
-Launch the GUI:
+Verify installation
 
-```bash
+Check if the installation was successful:
+
+```
 blastdbbuilder-gui
 ```
 
-### Optional: Create a Desktop launcher (Linux)
+If the GUI window opens, then:
+
+- the `installation` has been successful
+
+- you can run `blastdbbuilder-gui` from any directory on your computer.
+
+
+(Optional) Create a Desktop launcher (Linux)
 
 Run once:
 
-```bash
+
+```
 blastdbbuilder-gui-desktop
 ```
 
-This creates:
+This creates a Desktop launcher (Linux). You can then double-click the Desktop icon to start the GUI.
 
-```
-~/.local/share/applications/blastdbbuilder-gui.desktop
-~/.local/share/icons/hicolor/256x256/apps/blastdbbuilder-gui.png
-~/Desktop/blastdbbuilder-gui.desktop
-```
-
-You can then **double‑click the Desktop icon** to start the GUI.
+<br />
 
 ---
 

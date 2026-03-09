@@ -27,87 +27,116 @@
 
 </p>
 
-<br />
+---
 
 ## **Content**
 
 - [Introduction](#introduction)
 - [blastdbbuilder](#blastdbbuilder)
 - [Features](#features)
-- [Pre-requisite](#pre-requisite)
-- [Installation](#installation)
-- [Usage](#usage)
-  - [Step 1. Download Genomes](#step-1-download-genomes)  
-  - [Step 2. Concatenate Genomes](#step-2-concatenate-genomes)
-  - [Step 3. Build BLAST Database](#step-3-build-blast-database)
-  - [Final Files](#final-files)
+- [User Manuals](#user-manuals)
+  - [Pre-requisite](#pre-requisite)
+  - [Command Line Interface (CLI)](#command-line-interface-cli)
+  - [Graphical User Interface (GUI)](#graphical-user-interface-gui)
+  - [Windows (WSL) Usage](#windows-wsl-usage)
+  - [High Performance Computing (HPC)](#high-performance-computing-hpc)
 - [Citation](#citation)
 - [Support](#support)
 
-
-<br />
-
+---
 
 ## **Introduction**
 
-A BLASTn database provides the essential reference framework for comparing query sequences, forming the backbone of any sequence-based analysis. Accurate results—whether in diagnostics, biosecurity surveillance, microbial studies, evolutionary research, environmental surveys, or functional genomics—depend on a high-quality, well-curated database; without it, even the most sophisticated tools can yield ambiguous outcomes.
+A BLASTn database provides the essential reference framework for
+comparing query sequences, forming the backbone of any sequence-based
+analysis. Accurate results---whether in diagnostics, biosecurity
+surveillance, microbial studies, evolutionary research, environmental
+surveys, or functional genomics---depend on a high-quality, well-curated
+database; without it, even the most sophisticated tools can yield
+ambiguous outcomes.
 
-Public databases are comprehensive but rapidly expanding, often containing redundant or low-quality and irrelevant entries. This leads to slower searches and reduced search resolution. 
+Public databases are comprehensive but rapidly expanding, often
+containing redundant or low-quality and irrelevant entries. This leads
+to slower searches and reduced search resolution.
 
-In contrast, a custom database is like a well-organised library where every book is precisely indexed— smaller in volume, faster to search, and more focused in results.
+In contrast, a custom database is like a well-organised library where
+every book is precisely indexed--- smaller in volume, faster to search,
+and more focused in results.
 
-However, manually constructing a custom database from numerous genomes is tedious, error-prone, and frequently interrupted by the “Duplicate ID Found” error— with little guidance available on how to resolve it.
+However, manually constructing a custom database from numerous genomes
+is tedious, error-prone, and frequently interrupted by the "Duplicate ID
+Found" error--- with little guidance available on how to resolve it.
 
-To bridge this gap, I developed the blastdbbuilder package — an automated solution for genome download, curation, and database construction. It eliminates common errors, ensures reproducibility, and delivers an optimized, high-quality BLASTn database tailored for diagnostics, biosecurity surveillance, microbial research, and any study that relies on robust sequence comparison.
+To bridge this gap, I developed the blastdbbuilder package --- an
+automated solution for genome download, curation, and database
+construction. It eliminates common errors, ensures reproducibility, and
+delivers an optimized, high-quality BLASTn database tailored for
+diagnostics, biosecurity surveillance, microbial research, and any study
+that relies on robust sequence comparison.
 
-<br />
+---
 
+## **blastdbbuilder**
 
-## **blastdbbuilder Command Line Interface (CLI)**
+`blastdbbuilder` is a lightweight toolkit that automates the complete
+**BLASTn database preparation workflow**. It streamlines every step ---
+from downloading user-specified genomes and organizing datasets to
+building **optimized, up-to-date BLASTn databases**.
 
+Designed for **researchers and clinicians**, it provides a
+**reproducible, portable, and regularly updated solution** for
+constructing BLASTn databases **without manual setup**.
 
-`blastdbbuilder` is a lightweight, command-line toolkit that automates the complete **BLASTn database preparation workflow**. It streamlines every step — from downloading user-specified genomes and organizing datasets to building **optimized, up-to-date BLASTn databases**.
+The toolkit leverages:
 
-Designed for **researchers and clinicians**, it provides a **reproducible, portable, and regularly updated solution** for constructing BLASTn databases **without manual setup**.
+-   **Singularity / Apptainer containers**
+-   **Modular scripts**
+-   **Automated genome retrieval from NCBI**
 
-The toolkit leverages:  
-- **Singularity containers**  
-- **Modular shell scripts**  
+This enables:
 
-Which enables:  
-- **Easy deployment** across diverse computational environments  
-- **No dependency installation**  
-- A **smooth and user-friendly experience**  
-- **Automatic cleanup of intermediate files**, retaining only the final BLASTn database and **significantly reducing disk space requirements**  
+-   **Easy deployment across diverse computational environments**
+-   **Minimal dependency installation**
+-   **Reproducible database generation**
+-   **Automatic cleanup of intermediate files**, retaining only the
+    final BLASTn database to significantly reduce disk space
+    requirements
 
-Additionally, `blastdbbuilder` retrieves genomes directly from **NCBI’s FTP servers**, ensuring that all sequences are **as current as the time of download**.
+All genomes are retrieved directly from **NCBI RefSeq repositories**,
+ensuring that the database reflects the **latest available sequences at
+the time of download**.
 
-
-<br />
+---
 
 ## **Features**
 
-- Automated download of all genomes for virus and the reference genomes for Archaea, Bacteria, Fungi, and Plants
-  
-- Resume-able BLASTn database creation — continue from interrupted runs
-   
-- Modular bash scripts for each task
-    
-- Use of Singularity containers for less software installation and portability
-    
-- Lightweight installation 
-  
-- Less disk space requirement 
- 
+-   Automated download of all genomes for virus and the reference
+    genomes for Archaea, Bacteria, Fungi, and Plants
 
-<br />
+-   Resume-able BLASTn database creation --- continue from interrupted
+    runs
 
+-   Modular scripts for each workflow step
 
-## **Pre-requisite**
+-   Container-based execution for portability and reproducibility
+
+-   Lightweight installation
+
+-   Reduced disk space usage through automatic cleanup of intermediate
+    files
+
+---
+
+## **User Manuals**
+
+blastdbbuilder supports multiple user workflows depending on computational environment and user preference. Separate user manuals are provided for each supported usage environment.
+
+### **Pre-requisite**
 
 **System requirements**
 
-Before installing `blastdbbuilder`, make sure the following are available on your system:
+Before installing `blastdbbuilder`, make sure the following are
+available on your system:
 
 **Python ≥ 3.9**
 
@@ -117,7 +146,8 @@ Check your Python version:
 python3 --version
 ```
 
-If Python is older than 3.9, install a newer Python using your system package manager.
+If Python is older than 3.9, install a newer Python using your system
+package manager.
 
 Example (Ubuntu):
 
@@ -125,287 +155,89 @@ Example (Ubuntu):
 sudo apt install python3
 ```
 
-This installs the latest Python version supported by your operating system.
-
-You do not need to remove the existing Python installation, because Ubuntu uses Python internally for many system tools.
-
 
 **unzip**
 
-The program requires the unzip utility to extract downloaded genome archives.
-
-Check if `unzip` is installed:
+Check if installed:
 
 ```
 unzip -v
 ```
 
-If the command is not found, install it:
+If missing:
 
 ```
 sudo apt install unzip
 ```
 
+
 **Container engine**
 
 One of the following container engines must be installed:
 
-- Apptainer
+-   Apptainer
+-   SingularityCE ≥ 3.x
 
-- SingularityCE ≥ 3.x
-
-Example installation on Ubuntu / Debian:
+Example installation:
 
 ```
 sudo apt install singularity-container
 ```
 
-The program automatically detects which container engine is available on your system and uses it.
+On most HPC systems (for example ARDC Nectar), Singularity or Apptainer
+is typically already installed.
 
-On HPC systems (for example ARDC Nectar), Singularity or Apptainer is typically already installed.
+---
 
+### **Command Line Interface (CLI)**
 
-<br />
+The CLI provides the full automated workflow for downloading genomes,
+concatenating FASTA files, and building BLAST databases.
 
+👉 **CLI Documentation:**\
+`docs/CLI_README.md`
 
-## **Installation**
+---
 
-Install `blastdbbuilder` directly from PyPI:
+### **Graphical User Interface (GUI)**
 
-```
-pip install blastdbbuilder
-```
+The GUI provides a guided desktop interface for building customised
+BLASTn databases without requiring command-line experience.
 
-Verify installation
+It wraps the same reproducible backend as the CLI while offering an
+interactive environment suitable for diagnostics laboratories, teaching
+environments, and routine analyses.
 
-Check if the installation was successful:
+👉 **GUI Documentation:**\
+`docs/GUI_README.md`
 
-```
-blastdbbuilder --help
-```
+---
 
-If you see the following usage flags, then 
+### **Windows (WSL) Usage**
 
-  - the `installation` has been successful
-  
-  - you can run `blastdbbuilder` from any directory in your computer 
+blastdbbuilder can be run on Windows using **Windows Subsystem for Linux
+(WSL)**, enabling Windows users to build BLAST databases locally while
+using a Linux backend.
 
+👉 **WSL User Guide:**\
+`docs/WSL_README.md`
 
+---
 
-<br />
+### **High Performance Computing (HPC)**
 
+blastdbbuilder is designed to scale efficiently on HPC systems.
 
-```
-usage: blastdbbuilder [-h] [--download] [--concat] [--build] [--citation] [--archaea] [--bacteria] [--fungi]
-                      [--virus] [--plants]
+It supports:
 
-blastdbbuilder: Automated genome download, concatenation, and BLAST database builder
+-   SLURM-based execution
+-   containerised workflows
+-   large-scale genome downloads
 
-options:
-  -h, --help  show this help message and exit
-  --download  Download genomes for selected groups
-  --concat    Concatenate all genomes into one FASTA
-  --build     Build BLAST database from concatenated FASTA
-  --citation  Print citation information
-  --archaea   Include Archaea genomes
-  --bacteria  Include Bacteria genomes
-  --fungi     Include Fungi genomes
-  --virus     Include Virus genomes (all)
-  --plants    Include Plant genomes
-```
+👉 **HPC Documentation:**\
+`docs/HPC_README.md`
 
-Check the installed version:
-
-```
-blastdbbuilder --version
-```
-
-Upgrade blastdbbuilder
-
-```
-pip install --upgrade blastdbbuilder
-```
-
-
-**Optional: Install from GitHub (development version)**
-
-If you want to install the latest development version from GitHub:
-
-
-```
-git clone https://github.com/AsadProdhan/blastdbbuilder.git
-cd blastdbbuilder
-pip install -e .
-```
-
-
-If you want to uninstall blastdbbuilder, run the following command in the same directory where you have installed blastdbbuilder.
-
-  ```
-  pip uninstall blastdbbuilder -y
-  ```
-
-Check if the uninstallation has been successful
-
-  ```
-  blastdbbuilder --help
-  ```
-
-Now, you will see an error.
-
-
-<br />
-
-
-## Usage
-
-  - There are three steps from downloading the genomes to building a BLASTn database
-  
-  - Open a terminal
-  
-  - Make a directory. Name it based on which group/s you are going to download. For example
-  
-
-    ```
-    mkdir bacteria
-    ```   
-
-  - Or, maybe something like this if you are going to download archaea (a), bacteria (b), fungi (f), virus (v), and plants (p). This will help remember what are in the database files which will look like nt.001, nt.002, nt.003 and so on
-
-    ```
-    mkdir abfvp
-    ```
-
-  - Now cd to that directory
-
-
-    ```
-    cd abfvp
-    ```
-
-  - In this directory, run the following three steps- download, concat and build - sequentially
-   
-<br />
-
-
-### **Step 1. Download genomes**
-
-
-Download Archaea genomes
-
-  ```
-  blastdbbuilder --download --archaea
-  ```
-
-  - This will create an "archaea" directory (db/archaea) and download the  archaeal genomes there. Same for the other groups as well
-
-
-Download Bacteria genomes
-
-  ```
-  blastdbbuilder --download --bacteria
-  ```
-
-Download Fungal genomes
-
-  ```
-  blastdbbuilder --download --fungi
-  ```
-
-Download Viral genomes
-
-  ```
-  blastdbbuilder --download --virus
-  ```
-
-Download Plant genomes
-
-  ```
-  blastdbbuilder --download --plants
-  ```
-
-Download multiple groups simultaneously in varius combinations of your interest
-
-
-  ```
-  blastdbbuilder --download --archaea --bacteria 
-  ```
-
-  Or,
-
-
-  ```
-  blastdbbuilder --download --archaea --bacteria --fungi --virus --plants
-  ```
-
-<br />
-
-
-### **Step 2. Concatenate genomes**
-
-After downloading, run the following command. 
-
-  ```
-  blastdbbuilder --concat
-  ```
-
-  - This will create a directory called `concat` and put the concatenated file (containing all the downloaded genomes) in there 
-
-<br />
-
-
-### **Step 3. Build BLAST database**
-
-Finally, run the following command.
-
-  ```
-  blastdbbuilder --build
-  ```
-
-  - This will build a BLASTn database from the concatenated FASTA file
-    
-  - When the run finished, it will clean up all the intermediate files and directories to reduce disk space usage
-    
-  - You will see only one directory named blastnDB
-    
-  - blastnDB will contain all the database files, nt.001, nt.002 etc
-
-<br />
-
-
-### **Final Files**
-
-After running, the directory structure will look like:
-
-  ```
-  blastnDB/
-  ├─ nt.001.fna.gz
-  ├─ nt.002.fna.gz
-  ├─ nt.003.fna.gz
-  ├─ nt.004.fna.gz
-  ├─ nt.nl        
-  ├─ logs/
-    ├─ nt.001.log
-    ├─ nt.002.log
-    ├─ nt.003.log
-    └─ nt.004.log
-  ```
-
-<br />
-
-**You have just created your customised BLASTn database. It is **fully portable**, can be moved to other users/computers and used without making any changes**
-
-<br />
-
-## **blastdbbuilder Graphical User Interface (GUI)**
-
-The blastdbbuilder GUI provides a simple, guided desktop interface for building customised BLASTn databases without requiring command-line experience, making the workflow more accessible for routine diagnostics and research users. It wraps the same reproducible and containerised backend as the CLI, ensuring identical, high-quality database outputs.
-
-👉 **GUI User Manual:** https://github.com/asadprodhan/blastdbbuilder/tree/main/GUI
-
-
-<br />
-
+---
 
 ## **Citation**
 
@@ -413,13 +245,12 @@ Cite this repository
 
 If you use this software in your work, please cite it as follows:
 
-Prodhan, M. A. (2025). blastdbbuilder: Building a Customised BLASTn Database. https://doi.org/10.5281/zenodo.17394137
+**Prodhan, M. A.** (2025). blastdbbuilder: Building a Customised BLASTn
+Database. https://doi.org/10.5281/zenodo.17394137
 
-<br />
+---
 
 ## **Support**
 
-For issues, bug reports, or feature requests, please contact: **Asad Prodhan. E-mail: asad.prodhan@dpird.wa.gov.au, prodhan82@gmail.com**
-
-
-
+For issues, bug reports, or feature requests, please contact: **Asad
+Prodhan. E-mail: asad.prodhan@dpird.wa.gov.au, prodhan82@gmail.com**

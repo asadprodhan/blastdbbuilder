@@ -194,8 +194,7 @@ is typically already installed.
 The CLI provides the full automated workflow for downloading genomes,
 concatenating FASTA files, and building BLAST databases.
 
-👉 **CLI Documentation:**\
-`docs/CLI_README.md`
+👉 [**CLI User Guide**](https://github.com/asadprodhan/blastdbbuilder/blob/main/docs/CLI_README.md)
 
 ---
 
@@ -208,8 +207,7 @@ It wraps the same reproducible backend as the CLI while offering an
 interactive environment suitable for diagnostics laboratories, teaching
 environments, and routine analyses.
 
-👉 **GUI Documentation:**\
-`docs/GUI_README.md`
+👉 [**GUI User Guide**](https://github.com/asadprodhan/blastdbbuilder/blob/main/docs/CLI_README.md)
 
 ---
 

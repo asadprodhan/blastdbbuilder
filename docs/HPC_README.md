@@ -15,10 +15,13 @@
   <a href="https://orcid.org/0000-0002-1320-3486"><img src="https://img.shields.io/badge/ORCID-green?style=flat-square&logo=ORCID&logoColor=white" alt="ORCID"></a>
 </p>
 
----
 
 ## **Content**
 
+<img src="https://raw.githubusercontent.com/asadprodhan/blastdbbuilder/main/blastdbbuilder_logo.png"
+     width="190"
+     align="right">
+     
 - [Introduction](#introduction)  
 - [Features](#features)  
 - [Running blastdbbuilder on HPC clusters](#running-blastdbbuilder-on-hpc-clusters)  
@@ -31,8 +34,6 @@
 - [Full workflow diagram](#full-workflow-diagram)  
 - [Citation](#citation)  
 - [Support](#support)
-
----
 
 
 ## **Introduction**

@@ -42,21 +42,20 @@ A BLASTn database provides the essential reference framework for comparing query
 
 Public databases are comprehensive but rapidly expanding, often containing redundant, low-quality or irrelevant entries. This leads to slower searches and reduced search resolution.
 
-In contrast, a custom database is like a well‑organised library where every book is precisely indexed—smaller in volume, faster to search, and more focused in results.
+In contrast, a custom database is like a well-organised library where every book is precisely indexed—smaller in volume, faster to search, and more focused in results.
 
-To simplify this process for end users, **blastdbbuilder GUI** provides a graphical interface to the proven `blastdbbuilder` backend, allowing fully reproducible database construction without requiring command‑line interaction.
+To simplify this process, **blastdbbuilder** provides an automated command-line workflow for downloading genomes, concatenating FASTA files, and constructing custom BLAST databases in a reproducible manner.
 
 ---
 
 ## **Features**
 
-- Graphical selection of genome groups (Archaea, Bacteria, Fungi, Virus, Plants)
-- Graphical execution of genome download, FASTA concatenation and BLAST database building
-- Background execution (safe to close the GUI)
-- Reconnect to running jobs
-- Live log monitoring
-- Safe termination and emergency kill options
-- Directory‑based job management
+- Automated download of RefSeq genomes from NCBI
+- FASTA concatenation into a unified reference dataset
+- Automated construction of BLAST nucleotide databases
+- Fully reproducible workflow using containerised runtime
+- Compatible with HPC clusters using SLURM
+- No manual dependency installation required
 
 ---
 

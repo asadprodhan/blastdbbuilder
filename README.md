@@ -214,7 +214,7 @@ environments, and routine analyses.
 
 ---
 
-## **Windows (WSL) Usage**
+## **Windows (WSL)**
 
 blastdbbuilder can be run on Windows using **Windows Subsystem for Linux
 (WSL)**, enabling Windows users to build BLAST databases locally while
@@ -240,7 +240,7 @@ It supports:
 
 ---
 
-## **Singularity/Apptainer container**
+## **Singularity/Apptainer Container**
 
 For reproducible execution across different computing environments, **blastdbbuilder** is distributed with an official container runtime.
 

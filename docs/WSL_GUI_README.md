@@ -21,15 +21,15 @@
 ## **Content**
 
 - [Introduction](#introduction)
-- [blastdbbuilder GUI](#blastdbbuilder-gui)
 - [Features](#features)
+- [Running blastdbbuilder GUI on Windows (WSL)](#running-blastdbbuilder-gui-on-windows-wsl)
 - [Pre-requisite](#pre-requisite)
 - [Installation](#installation)
-- [Introduction of the Buttons and their meaning](#introduction-of-the-buttons-and-their-meaning)
-- [How to use the GUI locally](#how-to-use-the-gui-locally)
-- [How to use the GUI remotely](#how-to-use-the-gui-remotely)
-- [Checking progress later](#checking-progress-later)
-- [Stopping a job](#stopping-a-job)
+- [Introduction of the Buttons and Their Meaning](#introduction-of-the-buttons-and-their-meaning)
+- [Access Windows Files from WSL](#access-windows-files-from-wsl)
+- [Build a BLAST Database on Your Laptop](#build-a-blast-database-on-your-laptop)
+- [Output Files](#output-files)
+- [FAQ](#faq)
 - [Citation](#citation)
 - [Support](#support)
 

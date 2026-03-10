@@ -16,10 +16,13 @@
   <a href="https://doi.org/10.5281/zenodo.17394137"><img src="https://img.shields.io/badge/DOI-10.5281%2Fzenodo.17394137-blue?style=flat-square&logo=Zenodo&logoColor=white" alt="DOI"></a>
 </p>
 
----
 
 ## **Content**
 
+<img src="https://raw.githubusercontent.com/asadprodhan/blastdbbuilder/main/blastdbbuilder_logo.png"
+     width="190"
+     align="right">
+     
 - [Introduction](#introduction)
 - [Features](#features)
 - [Running blastdbbuilder GUI on Windows (WSL)](#running-blastdbbuilder-gui-on-windows-wsl)
@@ -32,8 +35,6 @@
 - [FAQ](#faq)
 - [Citation](#citation)
 - [Support](#support)
-
----
 
 
 ## **Introduction**

@@ -207,7 +207,7 @@ It wraps the same reproducible backend as the CLI while offering an
 interactive environment suitable for diagnostics laboratories, teaching
 environments, and routine analyses.
 
-👉 [**GUI User Guide**](https://github.com/asadprodhan/blastdbbuilder/blob/main/docs/CLI_README.md)
+👉 [**GUI User Guide**](https://github.com/asadprodhan/blastdbbuilder/blob/main/docs/GUI_README.md)
 
 ---
 

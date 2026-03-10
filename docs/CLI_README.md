@@ -26,10 +26,13 @@
 
 </p>
 
----
 
 ## **Content**
 
+<img src="https://raw.githubusercontent.com/asadprodhan/blastdbbuilder/main/blastdbbuilder_logo.png"
+     width="190"
+     align="right">
+     
 - [Introduction](#introduction)
 - [blastdbbuilder](#blastdbbuilder)
 - [Features](#features)
@@ -42,9 +45,6 @@
   - [Final Files](#final-files)
 - [Citation](#citation)
 - [Support](#support)
-
-
----
 
 
 ## **Introduction**
@@ -63,7 +63,7 @@ To bridge this gap, I developed the blastdbbuilder package — an automated solu
 ---
 
 
-## **blastdbbuilder Command Line Interface (CLI)**
+## **blastdbbuilder**
 
 
 `blastdbbuilder` is a lightweight, command-line toolkit that automates the complete **BLASTn database preparation workflow**. It streamlines every step — from downloading user-specified genomes and organizing datasets to building **optimized, up-to-date BLASTn databases**.

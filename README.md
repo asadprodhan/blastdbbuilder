@@ -232,8 +232,8 @@ It supports:
 -   containerised workflows
 -   large-scale genome downloads
 
-👉 **HPC Documentation:**\
-`docs/HPC_README.md`
+
+👉 [**HPC User Guide**](https://github.com/asadprodhan/blastdbbuilder/blob/main/docs/HPC_README.md)
 
 ---
 

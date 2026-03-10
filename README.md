@@ -27,7 +27,19 @@
 
 </p>
 
----
+
+<table style="border-collapse:collapse; border:1px solid white;">
+<tr style="border:1px solid white;">
+
+<td width="30%" align="center" style="border:1px solid white;">
+
+<img src="https://raw.githubusercontent.com/asadprodhan/blastdbbuilder/main/blastdbbuilder_logo.png" width="240">
+
+<br>
+
+</td>
+
+<td width="70%" style="border:1px solid white;">
 
 ## **Content**
 
@@ -43,7 +55,11 @@
 - [Citation](#citation)
 - [Support](#support)
 
----
+</td>
+
+</tr>
+</table>
+
 
 ## **Introduction**
 

@@ -19,19 +19,18 @@
 
 ## **Content**
 
-- Introduction  
-- Why use the container on HPC  
-- Recommended HPC directory layout  
-- Understanding the two container directories  
-- Pulling the container  
-- SLURM workflow scripts  
-- Step 1 — Download genomes  
-- Step 2 — Concatenate genomes  
-- Step 3 — Build BLAST database  
-- Final output files  
-- Full workflow diagram  
-- Citation  
-- Support  
+- [Introduction](#introduction)  
+- [Features](#features)  
+- [Running blastdbbuilder on HPC clusters](#running-blastdbbuilder-on-hpc-clusters)  
+- [Pre-requisite](#pre-requisite)  
+- [How to use blastdbbuilder on HPC](#how-to-use-blastdbbuilder-on-hpc)  
+- [Step 1 — Download genomes](#step-1--download-genomes)  
+- [Step 2 — Concatenate genomes](#step-2--concatenate-genomes)  
+- [Step 3 — Build BLAST database](#step-3--build-blast-database)  
+- [Final output files](#final-output-files)  
+- [Full workflow diagram](#full-workflow-diagram)  
+- [Citation](#citation)  
+- [Support](#support)
 
 ---
 
@@ -61,7 +60,7 @@ To simplify this process for end users, **blastdbbuilder GUI** provides a graphi
 ---
 
 
-## **Running blastdbbuilder on High‑performance computing (HPC) Cluster**
+## **Running blastdbbuilder on HPC clusters**
 
 High‑performance computing (HPC) clusters provide the computational power required to build large custom BLAST databases efficiently. `blastdbbuilder` can be run on HPC using the **blastdbbuilder container** that allows the entire pipeline to run without installing any dependencies on the cluster.
 
@@ -71,7 +70,7 @@ High‑performance computing (HPC) clusters provide the computational power requ
 The container bundles all required softwares to run `blastdbbuilder' on HPC:
 
 | Tool | Purpose |
-|-----|------|
+|:-----|:--------|
 | blastdbbuilder | Pipeline orchestration |
 | NCBI datasets CLI | Genome download |
 | dataformat | Metadata parsing |
@@ -112,7 +111,7 @@ Example SLURM script:
 #!/bin/bash --login
 #SBATCH --job-name=blastdbbuilder-archaea-download
 #SBATCH --account=xxx
-#SBATCH --partition=work
+#SBATCH --partition=xxx
 #SBATCH --time=04:00:00
 #SBATCH --ntasks=1
 #SBATCH --nodes=1
@@ -167,7 +166,7 @@ sbatch blastdbbuilder_container_archaea_download_slurm.sh
 #!/bin/bash --login
 #SBATCH --job-name=blastdbbuilder-archaea-download
 #SBATCH --account=xxx
-#SBATCH --partition=work
+#SBATCH --partition=xxx
 #SBATCH --time=04:00:00
 #SBATCH --ntasks=1
 #SBATCH --nodes=1
@@ -222,7 +221,7 @@ sbatch blastdbbuilder_container_concat_slurm.sh
 #!/bin/bash --login
 #SBATCH --job-name=blastdbbuilder-archaea-download
 #SBATCH --account=xxx
-#SBATCH --partition=work
+#SBATCH --partition=xxx
 #SBATCH --time=04:00:00
 #SBATCH --ntasks=1
 #SBATCH --nodes=1

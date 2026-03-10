@@ -27,6 +27,8 @@
 
 </p>
 
+---
+
 <table align="center" style="border-collapse:collapse; border:1px solid white;">
 <tr style="border:1px solid white;">
 
@@ -57,6 +59,7 @@
 </tr>
 </table>
 
+---
 
 ## **Introduction**
 

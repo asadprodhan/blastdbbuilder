@@ -30,9 +30,8 @@
 ## **Content**
 
 <img src="https://raw.githubusercontent.com/asadprodhan/blastdbbuilder/main/blastdbbuilder_logo.png"
-     width="200"
+     width="190"
      align="right">
-
 
 - [Introduction](#introduction)
 - [blastdbbuilder](#blastdbbuilder)
@@ -45,8 +44,6 @@
   - [High Performance Computing (HPC)](#high-performance-computing-hpc)
 - [Citation](#citation)
 - [Support](#support)
-
-<br clear="right"/>
 
 ## **Introduction**
 

@@ -27,15 +27,12 @@
 
 </p>
 
-
-<table style="border-collapse:collapse; border:1px solid white;">
+<table align="center" style="border-collapse:collapse; border:1px solid white;">
 <tr style="border:1px solid white;">
 
-<td width="30%" align="center" style="border:1px solid white;">
+<td width="30%" align="center" style="border:1px solid white; vertical-align:top;">
 
 <img src="https://raw.githubusercontent.com/asadprodhan/blastdbbuilder/main/blastdbbuilder_logo.png" width="240">
-
-<br>
 
 </td>
 

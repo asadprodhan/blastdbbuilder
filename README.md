@@ -43,6 +43,7 @@
   - [Graphical User Interface (GUI)](#graphical-user-interface-gui)
   - [Windows (WSL) Usage](#windows-wsl-usage)
   - [High Performance Computing (HPC)](#high-performance-computing-hpc)
+  - [Singularity/Apptainer container](#singularityapptainer-container)
 - [Citation](#citation)
 - [Support](#support)
 
@@ -191,7 +192,7 @@ is typically already installed.
 
 ---
 
-### **Command Line Interface (CLI)**
+## **Command Line Interface (CLI)**
 
 The CLI provides the full automated workflow for downloading genomes,
 concatenating FASTA files, and building BLAST databases.
@@ -200,7 +201,7 @@ concatenating FASTA files, and building BLAST databases.
 
 ---
 
-### **Graphical User Interface (GUI)**
+## **Graphical User Interface (GUI)**
 
 The GUI provides a guided desktop interface for building customised
 BLASTn databases without requiring command-line experience.
@@ -213,7 +214,7 @@ environments, and routine analyses.
 
 ---
 
-### **Windows (WSL) Usage**
+## **Windows (WSL) Usage**
 
 blastdbbuilder can be run on Windows using **Windows Subsystem for Linux
 (WSL)**, enabling Windows users to build BLAST databases locally while
@@ -224,7 +225,7 @@ using a Linux backend.
 
 ---
 
-### **High Performance Computing (HPC)**
+## **High Performance Computing (HPC)**
 
 blastdbbuilder is designed to scale efficiently on HPC systems.
 
@@ -236,6 +237,25 @@ It supports:
 
 
 👉 [**HPC User Guide**](https://github.com/asadprodhan/blastdbbuilder/blob/main/docs/HPC_README.md)
+
+---
+
+## **Singularity/Apptainer container**
+
+For reproducible execution across different computing environments, **blastdbbuilder** is distributed with an official container runtime.
+
+The container bundles all required software dependencies, including:
+
+- blastdbbuilder
+- NCBI datasets CLI
+- BLAST+
+- seqkit
+- dataformat
+- unzip
+
+This enables **blastdbbuilder** to run without installing any dependencies on the host system.
+
+👉 [**blastdbbuilder Container**](https://github.com/asadprodhan/blastdbbuilder_container)
 
 ---
 

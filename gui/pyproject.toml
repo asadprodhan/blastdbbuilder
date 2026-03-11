@@ -1,28 +1,59 @@
 [build-system]
-requires = ["setuptools", "wheel"]
+requires = ["setuptools>=64", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "blastdbbuilder-gui"
-version = "1.0.6"
-description = "GUI for blastdbbuilder"
+version = "1.0.8"
+description = "Graphical user interface for building customised BLASTn databases using blastdbbuilder"
 readme = "README.md"
 requires-python = ">=3.9"
+
+authors = [
+  { name = "Asad Prodhan", email = "prodhan82@gmail.com" }
+]
+
+license = {text = "GPL-3.0"}
+
+keywords = [
+  "bioinformatics",
+  "blast",
+  "blastn",
+  "genomics",
+  "database",
+  "refseq",
+  "ncbi",
+  "gui"
+]
+
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Intended Audience :: Science/Research",
+  "Topic :: Scientific/Engineering :: Bio-Informatics",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3 :: Only",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Operating System :: POSIX :: Linux",
+  "License :: OSI Approved :: GNU General Public License v3 (GPLv3)"
+]
+
 dependencies = [
     "blastdbbuilder",
     "customtkinter"
 ]
 
-authors = [{name="M. Asaduzzaman Prodhan"}]
-license = {text="GPL-3.0"}
-urls = {Homepage="https://github.com/asadprodhan/blastdbbuilder"}
-
+[project.urls]
+Homepage = "https://github.com/asadprodhan/blastdbbuilder"
+Repository = "https://github.com/asadprodhan/blastdbbuilder"
+Documentation = "https://github.com/asadprodhan/blastdbbuilder/tree/main/docs"
+Issues = "https://github.com/asadprodhan/blastdbbuilder/issues"
 
 [project.scripts]
 blastdbbuilder-gui = "blastdbbuilder_gui.gui:main"
 blastdbbuilder-gui-desktop = "blastdbbuilder_gui.desktop:main"
 blastdbbuilder-gui-desktop-uninstall = "blastdbbuilder_gui.desktop:uninstall_main"
-
 
 [tool.setuptools.packages.find]
 where = ["."]

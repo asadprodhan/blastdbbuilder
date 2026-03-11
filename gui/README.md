@@ -1,5 +1,5 @@
 
-<h1 align="center">blastdbbuilder GUI: Building a Customised BLASTn Database</h1>
+<h1 align="center">blastdbbuilder GUI: Graphical Interface for Building Customised BLASTn Databases</h1>
 
 <h3 align="center">M. Asaduzzaman Prodhan<sup>*</sup> </h3>
 
@@ -16,23 +16,28 @@
   <a href="https://doi.org/10.5281/zenodo.17394137"><img src="https://img.shields.io/badge/DOI-10.5281%2Fzenodo.17394137-blue?style=flat-square&logo=Zenodo&logoColor=white" alt="DOI"></a>
 </p>
 
----
+
 
 ## **Content**
 
+<img src="https://raw.githubusercontent.com/asadprodhan/blastdbbuilder/main/blastdbbuilder_logo.png"
+     width="190"
+     align="right">
+     
 - [Introduction](#introduction)
 - [blastdbbuilder GUI](#blastdbbuilder-gui)
 - [Features](#features)
-- [Computer Setup](#computer-setup-using-conda)
+- [Pre-requisite](#pre-requisite)
 - [Installation](#installation)
-- [Using the GUI](#how-to-use-the-gui-locally)
-- [Running Remotely](#how-to-use-the-gui-remotely)
+- [Introduction of the Buttons and their meaning](#introduction-of-the-buttons-and-their-meaning)
+- [How to use the GUI locally](#how-to-use-the-gui-locally)
+- [How to use the GUI remotely](#how-to-use-the-gui-remotely)
 - [Checking progress later](#checking-progress-later)
 - [Stopping a job](#stopping-a-job)
 - [Citation](#citation)
 - [Support](#support)
 
----
+
 
 ## **Introduction**
 
@@ -158,7 +163,7 @@ The program automatically detects which container engine is available on your sy
 On HPC systems (for example ARDC Nectar), Singularity or Apptainer is typically already installed.
 
 
-<br />
+---
 
 
 ## **Installation**

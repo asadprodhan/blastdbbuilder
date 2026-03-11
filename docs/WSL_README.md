@@ -209,7 +209,7 @@ wsl.exe -e blastdbbuilder-gui
 ```
 
 
-<br /> <p align="center"> <img src="https://raw.githubusercontent.com/asadprodhan/blastdbbuilder/main/GUI/GUI_Screenshot.png" width="100%" > </p>
+<br /> <p align="center"> <img src="https://raw.githubusercontent.com/asadprodhan/blastdbbuilder/main/gui/GUI_Screenshot.png" width="100%" > </p>
 
 <p><strong>Figure 1.</strong> blastdbbuilder graphical user interface (GUI) automating construction of custom BLASTn reference databases from NCBI RefSeq genomes.</p>
 

@@ -4,20 +4,37 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "blastdbbuilder"
-version = "1.0.0"
+version = "1.0.1"
 description = "Automated genome download, concatenation, and BLAST database builder"
 readme = "README.md"
-requires-python = ">=3.8"
-license = {text = "MIT"}
+requires-python = ">=3.9"
+license = {text = "GPL-3.0-only"}
 
 authors = [
   { name = "Asad Prodhan", email = "prodhan82@gmail.com" }
 ]
 
+keywords = [
+  "bioinformatics",
+  "blast",
+  "blastn",
+  "genomics",
+  "refseq",
+  "database",
+  "ncbi"
+]
+
 classifiers = [
+  "Development Status :: 4 - Beta",
+  "Intended Audience :: Science/Research",
+  "Topic :: Scientific/Engineering :: Bio-Informatics",
   "Programming Language :: Python :: 3",
-  "License :: OSI Approved :: MIT License",
-  "Operating System :: OS Independent"
+  "Programming Language :: Python :: 3 :: Only",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Operating System :: POSIX :: Linux",
+  "License :: OSI Approved :: GNU General Public License v3 (GPLv3)"
 ]
 
 dependencies = []
@@ -25,7 +42,8 @@ dependencies = []
 [project.urls]
 Homepage = "https://github.com/AsadProdhan/blastdbbuilder"
 Repository = "https://github.com/AsadProdhan/blastdbbuilder"
+Documentation = "https://github.com/AsadProdhan/blastdbbuilder/tree/main/docs"
+Issues = "https://github.com/AsadProdhan/blastdbbuilder/issues"
 
 [project.scripts]
 blastdbbuilder = "blastdbbuilder.cli:main"
-

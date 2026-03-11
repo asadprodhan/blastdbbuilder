@@ -221,7 +221,7 @@ blastdbbuilder can be run on Windows using **Windows Subsystem for Linux
 using a Linux backend.
 
 
-👉 [**WSL User Guide**](https://github.com/asadprodhan/blastdbbuilder/blob/main/docs/WSL_GUI_README.md)
+👉 [**WSL User Guide**](https://github.com/asadprodhan/blastdbbuilder/blob/main/docs/WSL_README.md)
 
 ---
 

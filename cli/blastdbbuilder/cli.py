@@ -12,6 +12,7 @@ import datetime
 import csv
 import glob
 import shutil
+from blastdbbuilder import __version__
 
 # -----------------------------
 # Utility to run shell commands
@@ -312,7 +313,7 @@ def main():
     parser.add_argument(
         "--version",
         action="version",
-        version="blastdbbuilder v1.0.0",
+        version=f"blastdbbuilder v{__version__}",
         help="Show version number and exit"
     )
 

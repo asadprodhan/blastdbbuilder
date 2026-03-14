@@ -1,5 +1,5 @@
 
-<h1 align="center">blastdbbuilder GUI: Graphical Interface for Building Customised BLASTn Databases</h1>
+<h1 align="center">blastdbbuilder GUI: Building a Customised BLASTn Database</h1>
 
 <h3 align="center">M. Asaduzzaman Prodhan<sup>*</sup> </h3>
 
@@ -13,31 +13,26 @@
 <p align="center">
   <a href="https://github.com/asadprodhan/blastdbbuilder/blob/main/LICENSE"><img src="https://img.shields.io/badge/License-GPL%203.0-yellow.svg" alt="License GPL 3.0"></a>
   <a href="https://orcid.org/0000-0002-1320-3486"><img src="https://img.shields.io/badge/ORCID-green?style=flat-square&logo=ORCID&logoColor=white" alt="ORCID"></a>
-  <a href="https://doi.org/10.5281/zenodo.18973405"><img src="https://img.shields.io/badge/DOI-10.5281%2Fzenodo.18973405-blue?style=flat-square&logo=Zenodo&logoColor=white" alt="DOI: 10.5281/zenodo.18973405" style="display: inline-block;">
+  <a href="https://doi.org/10.5281/zenodo.17394137"><img src="https://img.shields.io/badge/DOI-10.5281%2Fzenodo.17394137-blue?style=flat-square&logo=Zenodo&logoColor=white" alt="DOI"></a>
 </p>
 
-
+---
 
 ## **Content**
 
-<img src="https://raw.githubusercontent.com/asadprodhan/blastdbbuilder/main/blastdbbuilder_logo.png"
-     width="190"
-     align="right">
-     
 - [Introduction](#introduction)
 - [blastdbbuilder GUI](#blastdbbuilder-gui)
 - [Features](#features)
-- [Pre-requisite](#pre-requisite)
+- [Computer Setup](#computer-setup-using-conda)
 - [Installation](#installation)
-- [Introduction of the Buttons and their meaning](#introduction-of-the-buttons-and-their-meaning)
-- [How to use the GUI locally](#how-to-use-the-gui-locally)
-- [How to use the GUI remotely](#how-to-use-the-gui-remotely)
+- [Using the GUI](#how-to-use-the-gui-locally)
+- [Running Remotely](#how-to-use-the-gui-remotely)
 - [Checking progress later](#checking-progress-later)
 - [Stopping a job](#stopping-a-job)
 - [Citation](#citation)
 - [Support](#support)
 
-
+---
 
 ## **Introduction**
 
@@ -163,7 +158,7 @@ The program automatically detects which container engine is available on your sy
 On HPC systems (for example ARDC Nectar), Singularity or Apptainer is typically already installed.
 
 
----
+<br />
 
 
 ## **Installation**
@@ -204,7 +199,7 @@ This creates a Desktop launcher (Linux). You can then double-click the Desktop i
 
 ---
 
-<br /> <p align="center"> <img src="https://raw.githubusercontent.com/asadprodhan/blastdbbuilder/main/gui/GUI_Screenshot.png" width="100%" > </p>
+<br /> <p align="center"> <img src="https://raw.githubusercontent.com/asadprodhan/blastdbbuilder/main/GUI/GUI_Screenshot.png" width="100%" > </p>
 
 <p><strong>Figure 1.</strong> blastdbbuilder graphical user interface (GUI) automating construction of custom BLASTn reference databases from NCBI RefSeq genomes.</p>
 
@@ -311,7 +306,7 @@ If the job does not stop (for example, a stalled container), click **Force Kill*
 
 If you use this software in your work, please cite:
 
-Prodhan, M. A. (2025). blastdbbuilder: Building a Customised BLASTn Database. https://doi.org/10.5281/zenodo.18973405
+Prodhan, M. A. (2025). blastdbbuilder: Building a Customised BLASTn Database. https://doi.org/10.5281/zenodo.17394137
 
 ---
 

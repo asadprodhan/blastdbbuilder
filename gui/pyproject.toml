@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "blastdbbuilder-gui"
-version = "1.0.10"
+version = "1.0.11"
 description = "Graphical user interface for building customised BLASTn databases using blastdbbuilder"
 readme = "README.md"
 requires-python = ">=3.9"

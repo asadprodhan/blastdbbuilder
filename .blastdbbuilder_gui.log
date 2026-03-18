@@ -1,0 +1,345 @@
+
+[Diag] summary destination path: /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/metadata/assembly_summary_virus.txt
+=== blastdbbuilder GUI started: Wed Mar 18 11:12:15 AWST 2026 ===
+Working dir: /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder
+
+$ (step=download) blastdbbuilder --download --virus
+
+[INFO] Downloading virus genomes into /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/virus ...
+Downloading assembly_summary.txt for virus...
+Running: wget -O /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/virus/assembly_summary.txt https://ftp.ncbi.nlm.nih.gov/genomes/refseq/viral/assembly_summary.txt
+[progress][virus] 0/15058 status=start
+[INFO] Downloading container: ncbi-datasets-cli.sif
+Running: /usr/bin/apptainer pull /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/containers/ncbi-datasets-cli.sif docker://staphb/ncbi-datasets:latest
+[progress][virus] 1/15058 GCF_000839185.1 status=downloading
+Running: /usr/bin/apptainer exec /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/containers/ncbi-datasets-cli.sif datasets download genome accession GCF_000839185.1 --filename /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/virus/GCF_000839185.1.zip
+Running: unzip -o /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/virus/GCF_000839185.1.zip -d /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/virus
+[progress][virus] 1/15058 GCF_000839185.1 status=downloaded
+[progress][virus] 2/15058 GCF_000857045.1 status=downloading
+Running: /usr/bin/apptainer exec /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/containers/ncbi-datasets-cli.sif datasets download genome accession GCF_000857045.1 --filename /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/virus/GCF_000857045.1.zip
+Running: unzip -o /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/virus/GCF_000857045.1.zip -d /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/virus
+[progress][virus] 2/15058 GCF_000857045.1 status=downloaded
+[progress][virus] 3/15058 GCF_014621545.1 status=downloading
+Running: /usr/bin/apptainer exec /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/containers/ncbi-datasets-cli.sif datasets download genome accession GCF_014621545.1 --filename /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/virus/GCF_014621545.1.zip
+Running: unzip -o /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/virus/GCF_014621545.1.zip -d /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/virus
+[progress][virus] 3/15058 GCF_014621545.1 status=downloaded
+[progress][virus] 4/15058 GCF_000860085.1 status=downloading
+Running: /usr/bin/apptainer exec /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/containers/ncbi-datasets-cli.sif datasets download genome accession GCF_000860085.1 --filename /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/virus/GCF_000860085.1.zip
+Running: unzip -o /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/virus/GCF_000860085.1.zip -d /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/virus
+[progress][virus] 4/15058 GCF_000860085.1 status=downloaded
+[progress][virus] 5/15058 GCF_000859885.1 status=downloading
+Running: /usr/bin/apptainer exec /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/containers/ncbi-datasets-cli.sif datasets download genome accession GCF_000859885.1 --filename /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/virus/GCF_000859885.1.zip
+Running: unzip -o /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/virus/GCF_000859885.1.zip -d /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/virus
+[progress][virus] 5/15058 GCF_000859885.1 status=downloaded
+[progress][virus] 6/15058 GCF_001029045.1 status=downloading
+Running: /usr/bin/apptainer exec /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/containers/ncbi-datasets-cli.sif datasets download genome accession GCF_001029045.1 --filename /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/virus/GCF_001029045.1.zip
+Running: unzip -o /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/virus/GCF_001029045.1.zip -d /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/virus
+[progress][virus] 6/15058 GCF_001029045.1 status=downloaded
+[progress][virus] 7/15058 GCF_000844845.1 status=downloading
+Running: /usr/bin/apptainer exec /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/containers/ncbi-datasets-cli.sif datasets download genome accession GCF_000844845.1 --filename /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/virus/GCF_000844845.1.zip
+Running: unzip -o /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/virus/GCF_000844845.1.zip -d /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/virus
+[progress][virus] 7/15058 GCF_000844845.1 status=downloaded
+[progress][virus] 8/15058 GCF_000838605.1 status=downloading
+Running: /usr/bin/apptainer exec /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/containers/ncbi-datasets-cli.sif datasets download genome accession GCF_000838605.1 --filename /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/virus/GCF_000838605.1.zip
+Running: unzip -o /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/virus/GCF_000838605.1.zip -d /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/virus
+[progress][virus] 8/15058 GCF_000838605.1 status=downloaded
+[progress][virus] 9/15058 GCF_000922075.1 status=downloading
+Running: /usr/bin/apptainer exec /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/containers/ncbi-datasets-cli.sif datasets download genome accession GCF_000922075.1 --filename /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/virus/GCF_000922075.1.zip
+Running: unzip -o /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/virus/GCF_000922075.1.zip -d /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/virus
+[progress][virus] 9/15058 GCF_000922075.1 status=downloaded
+[progress][virus] 10/15058 GCF_000840205.1 status=downloading
+Running: /usr/bin/apptainer exec /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/containers/ncbi-datasets-cli.sif datasets download genome accession GCF_000840205.1 --filename /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/virus/GCF_000840205.1.zip
+Running: unzip -o /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/virus/GCF_000840205.1.zip -d /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/virus
+[progress][virus] 10/15058 GCF_000840205.1 status=downloaded
+[progress][virus] 11/15058 GCF_000847965.1 status=downloading
+Running: /usr/bin/apptainer exec /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/containers/ncbi-datasets-cli.sif datasets download genome accession GCF_000847965.1 --filename /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/virus/GCF_000847965.1.zip
+Running: unzip -o /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/virus/GCF_000847965.1.zip -d /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/virus
+[progress][virus] 11/15058 GCF_000847965.1 status=downloaded
+[progress][virus] 12/15058 GCF_000843685.1 status=downloading
+Running: /usr/bin/apptainer exec /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/containers/ncbi-datasets-cli.sif datasets download genome accession GCF_000843685.1 --filename /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/virus/GCF_000843685.1.zip
+Running: unzip -o /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/virus/GCF_000843685.1.zip -d /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/virus
+[progress][virus] 12/15058 GCF_000843685.1 status=downloaded
+[progress][virus] 13/15058 GCF_000839965.1 status=downloading
+Running: /usr/bin/apptainer exec /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/containers/ncbi-datasets-cli.sif datasets download genome accession GCF_000839965.1 --filename /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/virus/GCF_000839965.1.zip
+Running: unzip -o /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/virus/GCF_000839965.1.zip -d /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/virus
+[progress][virus] 13/15058 GCF_000839965.1 status=downloaded
+[progress][virus] 14/15058 GCF_000843325.1 status=downloading
+Running: /usr/bin/apptainer exec /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/containers/ncbi-datasets-cli.sif datasets download genome accession GCF_000843325.1 --filename /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/virus/GCF_000843325.1.zip
+Running: unzip -o /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/virus/GCF_000843325.1.zip -d /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/virus
+[progress][virus] 14/15058 GCF_000843325.1 status=downloaded
+[progress][virus] 15/15058 GCF_000909015.1 status=downloading
+Running: /usr/bin/apptainer exec /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/containers/ncbi-datasets-cli.sif datasets download genome accession GCF_000909015.1 --filename /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/virus/GCF_000909015.1.zip
+Running: unzip -o /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/virus/GCF_000909015.1.zip -d /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/virus
+[progress][virus] 15/15058 GCF_000909015.1 status=downloaded
+[progress][virus] 16/15058 GCF_002987725.1 status=downloading
+Running: /usr/bin/apptainer exec /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/containers/ncbi-datasets-cli.sif datasets download genome accession GCF_002987725.1 --filename /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/virus/GCF_002987725.1.zip
+Running: unzip -o /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/virus/GCF_002987725.1.zip -d /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/virus
+[progress][virus] 16/15058 GCF_002987725.1 status=downloaded
+[progress][virus] 17/15058 GCF_002814635.1 status=downloading
+Running: /usr/bin/apptainer exec /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/containers/ncbi-datasets-cli.sif datasets download genome accession GCF_002814635.1 --filename /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/virus/GCF_002814635.1.zip
+Running: unzip -o /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/virus/GCF_002814635.1.zip -d /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/virus
+[progress][virus] 17/15058 GCF_002814635.1 status=downloaded
+[progress][virus] 18/15058 GCF_021461835.1 status=downloading
+Running: /usr/bin/apptainer exec /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/containers/ncbi-datasets-cli.sif datasets download genome accession GCF_021461835.1 --filename /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/virus/GCF_021461835.1.zip
+Running: unzip -o /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/virus/GCF_021461835.1.zip -d /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/virus
+[progress][virus] 18/15058 GCF_021461835.1 status=downloaded
+[progress][virus] 19/15058 GCF_000859985.2 status=downloading
+Running: /usr/bin/apptainer exec /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/containers/ncbi-datasets-cli.sif datasets download genome accession GCF_000859985.2 --filename /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/virus/GCF_000859985.2.zip
+Running: unzip -o /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/virus/GCF_000859985.2.zip -d /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/virus
+[progress][virus] 19/15058 GCF_000859985.2 status=downloaded
+[progress][virus] 20/15058 GCF_000858385.2 status=downloading
+Running: /usr/bin/apptainer exec /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/containers/ncbi-datasets-cli.sif datasets download genome accession GCF_000858385.2 --filename /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/virus/GCF_000858385.2.zip
+Running: unzip -o /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/virus/GCF_000858385.2.zip -d /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/virus
+[progress][virus] 20/15058 GCF_000858385.2 status=downloaded
+[progress][virus] 21/15058 GCF_000846965.1 status=downloading
+Running: /usr/bin/apptainer exec /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/containers/ncbi-datasets-cli.sif datasets download genome accession GCF_000846965.1 --filename /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/virus/GCF_000846965.1.zip
+Running: unzip -o /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/virus/GCF_000846965.1.zip -d /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/virus
+[progress][virus] 21/15058 GCF_000846965.1 status=downloaded
+[progress][virus] 22/15058 GCF_000844145.1 status=downloading
+Running: /usr/bin/apptainer exec /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/containers/ncbi-datasets-cli.sif datasets download genome accession GCF_000844145.1 --filename /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/virus/GCF_000844145.1.zip
+Running: unzip -o /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/virus/GCF_000844145.1.zip -d /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/virus
+[progress][virus] 22/15058 GCF_000844145.1 status=downloaded
+[progress][virus] 23/15058 GCF_018580855.1 status=downloading
+Running: /usr/bin/apptainer exec /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/containers/ncbi-datasets-cli.sif datasets download genome accession GCF_018580855.1 --filename /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/virus/GCF_018580855.1.zip
+Running: unzip -o /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/virus/GCF_018580855.1.zip -d /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/virus
+[progress][virus] 23/15058 GCF_018580855.1 status=downloaded
+[progress][virus] 24/15058 GCF_018580865.1 status=downloading
+Running: /usr/bin/apptainer exec /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/containers/ncbi-datasets-cli.sif datasets download genome accession GCF_018580865.1 --filename /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/virus/GCF_018580865.1.zip
+Running: unzip -o /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/virus/GCF_018580865.1.zip -d /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/virus
+[progress][virus] 24/15058 GCF_018580865.1 status=downloaded
+[progress][virus] 25/15058 GCF_000844025.1 status=downloading
+Running: /usr/bin/apptainer exec /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/containers/ncbi-datasets-cli.sif datasets download genome accession GCF_000844025.1 --filename /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/virus/GCF_000844025.1.zip
+Running: unzip -o /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/virus/GCF_000844025.1.zip -d /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/virus
+[progress][virus] 25/15058 GCF_000844025.1 status=downloaded
+[progress][virus] 26/15058 GCF_000846345.1 status=downloading
+Running: /usr/bin/apptainer exec /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/containers/ncbi-datasets-cli.sif datasets download genome accession GCF_000846345.1 --filename /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/virus/GCF_000846345.1.zip
+Running: unzip -o /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/virus/GCF_000846345.1.zip -d /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/virus
+[progress][virus] 26/15058 GCF_000846345.1 status=downloaded
+[progress][virus] 27/15058 GCF_000885455.1 status=downloading
+Running: /usr/bin/apptainer exec /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/containers/ncbi-datasets-cli.sif datasets download genome accession GCF_000885455.1 --filename /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/virus/GCF_000885455.1.zip
+Running: unzip -o /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/virus/GCF_000885455.1.zip -d /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/virus
+[progress][virus] 27/15058 GCF_000885455.1 status=downloaded
+[progress][virus] 28/15058 GCF_000858285.1 status=downloading
+Running: /usr/bin/apptainer exec /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/containers/ncbi-datasets-cli.sif datasets download genome accession GCF_000858285.1 --filename /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/virus/GCF_000858285.1.zip
+Running: unzip -o /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/virus/GCF_000858285.1.zip -d /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/virus
+[progress][virus] 28/15058 GCF_000858285.1 status=downloaded
+[progress][virus] 29/15058 GCF_000843825.1 status=downloading
+Running: /usr/bin/apptainer exec /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/containers/ncbi-datasets-cli.sif datasets download genome accession GCF_000843825.1 --filename /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/virus/GCF_000843825.1.zip
+Running: unzip -o /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/virus/GCF_000843825.1.zip -d /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/virus
+[progress][virus] 29/15058 GCF_000843825.1 status=downloaded
+[progress][virus] 30/15058 GCF_008791805.1 status=downloading
+Running: /usr/bin/apptainer exec /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/containers/ncbi-datasets-cli.sif datasets download genome accession GCF_008791805.1 --filename /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/virus/GCF_008791805.1.zip
+Running: unzip -o /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/virus/GCF_008791805.1.zip -d /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/virus
+[progress][virus] 30/15058 GCF_008791805.1 status=downloaded
+[progress][virus] 31/15058 GCF_000890195.1 status=downloading
+Running: /usr/bin/apptainer exec /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/containers/ncbi-datasets-cli.sif datasets download genome accession GCF_000890195.1 --filename /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/virus/GCF_000890195.1.zip
+Running: unzip -o /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/virus/GCF_000890195.1.zip -d /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/virus
+[progress][virus] 31/15058 GCF_000890195.1 status=downloaded
+[progress][virus] 32/15058 GCF_000845245.1 status=downloading
+Running: /usr/bin/apptainer exec /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/containers/ncbi-datasets-cli.sif datasets download genome accession GCF_000845245.1 --filename /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/virus/GCF_000845245.1.zip
+Running: unzip -o /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/virus/GCF_000845245.1.zip -d /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/virus
+[progress][virus] 32/15058 GCF_000845245.1 status=downloaded
+[progress][virus] 33/15058 GCF_000859805.1 status=downloading
+Running: /usr/bin/apptainer exec /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/containers/ncbi-datasets-cli.sif datasets download genome accession GCF_000859805.1 --filename /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/virus/GCF_000859805.1.zip
+Running: unzip -o /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/virus/GCF_000859805.1.zip -d /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/virus
+[progress][virus] 33/15058 GCF_000859805.1 status=downloaded
+[progress][virus] 34/15058 GCF_008792765.1 status=downloading
+Running: /usr/bin/apptainer exec /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/containers/ncbi-datasets-cli.sif datasets download genome accession GCF_008792765.1 --filename /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/virus/GCF_008792765.1.zip
+Running: unzip -o /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/virus/GCF_008792765.1.zip -d /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/virus
+[progress][virus] 34/15058 GCF_008792765.1 status=downloaded
+[progress][virus] 35/15058 GCF_000929435.1 status=downloading
+Running: /usr/bin/apptainer exec /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/containers/ncbi-datasets-cli.sif datasets download genome accession GCF_000929435.1 --filename /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/virus/GCF_000929435.1.zip
+Running: unzip -o /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/virus/GCF_000929435.1.zip -d /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/virus
+[progress][virus] 35/15058 GCF_000929435.1 status=downloaded
+[progress][virus] 36/15058 GCF_000848125.1 status=downloading
+Running: /usr/bin/apptainer exec /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/containers/ncbi-datasets-cli.sif datasets download genome accession GCF_000848125.1 --filename /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/virus/GCF_000848125.1.zip
+Running: unzip -o /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/virus/GCF_000848125.1.zip -d /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/virus
+[progress][virus] 36/15058 GCF_000848125.1 status=downloaded
+[progress][virus] 37/15058 GCF_002402265.1 status=downloading
+Running: /usr/bin/apptainer exec /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/containers/ncbi-datasets-cli.sif datasets download genome accession GCF_002402265.1 --filename /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/virus/GCF_002402265.1.zip
+Running: unzip -o /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/virus/GCF_002402265.1.zip -d /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/virus
+[progress][virus] 37/15058 GCF_002402265.1 status=downloaded
+[progress][virus] 38/15058 GCF_002814975.1 status=downloading
+Running: /usr/bin/apptainer exec /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/containers/ncbi-datasets-cli.sif datasets download genome accession GCF_002814975.1 --filename /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/virus/GCF_002814975.1.zip
+Running: unzip -o /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/virus/GCF_002814975.1.zip -d /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/virus
+[progress][virus] 38/15058 GCF_002814975.1 status=downloaded
+[progress][virus] 39/15058 GCF_000845465.1 status=downloading
+Running: /usr/bin/apptainer exec /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/containers/ncbi-datasets-cli.sif datasets download genome accession GCF_000845465.1 --filename /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/virus/GCF_000845465.1.zip
+
+[Diag] summary destination path: /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/metadata/assembly_summary_virus.txt
+=== blastdbbuilder GUI started: Wed Mar 18 11:50:27 AWST 2026 ===
+Working dir: /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder
+
+$ (step=download) blastdbbuilder --download --virus
+
+[INFO] Downloading virus genomes into /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/virus ...
+Downloading assembly_summary.txt for virus...
+Running: wget -O /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/virus/assembly_summary.txt https://ftp.ncbi.nlm.nih.gov/genomes/refseq/viral/assembly_summary.txt
+[progress][virus] 0/15058 status=start
+[INFO] Downloading container: ncbi-datasets-cli.sif
+Running: /usr/bin/apptainer pull /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/containers/ncbi-datasets-cli.sif docker://staphb/ncbi-datasets:latest
+Running: /usr/bin/apptainer exec /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/containers/ncbi-datasets-cli.sif datasets download genome accession GCF_000839185.1 --filename /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/virus/GCF_000839185.1.zip
+Running: unzip -o /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/virus/GCF_000839185.1.zip -d /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/virus
+[progress][virus] 1/15058 GCF_000839185.1 status=downloaded
+Running: /usr/bin/apptainer exec /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/containers/ncbi-datasets-cli.sif datasets download genome accession GCF_000857045.1 --filename /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/virus/GCF_000857045.1.zip
+Running: unzip -o /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/virus/GCF_000857045.1.zip -d /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/virus
+[progress][virus] 2/15058 GCF_000857045.1 status=downloaded
+Running: /usr/bin/apptainer exec /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/containers/ncbi-datasets-cli.sif datasets download genome accession GCF_014621545.1 --filename /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/virus/GCF_014621545.1.zip
+Running: unzip -o /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/virus/GCF_014621545.1.zip -d /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/virus
+[progress][virus] 3/15058 GCF_014621545.1 status=downloaded
+Running: /usr/bin/apptainer exec /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/containers/ncbi-datasets-cli.sif datasets download genome accession GCF_000860085.1 --filename /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/virus/GCF_000860085.1.zip
+Running: unzip -o /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/virus/GCF_000860085.1.zip -d /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/virus
+[progress][virus] 4/15058 GCF_000860085.1 status=downloaded
+Running: /usr/bin/apptainer exec /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/containers/ncbi-datasets-cli.sif datasets download genome accession GCF_000859885.1 --filename /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/virus/GCF_000859885.1.zip
+Running: unzip -o /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/virus/GCF_000859885.1.zip -d /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/virus
+[progress][virus] 5/15058 GCF_000859885.1 status=downloaded
+Running: /usr/bin/apptainer exec /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/containers/ncbi-datasets-cli.sif datasets download genome accession GCF_001029045.1 --filename /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/virus/GCF_001029045.1.zip
+Running: unzip -o /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/virus/GCF_001029045.1.zip -d /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/virus
+[progress][virus] 6/15058 GCF_001029045.1 status=downloaded
+Running: /usr/bin/apptainer exec /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/containers/ncbi-datasets-cli.sif datasets download genome accession GCF_000844845.1 --filename /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/virus/GCF_000844845.1.zip
+Running: unzip -o /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/virus/GCF_000844845.1.zip -d /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/virus
+[progress][virus] 7/15058 GCF_000844845.1 status=downloaded
+Running: /usr/bin/apptainer exec /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/containers/ncbi-datasets-cli.sif datasets download genome accession GCF_000838605.1 --filename /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/virus/GCF_000838605.1.zip
+Running: unzip -o /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/virus/GCF_000838605.1.zip -d /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/virus
+[progress][virus] 8/15058 GCF_000838605.1 status=downloaded
+Running: /usr/bin/apptainer exec /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/containers/ncbi-datasets-cli.sif datasets download genome accession GCF_000922075.1 --filename /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/virus/GCF_000922075.1.zip
+Running: unzip -o /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/virus/GCF_000922075.1.zip -d /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/virus
+[progress][virus] 9/15058 GCF_000922075.1 status=downloaded
+Running: /usr/bin/apptainer exec /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/containers/ncbi-datasets-cli.sif datasets download genome accession GCF_000840205.1 --filename /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/virus/GCF_000840205.1.zip
+Running: unzip -o /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/virus/GCF_000840205.1.zip -d /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/virus
+[progress][virus] 10/15058 GCF_000840205.1 status=downloaded
+Running: /usr/bin/apptainer exec /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/containers/ncbi-datasets-cli.sif datasets download genome accession GCF_000847965.1 --filename /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/virus/GCF_000847965.1.zip
+Running: unzip -o /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/virus/GCF_000847965.1.zip -d /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/virus
+[progress][virus] 11/15058 GCF_000847965.1 status=downloaded
+Running: /usr/bin/apptainer exec /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/containers/ncbi-datasets-cli.sif datasets download genome accession GCF_000843685.1 --filename /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/virus/GCF_000843685.1.zip
+Running: unzip -o /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/virus/GCF_000843685.1.zip -d /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/virus
+[progress][virus] 12/15058 GCF_000843685.1 status=downloaded
+Running: /usr/bin/apptainer exec /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/containers/ncbi-datasets-cli.sif datasets download genome accession GCF_000839965.1 --filename /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/virus/GCF_000839965.1.zip
+
+[Diag] summary destination path: /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/metadata/assembly_summary_archaea.txt
+=== blastdbbuilder GUI started: Wed Mar 18 11:51:39 AWST 2026 ===
+Working dir: /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder
+
+$ (step=download) blastdbbuilder --download --archaea
+
+[INFO] Downloading archaea genomes into /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/archaea ...
+Downloading assembly_summary.txt for archaea...
+Running: wget -O /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/archaea/assembly_summary.txt https://ftp.ncbi.nlm.nih.gov/genomes/refseq/archaea/assembly_summary.txt
+[progress][archaea] 0/809 status=start
+Running: /usr/bin/apptainer exec /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/containers/ncbi-datasets-cli.sif datasets download genome accession GCF_002287175.1 --filename /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/archaea/GCF_002287175.1.zip
+Running: unzip -o /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/archaea/GCF_002287175.1.zip -d /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/archaea
+[progress][archaea] 1/809 GCF_002287175.1 status=downloaded
+Running: /usr/bin/apptainer exec /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/containers/ncbi-datasets-cli.sif datasets download genome accession GCF_001458655.1 --filename /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/archaea/GCF_001458655.1.zip
+Running: unzip -o /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/archaea/GCF_001458655.1.zip -d /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/archaea
+[progress][archaea] 2/809 GCF_001458655.1 status=downloaded
+Running: /usr/bin/apptainer exec /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/containers/ncbi-datasets-cli.sif datasets download genome accession GCF_001889405.1 --filename /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/archaea/GCF_001889405.1.zip
+Running: unzip -o /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/archaea/GCF_001889405.1.zip -d /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/archaea
+[progress][archaea] 3/809 GCF_001889405.1 status=downloaded
+Running: /usr/bin/apptainer exec /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/containers/ncbi-datasets-cli.sif datasets download genome accession GCF_055392295.1 --filename /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/archaea/GCF_055392295.1.zip
+Running: unzip -o /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/archaea/GCF_055392295.1.zip -d /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/archaea
+[progress][archaea] 4/809 GCF_055392295.1 status=downloaded
+Running: /usr/bin/apptainer exec /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/containers/ncbi-datasets-cli.sif datasets download genome accession GCF_002287215.1 --filename /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/archaea/GCF_002287215.1.zip
+Running: unzip -o /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/archaea/GCF_002287215.1.zip -d /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/archaea
+[progress][archaea] 5/809 GCF_002287215.1 status=downloaded
+Running: /usr/bin/apptainer exec /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/containers/ncbi-datasets-cli.sif datasets download genome accession GCF_026684035.1 --filename /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/archaea/GCF_026684035.1.zip
+Running: unzip -o /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/archaea/GCF_026684035.1.zip -d /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/archaea
+[progress][archaea] 6/809 GCF_026684035.1 status=downloaded
+Running: /usr/bin/apptainer exec /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/containers/ncbi-datasets-cli.sif datasets download genome accession GCF_001571405.1 --filename /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/archaea/GCF_001571405.1.zip
+Running: unzip -o /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/archaea/GCF_001571405.1.zip -d /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/archaea
+[progress][archaea] 7/809 GCF_001571405.1 status=downloaded
+Running: /usr/bin/apptainer exec /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/containers/ncbi-datasets-cli.sif datasets download genome accession GCF_000765475.1 --filename /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/archaea/GCF_000765475.1.zip
+Running: unzip -o /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/archaea/GCF_000765475.1.zip -d /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/archaea
+[progress][archaea] 8/809 GCF_000765475.1 status=downloaded
+Running: /usr/bin/apptainer exec /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/containers/ncbi-datasets-cli.sif datasets download genome accession GCF_004799605.1 --filename /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/archaea/GCF_004799605.1.zip
+
+[Diag] summary destination path: /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/metadata/assembly_summary_virus.txt
+=== blastdbbuilder GUI started: Wed Mar 18 11:52:41 AWST 2026 ===
+Working dir: /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder
+
+$ (step=download) blastdbbuilder --download --virus
+
+[INFO] Downloading virus genomes into /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/virus ...
+Downloading assembly_summary.txt for virus...
+Running: wget -O /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/virus/assembly_summary.txt https://ftp.ncbi.nlm.nih.gov/genomes/refseq/viral/assembly_summary.txt
+[progress][virus] 0/15058 status=start
+[progress][virus] 1/15058 GCF_000839185.1 status=skipped
+[progress][virus] 2/15058 GCF_000857045.1 status=skipped
+[progress][virus] 3/15058 GCF_014621545.1 status=skipped
+[progress][virus] 4/15058 GCF_000860085.1 status=skipped
+[progress][virus] 5/15058 GCF_000859885.1 status=skipped
+[progress][virus] 6/15058 GCF_001029045.1 status=skipped
+[progress][virus] 7/15058 GCF_000844845.1 status=skipped
+[progress][virus] 8/15058 GCF_000838605.1 status=skipped
+[progress][virus] 9/15058 GCF_000922075.1 status=skipped
+[progress][virus] 10/15058 GCF_000840205.1 status=skipped
+[progress][virus] 11/15058 GCF_000847965.1 status=skipped
+[progress][virus] 12/15058 GCF_000843685.1 status=skipped
+Running: /usr/bin/apptainer exec /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/containers/ncbi-datasets-cli.sif datasets download genome accession GCF_000839965.1 --filename /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/virus/GCF_000839965.1.zip
+Running: unzip -o /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/virus/GCF_000839965.1.zip -d /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/virus
+[progress][virus] 13/15058 GCF_000839965.1 status=downloaded
+Running: /usr/bin/apptainer exec /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/containers/ncbi-datasets-cli.sif datasets download genome accession GCF_000843325.1 --filename /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/virus/GCF_000843325.1.zip
+Running: unzip -o /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/virus/GCF_000843325.1.zip -d /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/virus
+[progress][virus] 14/15058 GCF_000843325.1 status=downloaded
+Running: /usr/bin/apptainer exec /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/containers/ncbi-datasets-cli.sif datasets download genome accession GCF_000909015.1 --filename /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/virus/GCF_000909015.1.zip
+Running: unzip -o /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/virus/GCF_000909015.1.zip -d /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/virus
+[progress][virus] 15/15058 GCF_000909015.1 status=downloaded
+Running: /usr/bin/apptainer exec /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/containers/ncbi-datasets-cli.sif datasets download genome accession GCF_002987725.1 --filename /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/virus/GCF_002987725.1.zip
+Running: unzip -o /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/virus/GCF_002987725.1.zip -d /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/virus
+[progress][virus] 16/15058 GCF_002987725.1 status=downloaded
+Running: /usr/bin/apptainer exec /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/containers/ncbi-datasets-cli.sif datasets download genome accession GCF_002814635.1 --filename /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/virus/GCF_002814635.1.zip
+
+[Diag] summary destination path: /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/metadata/assembly_summary_archaea.txt
+=== blastdbbuilder GUI started: Wed Mar 18 11:57:11 AWST 2026 ===
+Working dir: /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder
+
+$ (step=download) blastdbbuilder --download --archaea --virus
+
+[INFO] Downloading archaea genomes into /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/archaea ...
+Downloading assembly_summary.txt for archaea...
+Running: wget -O /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/archaea/assembly_summary.txt https://ftp.ncbi.nlm.nih.gov/genomes/refseq/archaea/assembly_summary.txt
+[progress][archaea] 0/809 status=start
+[progress][archaea] 1/809 GCF_002287175.1 status=skipped
+[progress][archaea] 2/809 GCF_001458655.1 status=skipped
+[progress][archaea] 3/809 GCF_001889405.1 status=skipped
+[progress][archaea] 4/809 GCF_055392295.1 status=skipped
+[progress][archaea] 5/809 GCF_002287215.1 status=skipped
+[progress][archaea] 6/809 GCF_026684035.1 status=skipped
+[progress][archaea] 7/809 GCF_001571405.1 status=skipped
+[progress][archaea] 8/809 GCF_000765475.1 status=skipped
+Running: /usr/bin/apptainer exec /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/containers/ncbi-datasets-cli.sif datasets download genome accession GCF_004799605.1 --filename /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/archaea/GCF_004799605.1.zip
+Running: unzip -o /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/archaea/GCF_004799605.1.zip -d /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/archaea
+[progress][archaea] 9/809 GCF_004799605.1 status=downloaded
+Running: /usr/bin/apptainer exec /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/containers/ncbi-datasets-cli.sif datasets download genome accession GCF_050496105.1 --filename /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/archaea/GCF_050496105.1.zip
+Running: unzip -o /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/archaea/GCF_050496105.1.zip -d /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/archaea
+[progress][archaea] 10/809 GCF_050496105.1 status=downloaded
+Running: /usr/bin/apptainer exec /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/containers/ncbi-datasets-cli.sif datasets download genome accession GCF_055384425.1 --filename /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/archaea/GCF_055384425.1.zip
+Running: unzip -o /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/archaea/GCF_055384425.1.zip -d /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/archaea
+[progress][archaea] 11/809 GCF_055384425.1 status=downloaded
+Running: /usr/bin/apptainer exec /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/containers/ncbi-datasets-cli.sif datasets download genome accession GCF_009729015.1 --filename /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/archaea/GCF_009729015.1.zip
+Running: unzip -o /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/archaea/GCF_009729015.1.zip -d /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/archaea
+[progress][archaea] 12/809 GCF_009729015.1 status=downloaded
+Running: /usr/bin/apptainer exec /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/containers/ncbi-datasets-cli.sif datasets download genome accession GCF_003852155.1 --filename /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/archaea/GCF_003852155.1.zip
+Running: unzip -o /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/archaea/GCF_003852155.1.zip -d /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/archaea
+[progress][archaea] 13/809 GCF_003852155.1 status=downloaded
+Running: /usr/bin/apptainer exec /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/containers/ncbi-datasets-cli.sif datasets download genome accession GCF_001462395.1 --filename /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/archaea/GCF_001462395.1.zip
+Running: unzip -o /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/archaea/GCF_001462395.1.zip -d /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/archaea
+[progress][archaea] 14/809 GCF_001462395.1 status=downloaded
+Running: /usr/bin/apptainer exec /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/containers/ncbi-datasets-cli.sif datasets download genome accession GCF_009729545.1 --filename /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/archaea/GCF_009729545.1.zip
+Running: unzip -o /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/archaea/GCF_009729545.1.zip -d /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/archaea
+[progress][archaea] 15/809 GCF_009729545.1 status=downloaded
+Running: /usr/bin/apptainer exec /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/containers/ncbi-datasets-cli.sif datasets download genome accession GCF_900106715.1 --filename /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/archaea/GCF_900106715.1.zip
+Running: unzip -o /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/archaea/GCF_900106715.1.zip -d /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/archaea
+[progress][archaea] 16/809 GCF_900106715.1 status=downloaded
+Running: /usr/bin/apptainer exec /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/containers/ncbi-datasets-cli.sif datasets download genome accession GCF_000275865.1 --filename /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/archaea/GCF_000275865.1.zip
+Running: unzip -o /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/archaea/GCF_000275865.1.zip -d /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/archaea
+[progress][archaea] 17/809 GCF_000275865.1 status=downloaded
+Running: /usr/bin/apptainer exec /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/containers/ncbi-datasets-cli.sif datasets download genome accession GCF_039545195.1 --filename /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/archaea/GCF_039545195.1.zip
+Running: unzip -o /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/archaea/GCF_039545195.1.zip -d /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/archaea
+[progress][archaea] 18/809 GCF_039545195.1 status=downloaded
+Running: /usr/bin/apptainer exec /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/containers/ncbi-datasets-cli.sif datasets download genome accession GCF_017873555.1 --filename /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/archaea/GCF_017873555.1.zip
+Running: unzip -o /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/archaea/GCF_017873555.1.zip -d /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/archaea
+[progress][archaea] 19/809 GCF_017873555.1 status=downloaded
+Running: /usr/bin/apptainer exec /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/containers/ncbi-datasets-cli.sif datasets download genome accession GCF_000337555.1 --filename /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/archaea/GCF_000337555.1.zip
+Running: unzip -o /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/archaea/GCF_000337555.1.zip -d /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/archaea
+[progress][archaea] 20/809 GCF_000337555.1 status=downloaded
+Running: /usr/bin/apptainer exec /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/containers/ncbi-datasets-cli.sif datasets download genome accession GCF_024662215.1 --filename /media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder/db/archaea/GCF_024662215.1.zip

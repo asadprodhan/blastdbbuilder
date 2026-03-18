@@ -92,6 +92,14 @@ def download_group(group_name, assembly_url, db_dir, container_dir, summary_log)
     print(f"\n[INFO] Downloading {group_name} genomes into {os.path.join(db_dir, group_name)} ...", flush=True)
     group_dir = os.path.join(db_dir, group_name)
     os.makedirs(group_dir, exist_ok=True)
+    completed_log = os.path.join(group_dir, "downloaded_accessions.txt")
+    completed = set()
+    if os.path.exists(completed_log):
+        with open(completed_log, encoding="utf-8", errors="replace") as f:
+            for line in f:
+                acc = line.strip()
+                if acc:
+                    completed.add(acc)
 
     # Step 1: Download assembly_summary.txt
     assembly_file = os.path.join(group_dir, "assembly_summary.txt")
@@ -110,14 +118,16 @@ def download_group(group_name, assembly_url, db_dir, container_dir, summary_log)
 
     # Load accessions from CSV so we know TOTAL
     accessions = []
+    seen = set()
     with open(csv_file, encoding="utf-8", errors="replace") as f:
         reader = csv.reader(f)
         for row in reader:
             if not row:
                 continue
             acc = (row[0] or "").strip()
-            if acc:
+            if acc and acc not in seen:
                 accessions.append(acc)
+                seen.add(acc) 
 
     total = len(accessions)
     if total == 0:
@@ -151,7 +161,7 @@ def download_group(group_name, assembly_url, db_dir, container_dir, summary_log)
             glob.glob(os.path.join(group_dir, f"{accession}*.fa")) +
             glob.glob(os.path.join(group_dir, f"{accession}*.fasta"))
         )
-        if fasta_files:
+        if accession in completed or fasta_files:
             skipped += 1
             emit_progress(summary_log, group_name, processed, total, accession=accession, status="skipped")
             continue
@@ -159,7 +169,7 @@ def download_group(group_name, assembly_url, db_dir, container_dir, summary_log)
         zip_file = os.path.join(group_dir, f"{accession}.zip")
 
         # Announce start of this accession
-        emit_progress(summary_log, group_name, processed, total, accession=accession, status="downloading")
+        #emit_progress(summary_log, group_name, processed, total, accession=accession, status="downloading")
 
         # Download
         try:
@@ -208,6 +218,10 @@ def download_group(group_name, assembly_url, db_dir, container_dir, summary_log)
             ok += 1
             write_summary(summary_log, f"[OK] Downloaded {accession}")
             emit_progress(summary_log, group_name, processed, total, accession=accession, status="downloaded")
+            if accession not in completed:
+                with open(completed_log, "a", encoding="utf-8") as f:
+                    f.write(accession + "\n")
+                completed.add(accession)
         else:
             failed += 1
             write_summary(summary_log, f"[ERROR] No FASTA found after extract for {accession}")

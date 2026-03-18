@@ -12,7 +12,7 @@ Features:
 - Stop / Force Kill from GUI
 
 Files created in working directory:
-  .blastdbbuilder_gui.pid
+  .blastdbbuilder.pid
   .blastdbbuilder_gui.log
   .blastdbbuilder_gui.state.json
 
@@ -54,7 +54,7 @@ ACTIONS = [
     ("Run all (1 → 2 → 3)", "all"),
 ]
 
-PID_FILE = ".blastdbbuilder_gui.pid"
+PID_FILE = ".blastdbbuilder.pid"
 LOG_FILE = ".blastdbbuilder_gui.log"
 STATE_FILE = ".blastdbbuilder_gui.state.json"
 
@@ -107,14 +107,10 @@ def is_pgid_running(pgid: int) -> bool:
     except Exception:
         # Fallback: coarse OS probe (can be tripped by PermissionError on shared systems).
         try:
-            os.killpg(pgid, 0)
+            os.killpg(os.getpgid(pgid), 0)
             return True
-        except ProcessLookupError:
+        except (ProcessLookupError, PermissionError, OSError):
             return False
-        except PermissionError:
-            # Can't signal it (likely not ours) -> treat as not running for UI.
-            return False
-
 
 def read_pidfile(pid_path: str):
     """Read PID file supporting legacy (single integer), JSON, and key=value formats.
@@ -1514,12 +1510,13 @@ class App(tk.Tk):
             return
 
         try:
-            os.killpg(pid, signal.SIGTERM)
+            os.killpg(os.getpgid(pid), signal.SIGTERM) 
             self._log(f"[Stop] Sent SIGTERM to process group PID {pid}")
             self._log("[INFO] Download interrupted by user.")
             self.status_var.set(f"Stopping job (PID {pid})...")
             # Mark as stopping so Run can re-enable immediately (even if PID lingers briefly)
             write_pidfile(pid_path, pid, status="stopping")
+            self._detect_and_attach(silent=True)
 
             # Re-enable Run immediately (even before PID fully exits)
             try:
@@ -1561,12 +1558,13 @@ class App(tk.Tk):
             return
 
         try:
-            os.killpg(pid, signal.SIGKILL)
+            os.killpg(os.getpgid(pid), signal.SIGKILL)
             self._log(f"[Force Kill] Sent SIGKILL to process group PID {pid}")
             self._log("[INFO] Download interrupted by user.")
             self.status_var.set(f"Killed job (PID {pid}).")
             # Mark as stopping so Run can re-enable immediately
             write_pidfile(pid_path, pid, status="stopping")
+            self._detect_and_attach(silent=True)
 
             # Re-enable Run immediately
             try:

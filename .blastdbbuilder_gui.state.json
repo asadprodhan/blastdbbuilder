@@ -1,0 +1,20 @@
+{
+  "started_at": "2026-03-18 11:57:11",
+  "cwd": "/media/bioinf5/data/blastdbbuilder_bugs_2026-03-18/blastdbbuilder",
+  "action": "download",
+  "groups": [
+    "Archaea",
+    "Virus"
+  ],
+  "commands": [
+    {
+      "step": "download",
+      "cmd": [
+        "blastdbbuilder",
+        "--download",
+        "--archaea",
+        "--virus"
+      ]
+    }
+  ]
+}

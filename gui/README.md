@@ -20,6 +20,10 @@
 
 ## **Content**
 
+<img src="https://raw.githubusercontent.com/asadprodhan/blastdbbuilder/main/blastdbbuilder_logo.png"
+     width="190"
+     align="right">
+
 - [Introduction](#introduction)
 - [blastdbbuilder GUI](#blastdbbuilder-gui)
 - [Features](#features)

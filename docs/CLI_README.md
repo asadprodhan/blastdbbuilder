@@ -262,6 +262,8 @@ Now, you will see an error.
   - There are three steps from downloading the genomes to building a BLASTn database
 
   - Open a terminal
+    
+  - Choose the correct working directory (IMPORTANT). Avoid working inside /home/... because it often has limited storage
 
   - Make a directory. Name it based on which group/s you are going to download. For example
 

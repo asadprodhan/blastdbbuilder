@@ -234,36 +234,12 @@ wsl.exe -e blastdbbuilder-gui
 
 ---
 
-## **Access Windows files from WSL**
-
-Windows drives are available under `/mnt`.
-
-Examples:
-
-| Windows path | WSL path |
-|--------------|----------|
-| C:\ | /mnt/c |
-| D:\ | /mnt/d |
-
-Example:
-
-```
-C:\Users\username\Documents
-```
-
-becomes
-
-```
-/mnt/c/Users/username/Documents
-```
-
-When using the GUI **Browse** button, navigate to `/mnt` to access your Windows files.
-
----
-
 ## **Build a BLAST database on your laptop**
 
 ### Step 1 — Create a working directory
+
+> Choose the correct working directory (IMPORTANT). Avoid working inside /home/... because it often has limited storage. See the following section - Access Windows files from WSL
+
 
 ```
 mkdir ~/blastdbbuilder_run
@@ -335,6 +311,58 @@ blastn
 megablast
 local BLAST searches
 ```
+
+---
+
+## **Access Windows files from WSL**
+
+**How to Access Windows Files from WSL**
+
+- Open your WSL
+- Run the following command
+
+	```
+	pwd
+	```
+
+> You will see the following path
+
+	```
+	/home/WSL_User_Name
+	```
+
+- Now, navigate to your Laptop's `/mnt` drive by running the following commands in your WSL terminal
+
+	```
+	cd ../../
+	ls
+	cd /mnt
+	```
+
+- Navigate to your Laptop's `Downloads` folder by running the following commands
+
+	```
+	cd /c
+	ls
+	cd /Users
+	ls
+	cd /YourLaptopUserName
+	ls
+	cd /Downloads
+	pwd
+	```
+
+- Now, within your Laptop's `Downloads` folder, create a new folder `db` and run blastdbbuilder-gui from the db folder
+
+	```
+	mkdir db
+	cd db
+	blastdbbuilder-gui
+	```
+ 
+- Leave the GUI running and you can also manually go to your Laptop's Download/db folder and see the output directories. 
+
+> When using the GUI **Browse** button, navigate to `/mnt` to access your Windows files.
 
 ---
 

@@ -238,6 +238,8 @@ blastdbbuilder-gui
 
 2. Select the working directory through navigating into the directory and DOUBLE-CLICK the folder to select it, and then pressing OK
 
+> Choose the correct working directory (IMPORTANT). Avoid working inside /home/... because it often has limited storage
+
 3. Choose genome groups:
 
 - Archaea

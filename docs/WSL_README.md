@@ -321,44 +321,44 @@ local BLAST searches
 - Open your WSL
 - Run the following command
 
-	```
-	pwd
-	```
+```
+pwd
+```
 
 > You will see the following path
 
-	```
-	/home/WSL_User_Name
-	```
+```
+/home/WSL_User_Name
+```
 
 - Now, navigate to your Laptop's `/mnt` drive by running the following commands in your WSL terminal
 
-	```
-	cd ../../
-	ls
-	cd /mnt
-	```
+```
+cd ../../
+ls
+cd /mnt
+```
 
 - Navigate to your Laptop's `Downloads` folder by running the following commands
 
-	```
-	cd /c
-	ls
-	cd /Users
-	ls
-	cd /YourLaptopUserName
-	ls
-	cd /Downloads
-	pwd
-	```
+```
+cd /c
+ls
+cd /Users
+ls
+cd /YourLaptopUserName
+ls
+cd /Downloads
+pwd
+```
 
 - Now, within your Laptop's `Downloads` folder, create a new folder `db` and run blastdbbuilder-gui from the db folder
 
-	```
-	mkdir db
-	cd db
-	blastdbbuilder-gui
-	```
+```
+mkdir db
+cd db
+blastdbbuilder-gui
+```
  
 - Leave the GUI running and you can also manually go to your Laptop's Download/db folder and see the output directories. 
 

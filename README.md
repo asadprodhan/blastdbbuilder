@@ -275,3 +275,15 @@ Database. https://doi.org/10.5281/zenodo.18973405
 
 For issues, bug reports, or feature requests, please contact: **Asad
 Prodhan. E-mail: asad.prodhan@dpird.wa.gov.au, prodhan82@gmail.com**
+
+## v1.2.0 additional feature: build from your own FASTA folder
+
+The existing download, concatenate, build, and Run all workflows are retained. Version 1.2.0 additionally allows a BLASTn database to be built directly from a directory containing one or more `.fasta`, `.fa`, `.fna`, or `.fas` files. Multiple FASTA files are concatenated automatically for the build, original FASTA files are preserved, and output is written as `blastnDB/nt.*`.
+
+CLI example:
+
+```bash
+blastdbbuilder --build --input-dir /path/to/fasta_folder
+```
+
+The same feature is available in the existing GUI as **Build from FASTA folder (new)**; the GUI's Working directory is used as the FASTA input directory.

@@ -272,50 +272,213 @@ def concat_genomes(db_dir, summary_log):
     return final_fasta
 
 # -----------------------------
-# Build BLAST database
+# Custom FASTA input + BLAST database build
 # -----------------------------
-def build_blast_db(fasta_file, summary_log, container_dir, db_dir):
-    if not fasta_file or not os.path.isfile(fasta_file):
-        print("[ERROR] FASTA file for BLAST DB not found.", flush=True)
-        return
+FASTA_EXTENSIONS = (".fasta", ".fa", ".fna", ".fas")
 
-    project_root = os.path.dirname(fasta_file)
-    blast_dir = os.path.join(project_root, "blastnDB")
+
+def find_fasta_files(input_dir):
+    """Return FASTA files directly inside input_dir, sorted by filename.
+
+    Generated blastdbbuilder output is excluded automatically because blastnDB
+    is a subdirectory and this scan is intentionally non-recursive.
+    """
+    input_dir = os.path.abspath(os.path.expanduser(input_dir))
+    if not os.path.isdir(input_dir):
+        raise ValueError(f"Input directory does not exist: {input_dir}")
+
+    files = []
+    for name in sorted(os.listdir(input_dir)):
+        path = os.path.join(input_dir, name)
+        if os.path.isfile(path) and name.lower().endswith(FASTA_EXTENSIONS):
+            files.append(path)
+    return files
+
+
+def validate_fasta_file(path):
+    """Perform a lightweight FASTA validation and return sequence count."""
+    headers = 0
+    saw_sequence = False
+    with open(path, "r", encoding="utf-8", errors="replace") as handle:
+        for raw in handle:
+            line = raw.strip()
+            if not line:
+                continue
+            if line.startswith(">"):
+                headers += 1
+            else:
+                saw_sequence = True
+    if headers == 0 or not saw_sequence:
+        raise ValueError(f"Not a valid FASTA file (no FASTA records found): {path}")
+    return headers
+
+
+def prepare_input_fasta(input_dir, blast_dir, summary_log):
+    """Find FASTA input(s), validate them, and concatenate when necessary.
+
+    Returns (fasta_for_build, temporary_combined, fasta_files, total_sequences).
+    Original FASTA files are never modified or deleted.
+    """
+    fasta_files = find_fasta_files(input_dir)
+    if not fasta_files:
+        raise ValueError(
+            f"No FASTA files found in {input_dir}. Supported extensions: "
+            + ", ".join(FASTA_EXTENSIONS)
+        )
+
+    total_sequences = 0
+    for fasta in fasta_files:
+        total_sequences += validate_fasta_file(fasta)
+
+    if len(fasta_files) == 1:
+        write_summary(summary_log, f"[OK] Found 1 FASTA file with {total_sequences} sequences: {fasta_files[0]}")
+        return fasta_files[0], False, fasta_files, total_sequences
+
     os.makedirs(blast_dir, exist_ok=True)
+    combined = os.path.join(blast_dir, ".blastdbbuilder_combined.fasta")
+    print(f"[INFO] Found {len(fasta_files)} FASTA files. Concatenating automatically...", flush=True)
+    with open(combined, "w", encoding="utf-8") as out_f:
+        for fasta in fasta_files:
+            with open(fasta, "r", encoding="utf-8", errors="replace") as in_f:
+                shutil.copyfileobj(in_f, out_f)
+                # Ensure records from adjacent files cannot run together.
+                out_f.write("\n")
+
+    write_summary(
+        summary_log,
+        f"[OK] Concatenated {len(fasta_files)} FASTA files ({total_sequences} sequences) for BLAST DB build"
+    )
+    return combined, True, fasta_files, total_sequences
+
+
+def _makeblastdb_command(fasta_file, db_prefix, container_dir):
+    """Return a command for makeblastdb, preferring a local BLAST+ installation."""
+    local_makeblastdb = shutil.which("makeblastdb")
+    if local_makeblastdb:
+        return [
+            local_makeblastdb,
+            "-in", fasta_file,
+            "-dbtype", "nucl",
+            "-out", db_prefix,
+        ]
 
     blast_container = ensure_container(
         container_dir,
         "ncbi-blast_2.16.0.sif",
         "docker://quay.io/biocontainers/blast:2.16.0--h6f7f691_0"
     )
-
-    fasta_file_name = os.path.basename(fasta_file)
-    db_prefix = os.path.join(blast_dir, os.path.splitext(fasta_file_name)[0])
-
-    print(f"Building BLAST database for {fasta_file} ...", flush=True)
-    write_summary(summary_log, f"-> Starting BLAST DB build for {fasta_file}")
-
     engine = get_container_engine()
-    bind_args = ["-B", "/data:/data"] if os.path.exists("/data") else []
 
-    cmd = [
+    # Bind the input/output directory explicitly so custom FASTA folders outside
+    # /data are available inside Apptainer/Singularity as well.
+    bind_root = os.path.dirname(os.path.abspath(fasta_file))
+    bind_args = ["-B", f"{bind_root}:{bind_root}"]
+    if os.path.exists("/data") and bind_root != "/data":
+        bind_args.extend(["-B", "/data:/data"])
+
+    return [
         engine, "exec", *bind_args, blast_container,
         "makeblastdb",
         "-in", fasta_file,
         "-dbtype", "nucl",
-        "-out", db_prefix
+        "-out", db_prefix,
     ]
 
+
+def build_blast_db_from_directory(input_dir, summary_log, container_dir):
+    """Build blastnDB/nt.* from one or more FASTA files in input_dir."""
+    input_dir = os.path.abspath(os.path.expanduser(input_dir))
+    blast_dir = os.path.join(input_dir, "blastnDB")
+    os.makedirs(blast_dir, exist_ok=True)
+    db_prefix = os.path.join(blast_dir, "nt")
+
+    fasta_for_build = None
+    temporary_combined = False
+    try:
+        fasta_for_build, temporary_combined, fasta_files, total_sequences = prepare_input_fasta(
+            input_dir, blast_dir, summary_log
+        )
+
+        print(f"[INFO] Input directory: {input_dir}", flush=True)
+        print(f"[INFO] FASTA files: {len(fasta_files)}", flush=True)
+        print(f"[INFO] Sequences: {total_sequences}", flush=True)
+        print(f"[INFO] Output database: {db_prefix}", flush=True)
+        write_summary(summary_log, f"-> Starting BLAST DB build: {db_prefix}")
+
+        cmd = _makeblastdb_command(fasta_for_build, db_prefix, container_dir)
+        run_cmd(cmd)
+
+        write_summary(summary_log, f"[OK] BLAST DB built: {db_prefix}")
+        print(f"[OK] BLAST database built successfully: {db_prefix}", flush=True)
+        print("[OK] Original FASTA file(s) were preserved.", flush=True)
+        return db_prefix
+    finally:
+        if temporary_combined and fasta_for_build and os.path.isfile(fasta_for_build):
+            try:
+                os.remove(fasta_for_build)
+            except OSError:
+                pass
+
+
+# -----------------------------
+# Legacy concatenation/build helpers (kept for existing CLI workflows)
+# -----------------------------
+def concat_genomes(db_dir, summary_log):
+    concat_dir = os.path.join(db_dir, "concat")
+    os.makedirs(concat_dir, exist_ok=True)
+    output_fasta = os.path.join(concat_dir, "combined.fasta")
+
+    fasta_files = []
+    for ext in ("*.fna", "*.fa", "*.fasta"):
+        fasta_files.extend(glob.glob(os.path.join(db_dir, "**", ext), recursive=True))
+
+    if not fasta_files:
+        print("[ERROR] No genome FASTA files found to concatenate", flush=True)
+        return None
+
+    print(f"Concatenating {len(fasta_files)} genome files...", flush=True)
+    total_sequences = 0
+    with open(output_fasta, "w", encoding="utf-8", errors="replace") as out_f:
+        for fasta in fasta_files:
+            with open(fasta, encoding="utf-8", errors="replace") as f:
+                for line in f:
+                    out_f.write(line)
+                    if line.startswith(">"):
+                        total_sequences += 1
+
+    project_root = os.path.abspath(os.path.join(db_dir, ".."))
+    final_fasta = os.path.join(project_root, "nt.fasta")
+    shutil.move(output_fasta, final_fasta)
+    shutil.rmtree(concat_dir, ignore_errors=True)
+
+    for entry in os.listdir(db_dir):
+        path = os.path.join(db_dir, entry)
+        if os.path.isdir(path) and entry != "containers":
+            shutil.rmtree(path, ignore_errors=True)
+
+    write_summary(summary_log, f"[OK] Concatenated {len(fasta_files)} files, {total_sequences} sequences into {final_fasta}")
+    print(f"[OK] Concatenation done. File moved to {final_fasta}", flush=True)
+    return final_fasta
+
+
+def build_blast_db(fasta_file, summary_log, container_dir, db_dir):
+    """Legacy build path. Output basename is now always blastnDB/nt."""
+    if not fasta_file or not os.path.isfile(fasta_file):
+        print("[ERROR] FASTA file for BLAST DB not found.", flush=True)
+        return None
+
+    project_root = os.path.dirname(os.path.abspath(fasta_file))
+    blast_dir = os.path.join(project_root, "blastnDB")
+    os.makedirs(blast_dir, exist_ok=True)
+    db_prefix = os.path.join(blast_dir, "nt")
+
+    print(f"Building BLAST database for {fasta_file} ...", flush=True)
+    write_summary(summary_log, f"-> Starting BLAST DB build for {fasta_file}")
+    cmd = _makeblastdb_command(fasta_file, db_prefix, container_dir)
     run_cmd(cmd)
     write_summary(summary_log, f"[OK] BLAST DB built: {db_prefix}")
     print(f"[OK] BLAST database built at {db_prefix}", flush=True)
-
-    if os.path.isdir(db_dir):
-        shutil.rmtree(db_dir, ignore_errors=True)
-
-    for ext in ("*.fna", "*.fa", "*.fasta"):
-        for f in glob.glob(os.path.join(project_root, ext)):
-            os.remove(f)
+    return db_prefix
 
 # -----------------------------
 # Main CLI
@@ -333,7 +496,12 @@ def main():
 
     parser.add_argument("--download", action="store_true", help="Download genomes for selected groups")
     parser.add_argument("--concat", action="store_true", help="Concatenate all genomes into one FASTA")
-    parser.add_argument("--build", action="store_true", help="Build BLAST database from concatenated FASTA")
+    parser.add_argument("--build", action="store_true", help="Build BLAST database")
+    parser.add_argument(
+        "--input-dir",
+        metavar="DIR",
+        help="Directory containing one or more FASTA files. With --build, multiple FASTA files are concatenated automatically and output is DIR/blastnDB/nt.*"
+    )
     parser.add_argument("--citation", action="store_true", help="Print citation information")
     parser.add_argument("--archaea", action="store_true", help="Include Archaea genomes")
     parser.add_argument("--bacteria", action="store_true", help="Include Bacteria genomes")
@@ -369,12 +537,26 @@ def main():
         final_fasta = concat_genomes(db_dir, summary_log)
 
     if args.build:
-        if not final_fasta:
-            project_root = os.path.abspath(os.path.join(db_dir, ".."))
-            candidate = os.path.join(project_root, "nt.fasta")
-            if os.path.isfile(candidate):
-                final_fasta = candidate
-        build_blast_db(final_fasta, summary_log, container_dir, db_dir)
+        if args.input_dir:
+            input_dir = os.path.abspath(os.path.expanduser(args.input_dir))
+            summary_log = os.path.join(input_dir, "summary.log")
+            container_dir = os.environ.get(
+                "BLASTDBBUILDER_CONTAINER_DIR",
+                os.path.join(os.path.expanduser("~"), ".cache", "blastdbbuilder", "containers")
+            )
+            os.makedirs(container_dir, exist_ok=True)
+            try:
+                build_blast_db_from_directory(input_dir, summary_log, container_dir)
+            except (ValueError, RuntimeError, subprocess.CalledProcessError) as exc:
+                print(f"[ERROR] {exc}", file=sys.stderr, flush=True)
+                sys.exit(1)
+        else:
+            if not final_fasta:
+                project_root = os.path.abspath(os.path.join(db_dir, ".."))
+                candidate = os.path.join(project_root, "nt.fasta")
+                if os.path.isfile(candidate):
+                    final_fasta = candidate
+            build_blast_db(final_fasta, summary_log, container_dir, db_dir)
 
     if args.citation:
         print("blastdbbuilder (Asad Prodhan, 2025). Please cite as needed.", flush=True)

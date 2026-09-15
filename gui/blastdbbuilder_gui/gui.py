@@ -54,6 +54,13 @@ ACTIONS = [
     ("Run all (1 → 2 → 3)", "all"),
 ]
 
+LOCAL_ACTIONS = [
+    ("Select FASTA Directory (Step 1)", "local_select"),
+    ("Concat only (Step 2)", "local_concat"),
+    ("Build only (Step 3)", "local_build"),
+    ("Run all (1 → 2 → 3)", "local_all"),
+]
+
 PID_FILE = ".blastdbbuilder.pid"
 LOG_FILE = ".blastdbbuilder_gui.log"
 STATE_FILE = ".blastdbbuilder_gui.state.json"
@@ -265,8 +272,39 @@ class App(tk.Tk):
         act_box.pack(fill="x", **pad)
 
         self.action_var = tk.StringVar(value="")
+        self.local_fasta_dir = tk.StringVar(value="")
+        self.local_fasta_count = 0
+
+        # Two professional workflow tabs. The original download/build controls are
+        # unchanged and live in the first tab; local FASTA functionality is isolated
+        # in the second tab.
+        self.action_tabs = ttk.Notebook(act_box)
+        self.action_tabs.pack(fill="x", padx=4, pady=4)
+
+        download_tab = ttk.Frame(self.action_tabs)
+        local_tab = ttk.Frame(self.action_tabs)
+        self.action_tabs.add(download_tab, text="Reference Genomes")
+        self.action_tabs.add(local_tab, text="Local FASTA Database")
+
         for label, key in ACTIONS:
-            ttk.Radiobutton(act_box, text=label, value=key, variable=self.action_var, command=self._refresh_preview).pack(anchor="w")
+            ttk.Radiobutton(download_tab, text=label, value=key, variable=self.action_var, command=self._refresh_preview).pack(anchor="w", padx=4, pady=1)
+
+        self.local_action_buttons = {}
+        # Step 1 is informational: browsing is the selection action.
+        ttk.Label(local_tab, text="Select FASTA Directory (Step 1)").pack(anchor="w", padx=4, pady=1)
+        ttk.Button(local_tab, text="Browse FASTA Directory...", command=self._select_local_fasta_dir).pack(anchor="w", padx=22, pady=(2, 2))
+
+        self.local_dir_label = ttk.Label(local_tab, text="No FASTA directory selected", foreground="gray", wraplength=360, justify="left")
+        self.local_dir_label.pack(anchor="w", padx=22, pady=(2, 3))
+
+        for label, key in LOCAL_ACTIONS:
+            if key == "local_select":
+                continue
+            rb = ttk.Radiobutton(local_tab, text=label, value=key, variable=self.action_var, command=self._refresh_preview)
+            rb.pack(anchor="w", padx=4, pady=1)
+            self.local_action_buttons[key] = rb
+
+        self.action_tabs.bind("<<NotebookTabChanged>>", self._action_tab_changed)
 
         mode_box = ttk.LabelFrame(left, text="Execution mode")
         mode_box.pack(fill="x", **pad)
@@ -367,13 +405,163 @@ class App(tk.Tk):
         except Exception:
             pass
 
+    def _action_tab_changed(self, event=None):
+        # Avoid carrying an action selection from one workflow into the other.
+        self.action_var.set("")
+        self._refresh_preview()
+
+    def _local_fasta_files(self, directory):
+        # Accept either a directory or a FASTA file path.  The latter makes the
+        # local workflow robust if a file path is supplied by a platform/file
+        # chooser; the workflow still uses the containing directory.
+        if not directory:
+            return []
+        directory = os.path.abspath(os.path.expanduser(directory))
+        exts = (".fasta", ".fa", ".fna", ".fas")
+        if os.path.isfile(directory):
+            return [directory] if directory.lower().endswith(exts) else []
+        if not os.path.isdir(directory):
+            return []
+        files = []
+        try:
+            with os.scandir(directory) as entries:
+                for entry in entries:
+                    if entry.is_file() and entry.name.lower().endswith(exts):
+                        files.append(entry.path)
+        except OSError:
+            return []
+        return sorted(files)
+
+    def _ask_local_fasta_directory(self, initialdir):
+        """Choose a FASTA directory with single-click selection + Select.
+
+        Tk's native askdirectory dialog can require entering a highlighted folder
+        before OK returns that folder on some Linux desktops.  This small chooser
+        keeps the same workflow but makes a highlighted child directory selectable
+        directly with one click followed by Select.
+        """
+        initialdir = os.path.abspath(os.path.expanduser(initialdir or os.getcwd()))
+        if not os.path.isdir(initialdir):
+            initialdir = os.path.dirname(initialdir) if os.path.dirname(initialdir) else os.getcwd()
+
+        result = {"path": ""}
+        win = tk.Toplevel(self)
+        win.title("Select directory containing FASTA file(s)")
+        win.transient(self)
+        win.grab_set()
+        win.geometry("620x430")
+
+        current_var = tk.StringVar(value=initialdir)
+        ttk.Label(win, text="Current directory:").pack(anchor="w", padx=10, pady=(10, 2))
+        path_entry = ttk.Entry(win, textvariable=current_var, state="readonly")
+        path_entry.pack(fill="x", padx=10, pady=(0, 8))
+
+        list_frame = ttk.Frame(win)
+        list_frame.pack(fill="both", expand=True, padx=10)
+        dirs = tk.Listbox(list_frame, exportselection=False)
+        scroll = ttk.Scrollbar(list_frame, orient="vertical", command=dirs.yview)
+        dirs.configure(yscrollcommand=scroll.set)
+        dirs.pack(side="left", fill="both", expand=True)
+        scroll.pack(side="right", fill="y")
+
+        def refresh(path):
+            path = os.path.abspath(path)
+            if not os.path.isdir(path):
+                return
+            current_var.set(path)
+            dirs.delete(0, "end")
+            try:
+                names = sorted(
+                    name for name in os.listdir(path)
+                    if os.path.isdir(os.path.join(path, name)) and not name.startswith(".")
+                )
+            except OSError:
+                names = []
+            for name in names:
+                dirs.insert("end", name)
+
+        def selected_child():
+            sel = dirs.curselection()
+            if not sel:
+                return ""
+            return os.path.join(current_var.get(), dirs.get(sel[0]))
+
+        def go_into(event=None):
+            child = selected_child()
+            if child:
+                refresh(child)
+
+        def go_up():
+            current = current_var.get()
+            parent = os.path.dirname(current.rstrip(os.sep)) or os.sep
+            refresh(parent)
+
+        def choose():
+            # A highlighted child is the selection; otherwise select the directory
+            # currently being displayed.  No double-click is required.
+            result["path"] = selected_child() or current_var.get()
+            win.destroy()
+
+        dirs.bind("<Double-1>", go_into)
+        dirs.bind("<Return>", go_into)
+
+        buttons = ttk.Frame(win)
+        buttons.pack(fill="x", padx=10, pady=10)
+        ttk.Button(buttons, text="Up", command=go_up).pack(side="left")
+        ttk.Button(buttons, text="Cancel", command=win.destroy).pack(side="right")
+        ttk.Button(buttons, text="Select", command=choose).pack(side="right", padx=(0, 6))
+
+        refresh(initialdir)
+        win.protocol("WM_DELETE_WINDOW", win.destroy)
+        self.wait_window(win)
+        return result["path"]
+
+    def _select_local_fasta_dir(self):
+        current = self.local_fasta_dir.get().strip() or self.cwd_var.get().strip() or os.getcwd()
+        d = self._ask_local_fasta_directory(current)
+        if not d:
+            self.action_var.set("")
+            self._refresh_preview()
+            return
+        d = os.path.abspath(os.path.expanduser(d))
+        files_found = self._local_fasta_files(d)
+        self.local_fasta_dir.set(d)
+        self.local_fasta_count = len(files_found)
+        # The selected FASTA directory becomes the working directory for this local workflow
+        # so logs and blastnDB output remain with the user's input data.
+        self.cwd_var.set(d)
+        try:
+            os.chdir(d)
+        except Exception:
+            pass
+        if self.local_fasta_count == 0:
+            self.local_dir_label.config(text=f"Selected: {d}\nNo supported FASTA files detected", foreground="gray")
+            messagebox.showwarning("No FASTA files", "No .fasta, .fa, .fna or .fas files were found in the selected directory.")
+        elif self.local_fasta_count == 1:
+            self.local_dir_label.config(text=f"Selected: {d}\n1 FASTA file detected: {os.path.basename(files_found[0])}", foreground="gray")
+        else:
+            self.local_dir_label.config(text=f"Selected: {d}\n{self.local_fasta_count} FASTA files detected", foreground="gray")
+        self._update_local_controls_state()
+        self._refresh_preview()
+        self._auto_detect_job()
+
+    def _update_local_controls_state(self):
+        concat = getattr(self, "local_action_buttons", {}).get("local_concat")
+        if concat is not None:
+            # Keep Step 2 available before a FASTA directory is selected.
+            # Once scanned, concatenation is unnecessary only for a single FASTA.
+            if self.local_fasta_count == 1:
+                concat.state(["disabled"])
+            else:
+                concat.state(["!disabled"])
+
     def _selected_groups(self):
         return [name for name, v in self.group_vars.items() if v.get()]
 
     def _cmds_for_action(self):
         groups = self._selected_groups()
         action = self.action_var.get()
-        if action not in ("download", "concat", "build", "all"):
+        if action not in ("download", "concat", "build", "all", "local_select", "local_concat", "local_build", "local_all"):
             return []
 
         def download_cmd():
@@ -391,10 +579,23 @@ class App(tk.Tk):
             return [("concat", concat_cmd)]
         if action == "build":
             return [("build", build_cmd)]
+        if action == "local_select":
+            return []
+        local_dir = os.path.abspath(os.path.expanduser(self.local_fasta_dir.get().strip())) if self.local_fasta_dir.get().strip() else ""
+        if action == "local_concat":
+            return [("local_concat", ["blastdbbuilder", "--concat", "--input-dir", local_dir])]
+        if action == "local_build":
+            return [("local_build", ["blastdbbuilder", "--build", "--input-dir", local_dir])]
+        if action == "local_all":
+            cmds = []
+            if self.local_fasta_count > 1:
+                cmds.append(("local_concat", ["blastdbbuilder", "--concat", "--input-dir", local_dir]))
+            cmds.append(("local_build", ["blastdbbuilder", "--build", "--input-dir", local_dir]))
+            return cmds
         return [("download", download_cmd()), ("concat", concat_cmd), ("build", build_cmd)]
 
     def _update_group_controls_state(self):
-        enable = self.action_var.get() not in ("concat", "build")
+        enable = self.action_var.get() not in ("concat", "build", "local_select", "local_concat", "local_build", "local_all")
         for cb in getattr(self, "group_checkbuttons", []):
             if enable:
                 cb.state(["!disabled"])
@@ -404,9 +605,19 @@ class App(tk.Tk):
     def _refresh_preview(self):
         self._update_group_controls_state()
 
+        self._update_local_controls_state()
         action = self.action_var.get()
-        if action not in ("download", "concat", "build", "all"):
+        if action not in ("download", "concat", "build", "all", "local_select", "local_concat", "local_build", "local_all"):
             self.preview_var.set("Select an action.")
+            return
+        if action == "local_select":
+            if self.local_fasta_count:
+                self.preview_var.set(f"Selected {self.local_fasta_count} FASTA file(s). Choose the next step.")
+            else:
+                self.preview_var.set("Select a directory containing FASTA file(s).")
+            return
+        if action.startswith("local_") and (not self.local_fasta_dir.get().strip() or self.local_fasta_count == 0):
+            self.preview_var.set("Select a FASTA directory first (Step 1).")
             return
         if action in ("download", "all") and not self._selected_groups():
             self.preview_var.set("Select at least one genome group for Download.")
@@ -941,6 +1152,12 @@ class App(tk.Tk):
             return "Build completed successfully."
         if act == "all":
             return "Run all completed successfully."
+        if act == "local_concat":
+            return "FASTA concatenation completed successfully."
+        if act == "local_build":
+            return "Local FASTA database build completed successfully."
+        if act == "local_all":
+            return "Local FASTA workflow completed successfully."
         return "Job completed successfully."
 
     # ---------------- Natural completion detection from summary.log ----------------
@@ -996,9 +1213,11 @@ class App(tk.Tk):
             # Download / All: blastdbbuilder often prints "All genomes processed for ..."
             download_done = ("All genomes processed for" in text)
 
-            if action == "concat":
+            if action in ("concat", "local_concat"):
                 return concat_done
-            if action == "build":
+            if action in ("build", "local_build"):
+                return build_done
+            if action == "local_all":
                 return build_done
             if action == "download":
                 return download_done

@@ -16,466 +16,547 @@
   <a href="https://doi.org/10.5281/zenodo.18973405"><img src="https://img.shields.io/badge/DOI-10.5281%2Fzenodo.18973405-blue?style=flat-square&logo=Zenodo&logoColor=white" alt="DOI: 10.5281/zenodo.18973405" style="display: inline-block;">
 </p>
 
-
 ## **Content**
 
 <img src="https://raw.githubusercontent.com/asadprodhan/blastdbbuilder/main/blastdbbuilder_logo.png"
      width="190"
      align="right">
-     
+
 - [Introduction](#introduction)
 - [Features](#features)
 - [Running blastdbbuilder GUI on Windows (WSL)](#running-blastdbbuilder-gui-on-windows-wsl)
 - [Pre-requisite](#pre-requisite)
 - [Installation](#installation)
-- [Introduction of the Buttons and Their Meaning](#introduction-of-the-buttons-and-their-meaning)
+- [GUI Controls](#gui-controls)
 - [Access Windows Files from WSL](#access-windows-files-from-wsl)
-- [Build a BLAST Database on Your Laptop](#build-a-blast-database-on-your-laptop)
+- [Workflow 1. Reference Genomes](#workflow-1-reference-genomes)
+- [Workflow 2. Local FASTA Database](#workflow-2-local-fasta-database)
 - [Output Files](#output-files)
 - [FAQ](#faq)
+- [Entire Workflow Diagram](#entire-workflow-diagram)
+- [Summary](#summary)
 - [Citation](#citation)
 - [Support](#support)
 
 
 ## **Introduction**
 
-A BLASTn database provides the essential reference framework for comparing query sequences, forming the backbone of any sequence-based analysis. Accurate results—whether in diagnostics, biosecurity surveillance, microbial studies, evolutionary research, environmental surveys, or functional genomics—depend on a high-quality, well-curated database.
+A BLASTn database provides the essential reference framework for
+comparing query sequences, forming the backbone of any sequence-based
+analysis. Accurate results---whether in diagnostics, biosecurity
+surveillance, microbial studies, evolutionary research, environmental
+surveys, or functional genomics---depend on a high-quality, well-curated
+database.
 
-Public databases are comprehensive but rapidly expanding, often containing redundant, low-quality or irrelevant entries. This leads to slower searches and reduced search resolution.
+Public databases are comprehensive but rapidly expanding, often
+containing redundant, low-quality, or irrelevant entries. This leads to
+slower searches and reduced search resolution.
 
-In contrast, a custom database is like a well‑organised library where every book is precisely indexed—smaller in volume, faster to search, and more focused in results.
+In contrast, a custom database is like a well-organised library where
+every book is precisely indexed---smaller in volume, faster to search,
+and more focused in results.
 
-To simplify this process for end users, **blastdbbuilder GUI** provides a graphical interface to the proven `blastdbbuilder` backend, allowing fully reproducible database construction without requiring command‑line interaction.
+To simplify this process for Windows users, **blastdbbuilder GUI** can
+run through **Windows Subsystem for Linux (WSL)** while providing the
+same Linux-based blastdbbuilder backend.
+
+Version 1.2.0 supports both construction from NCBI reference genomes and
+direct construction from local FASTA collections.
 
 ---
 
+
 ## **Features**
 
-- Graphical selection of genome groups (Archaea, Bacteria, Fungi, Virus, Plants)
-- Graphical execution of genome download, FASTA concatenation and BLAST database building
-- Background execution (safe to close the GUI)
-- Reconnect to running jobs
-- Live log monitoring
-- Safe termination and emergency kill options
-- Directory‑based job management
+-   Graphical selection of genome groups (Archaea, Bacteria, Fungi,
+    Virus, Plants)
+
+-   Build customised BLASTn databases directly from local FASTA files
+    (`.fasta`, `.fa`, `.fna`, and `.fas`)
+
+-   Separate **Reference Genomes** and **Local FASTA Database** tabs
+
+-   Automatic handling of local FASTA collections --- use a single
+    FASTA directly or concatenate multiple FASTA files before database
+    construction
+
+-   Graphical execution of genome download, FASTA concatenation, and
+    BLASTn database construction
+
+-   Background execution
+
+-   Reconnect to running jobs
+
+-   Live log monitoring
+
+-   Safe termination and emergency kill options
+
+-   Directory-based job management
 
 ---
 
 
 ## **Running blastdbbuilder GUI on Windows (WSL)**
 
-`blastdbbuilder` can be run on Windows laptops using **Windows Subsystem for Linux (WSL)**.
-This allows you to use the same Linux-based workflow used on HPC systems or standalone Linux station.
+`blastdbbuilder` can be run on Windows using **Windows Subsystem for
+Linux (WSL)**.
+
+WSL provides a Linux environment on Windows, allowing the
+`blastdbbuilder` backend and GUI to use the same Linux-based workflow
+used on standalone Linux systems.
+
+Windows 11 with WSLg normally supports Linux graphical applications
+directly. The GUI can therefore be launched from WSL with:
+
+```bash
+blastdbbuilder-gui
+```
+
+---
 
 
 ## **Pre-requisite**
 
 **System requirements**
 
-Before installing `blastdbbuilder`, make sure the following are available on your system:
+Before installing `blastdbbuilder-gui`, make sure the following are
+available inside WSL:
 
 **Python ≥ 3.9**
 
 Check your Python version:
 
-```
+```bash
 python3 --version
 ```
 
-If Python is older than 3.9, install a newer Python using your system package manager.
+If required, install Python:
 
-Example (Ubuntu):
-
-```
+```bash
 sudo apt install python3
 ```
 
-This installs the latest Python version supported by your operating system.
-
-You do not need to remove the existing Python installation, because Ubuntu uses Python internally for many system tools.
-
-
 **tkinter**
 
-The GUI requires the `tkinter` library for the graphical interface.
+Check whether tkinter is available:
 
-To check if tkinter is available:
-
-
-```
+```bash
 python3 -m tkinter
 ```
 
-If a small window appears, tkinter is installed.
+If a small window appears, tkinter is installed and graphical Linux
+applications are working.
 
+If tkinter is missing:
 
-If tkinter is missing (Ubuntu):
-
-
-```
+```bash
 sudo apt install python3-tk
 ```
 
-
 **unzip**
-
-The program requires the unzip utility to extract downloaded genome archives.
-
-Check if `unzip` is installed:
-
-```
-unzip -v
-```
-
-If the command is not found, install it:
-
-```
-sudo apt install unzip
-```
-
-**wget**
 
 Check:
 
-```
-wget --version
+```bash
+unzip -v
 ```
 
 Install if missing:
 
-```
-sudo apt install wget
+```bash
+sudo apt install unzip
 ```
 
 **Container engine**
 
-One of the following container engines must be installed:
+One of the following supported container engines is required:
 
-- Apptainer
+-   Apptainer
+-   SingularityCE ≥ 3.x
 
-- SingularityCE ≥ 3.x
+The program automatically detects which supported container engine is
+available and uses it.
 
-Example installation on Ubuntu / Debian:
-
-```
-sudo apt install singularity-container
-```
-
-The program automatically detects which container engine is available on your system and uses it.
-
-On HPC systems (for example ARDC Nectar), Singularity or Apptainer is typically already installed.
-
+> Container-runtime installation and support under WSL can depend on
+> the WSL distribution and configuration. Confirm that your selected
+> Singularity/Apptainer installation works inside WSL before running
+> large database builds.
 
 ---
 
+
 ## **Installation**
 
-Install `blastdbbuilder-gui` directly from PyPI in your WSL:
+Install `blastdbbuilder-gui` from PyPI inside WSL:
 
-```
+```bash
 pip install blastdbbuilder-gui
 ```
 
-Verify installation by launching the GUI:
+The GUI package installs the required `blastdbbuilder` core package as a
+dependency.
 
+To upgrade:
+
+```bash
+pip install --upgrade blastdbbuilder-gui
 ```
+
+Verify the installation:
+
+```bash
 blastdbbuilder-gui
 ```
 
-If the GUI window opens, then:
+If the GUI opens, the installation has been successful.
 
-- the `installation` has been successful
+If a user-level pip installation is not on your PATH, add:
 
-- you can run `blastdbbuilder-gui` from any directory on your computer.
-
-
-Add blastdbbuilder to your PATH by running the following commands:
-
-```
+```bash
 echo 'export PATH=$HOME/.local/bin:$PATH' >> ~/.bashrc
 source ~/.bashrc
 ```
 
-This ensures commands installed by pip can be run from any directory.
+The GUI can also be launched from Windows with:
 
-
-(Optional) Create a Desktop launcher (Linux)
-
-WSL does not run a full Linux desktop environment, so the Desktop icon may not be visible in the same way as on a native Linux system.
-The GUI can always be launched using:
-
-```
-wsl.exe -e blastdbbuilder-gui
+```text
+wsl.exe bash -lc "blastdbbuilder-gui"
 ```
 
+---
 
-<br /> <p align="center"> <img src="https://raw.githubusercontent.com/asadprodhan/blastdbbuilder/main/gui/GUI_Screenshot.png" width="100%" > </p>
+<br />
+<p align="center">
+<img src="https://raw.githubusercontent.com/asadprodhan/blastdbbuilder/main/gui/GUI_Screenshot.png" width="100%">
+</p>
 
-<p><strong>Figure 1.</strong> blastdbbuilder graphical user interface (GUI) automating construction of custom BLASTn reference databases from NCBI RefSeq genomes.</p>
+<p><strong>Figure 1.</strong> blastdbbuilder graphical user interface (GUI) for building customised BLASTn databases from NCBI RefSeq genomes or local FASTA collections.</p>
 
 ---
 
 
-## **Introduction of the Buttons and their meaning**
+## **GUI Controls**
+
+The **Action** area provides two workflow tabs:
+
+-   **Reference Genomes**
+-   **Local FASTA Database**
+
+For the Reference Genomes workflow:
 
 **Browse...** Select the working directory.
 
-**Detect running job** Reconnect to a running job in the selected directory.
+**Detect running job** Reconnect to a running job associated with the
+selected working directory.
 
-**Run** Starts the selected action.
+**Run** Start the selected action.
 
-**Stop** Gracefully stops the running job.
+**Stop** Gracefully stop the running job.
 
-**Force Kill** Immediately terminates the job and all related processes.
+**Force Kill** Immediately terminate the job and related processes.
 
-**Clear log view** Clears the GUI log window only.
+**Clear log view** Clear the GUI log window only.
 
-**Exit** Closes the GUI window.
+**Exit** Close the GUI window.
 
----
-
-## **Build a BLAST database on your laptop**
-
-### Step 1 — Create a working directory
-
-> Choose the correct working directory (IMPORTANT). Avoid working inside /home/... because it often has limited storage. See the following section - Access Windows files from WSL
-
-
-```
-mkdir ~/blastdbbuilder_run
-cd ~/blastdbbuilder_run
-```
-
-### Step 2 — Launch the GUI
-
-```
-wsl.exe -e blastdbbuilder-gui
-```
-
-### Step 3 — Select database groups
-
-Choose the genomes you want to download:
-
-- Archaea
-- Bacteria
-- Fungi
-- Virus
-- Plants
-
-A good practice will be downloading one group at a time. Check the "Show failed genomes" tab and run "Try again (failed). Go back and forth between these two tabs until there is no genome in the "Show failed genomes" tab.
-
-Then move on the next group.
-
-
-### Step 4 — Run Concat
-
-Click the "Concat" button.
-
-
-### Step 5 — Run Build
-
-Click the "Build" button.
-
-
-
-The GUI will:
-
-1. Download reference genomes from NCBI
-2. Concatenate FASTA sequences
-3. Build a BLAST nucleotide database
+The **Local FASTA Database** tab provides its own FASTA-directory
+selection and workflow controls described below.
 
 ---
 
-## **Output files**
 
-After completion you will see:
+## **Access Windows Files from WSL**
 
-```
-blastnDB/
-metadata/
-summary.log
-```
+Windows drives are normally mounted under `/mnt` inside WSL.
 
-Example BLAST database files:
+For example, the Windows `C:` drive is available at:
 
-```
-blastnDB/nt.nsq
-blastnDB/nt.nin
-blastnDB/nt.nhr
+```text
+/mnt/c
 ```
 
-These can be used with:
+A Windows Downloads directory will typically be available at:
 
-```
-blastn
-megablast
-local BLAST searches
+```text
+/mnt/c/Users/YourWindowsUserName/Downloads
 ```
 
----
+From WSL, you can navigate there with:
 
-## **Access Windows files from WSL**
-
-**How to Access Windows Files from WSL**
-
-- Open your WSL
-- Run the following command
-
-```
-pwd
+```bash
+cd /mnt/c/Users/YourWindowsUserName/Downloads
 ```
 
-> You will see the following path
+Create a working directory if required:
 
-```
-/home/WSL_User_Name
-```
-
-- Now, navigate to your Laptop's `/mnt` drive by running the following commands in your WSL terminal
-
-```
-cd ../../
-ls
-cd /mnt
-```
-
-- Navigate to your Laptop's `Downloads` folder by running the following commands
-
-```
-cd /c
-ls
-cd /Users
-ls
-cd /YourLaptopUserName
-ls
-cd /Downloads
-pwd
-```
-
-- Now, within your Laptop's `Downloads` folder, create a new folder `db` and run blastdbbuilder-gui from the db folder
-
-```
-mkdir db
+```bash
+mkdir -p db
 cd db
+```
+
+Then launch the GUI:
+
+```bash
 blastdbbuilder-gui
 ```
- 
-- Leave the GUI running and you can also manually go to your Laptop's Download/db folder and see the output directories. 
 
-> When using the GUI **Browse** button, navigate to `/mnt` to access your Windows files.
+When using the GUI directory chooser, navigate to `/mnt/c` to access
+files stored on the Windows `C:` drive.
+
+> For large databases, choose a location with sufficient free disk
+> space.
+
+---
+
+
+## **Workflow 1. Reference Genomes**
+
+Use the **Reference Genomes** tab when you want blastdbbuilder to
+download selected NCBI genome collections and construct the database.
+
+### **Step 1. Launch the GUI**
+
+From WSL:
+
+```bash
+blastdbbuilder-gui
+```
+
+### **Step 2. Select the Working Directory**
+
+Click **Browse...** and select the required working directory.
+
+For a directory stored on Windows, navigate through `/mnt/c`.
+
+### **Step 3. Select Genome Groups**
+
+Choose one or more groups:
+
+-   Archaea
+-   Bacteria
+-   Fungi
+-   Virus
+-   Plants
+
+For large downloads, you may choose to process one genome group at a
+time.
+
+### **Step 4. Select an Action**
+
+Available actions are:
+
+-   Download only
+-   Concat only
+-   Build only
+-   Run all
+
+**Run all** performs the complete workflow:
+
+```text
+Download genomes
+      ↓
+Concatenate FASTA files
+      ↓
+Build BLASTn database
+```
+
+Enable **Run in background** when background execution is required, then
+click **Run**.
+
+---
+
+
+## **Workflow 2. Local FASTA Database**
+
+Use the **Local FASTA Database** tab to build a customised BLASTn
+database directly from FASTA files already stored on your Windows or
+WSL filesystem.
+
+Supported extensions are:
+
+-   `.fasta`
+-   `.fa`
+-   `.fna`
+-   `.fas`
+
+### **Step 1. Browse FASTA Directory**
+
+Click **Browse FASTA Directory**.
+
+To use FASTA files stored on Windows, navigate to a directory under:
+
+```text
+/mnt/c/Users/YourWindowsUserName/
+```
+
+Select the directory containing your FASTA files. The GUI displays the
+selected path and detected FASTA file information.
+
+### **Step 2. Concat only**
+
+If multiple supported FASTA files are detected, **Concat only** can be
+used to concatenate them before database construction.
+
+If exactly one FASTA file is detected, concatenation is unnecessary and
+**Concat only** is disabled.
+
+The original FASTA files are preserved.
+
+### **Step 3. Build only**
+
+Click **Build only** to construct the BLASTn database from the selected
+FASTA input.
+
+The resulting database is written using the `nt` prefix:
+
+```text
+blastnDB/nt.*
+```
+
+### **Run all**
+
+Click **Run all** to execute the complete local FASTA workflow.
+
+For multiple FASTA files:
+
+```text
+Select FASTA directory
+        ↓
+Concatenate FASTA files
+        ↓
+Build BLASTn database
+```
+
+For a single FASTA file, the concatenation step is skipped and the file
+is used directly for database construction.
+
+---
+
+
+## **Output Files**
+
+After successful database construction, the final BLASTn database is
+available under:
+
+```text
+blastnDB/nt.*
+```
+
+The exact database component files can vary with the BLAST+ database
+format/version.
+
+The database can be addressed with the prefix:
+
+```text
+blastnDB/nt
+```
+
+For example:
+
+```bash
+blastn -query query.fasta -db blastnDB/nt
+```
 
 ---
 
 
 ## **FAQ**
 
+### **1. How do I check WSL resources?**
 
-## **1. How to check WSL resources (RAM, CPU, disk)**
+Check RAM:
 
-### Check RAM
-
-```
+```bash
 free -h
 ```
 
-### Check CPU cores
+Check CPU cores:
 
-```
+```bash
 nproc
 ```
 
-### Detailed CPU information
+Check detailed CPU information:
 
-```
+```bash
 lscpu
 ```
 
-### Check disk space
+Check disk space:
 
-```
+```bash
 df -h
 ```
 
-### Check disk usage in the working directory
+Check disk usage in the current directory:
 
-```
+```bash
 du -sh *
 ```
 
----
+### **2. Can blastdbbuilder use my laptop's resources?**
 
-## **2. Can the laptop’s resources be used?**
+Yes. WSL uses resources provided by the Windows host.
 
-Yes. WSL can use your laptop’s CPU, RAM, and disk resources.
+The exact amount of CPU, RAM, disk, and swap available depends on the
+computer and WSL configuration.
 
-Typical laptop example:
+Check the resources actually available to your WSL environment using
+the commands above rather than assuming a fixed percentage of the
+laptop's hardware.
 
-| Laptop Hardware | Available to WSL |
-|-----------------|------------------|
-| 16 GB RAM | ~12–14 GB usable |
-| 8 CPU cores | All cores usable |
-| 1 TB disk | Full disk accessible |
+**Optional: configure WSL 2 resources**
 
-This means `blastdbbuilder` can build BLAST databases locally on your laptop.
+A Windows `.wslconfig` file can be used to configure resource limits.
+For example:
 
-### Optional: limit WSL resources
-
-Create a configuration file:
-
-```
-C:\Users\USERNAME\.wslconfig
-```
-
-Example:
-
-```
+```text
 [wsl2]
 memory=12GB
 processors=6
 swap=4GB
 ```
 
-Restart WSL:
+After changing the configuration, shut down WSL from Windows:
 
-```
+```text
 wsl --shutdown
 ```
 
----
+Then restart your WSL distribution.
 
-## **3. Can the blastdbbuilder icon stay on the laptop screen?**
+### **3. Can I create a Windows Desktop shortcut?**
 
-Yes. The best way is to create a **Windows desktop shortcut**.
+Yes. Create a Windows shortcut whose target runs:
 
-Create a Windows shortcut that runs:
-
-```
-wsl.exe -e blastdbbuilder-gui
-```
-
-Steps:
-
-1. Right‑click on the Windows Desktop
-2. Select **New → Shortcut**
-3. Enter:
-
-```
+```text
 wsl.exe bash -lc "blastdbbuilder-gui"
 ```
-4. Name the shortcut:
 
-```
+Name the shortcut, for example:
+
+```text
 blastdbbuilder
 ```
 
-Now double‑clicking the icon launches the GUI.
+Double-clicking the shortcut will start the GUI through WSL, provided
+WSL and the GUI environment are configured correctly.
+
+### **4. Can I build directly from FASTA files stored on Windows?**
+
+Yes. In the **Local FASTA Database** tab, browse to the Windows
+directory through `/mnt/c/Users/...` and select the directory containing
+your FASTA files.
+
+The GUI can then use the selected FASTA collection to build the BLASTn
+database.
 
 ---
 
+
 ## **Entire Workflow Diagram**
 
-
-```
+```text
 +-------------------+
 |   Windows Laptop  |
 +-------------------+
@@ -493,40 +574,63 @@ Now double‑clicking the icon launches the GUI.
           |
           v
 +----------------------------+
-|  Download genomes (NCBI)   |
+|      Select workflow       |
 +----------------------------+
-          |
-          v
+      |                 |
+      v                 v
++-------------+   +-------------------+
+| NCBI        |   | Local FASTA       |
+| genomes     |   | collection        |
++-------------+   +-------------------+
+      |                 |
+      v                 v
++-------------+   +-------------------+
+| Download    |   | Use one FASTA or  |
+| genomes     |   | concat multiple   |
++-------------+   +-------------------+
+      |                 |
+      v                 |
++-------------+         |
+| Concatenate |         |
+| FASTA       |         |
++-------------+         |
+      |                 |
+      +--------+--------+
+               |
+               v
 +----------------------------+
-|  Concatenate FASTA files   |
+|   Build BLASTn database    |
 +----------------------------+
-          |
-          v
+               |
+               v
 +----------------------------+
-|   Build BLAST Database     |
-+----------------------------+
-          |
-          v
-+----------------------------+
-|        blastnDB/           |
-|   nt.nsq nt.nin nt.nhr     |
+|       blastnDB/nt.*        |
 +----------------------------+
 ```
 
 ---
 
+
 ## **Summary**
 
-Using WSL, `blastdbbuilder` can run on a Windows laptop with the same workflow used on Linux servers and HPC systems. You can now build BLAST reference databases locally on your laptop.
+Using WSL, `blastdbbuilder` can provide Windows users with the same
+Linux-based database-building workflow used by the core toolkit.
+
+Version 1.2.0 provides two GUI workflows: construction from NCBI
+reference genomes and construction directly from local FASTA files.
+
+---
 
 
 ## **Citation**
 
 If you use this software in your work, please cite:
 
-Prodhan, M. A. (2025). blastdbbuilder: Building a Customised BLASTn Database. https://doi.org/10.5281/zenodo.18973405
+**Prodhan, M. A.** (2025). blastdbbuilder: Building a Customised BLASTn
+Database. https://doi.org/10.5281/zenodo.18973405
 
 ---
+
 
 ## **Support**
 

@@ -1,4 +1,3 @@
-
 <h1 align="center">blastdbbuilder GUI: Graphical Interface for Building Customised BLASTn Databases</h1>
 
 <h3 align="center">M. Asaduzzaman Prodhan<sup>*</sup> </h3>
@@ -13,9 +12,8 @@
 <p align="center">
   <a href="https://github.com/asadprodhan/blastdbbuilder/blob/main/LICENSE"><img src="https://img.shields.io/badge/License-GPL%203.0-yellow.svg" alt="License GPL 3.0"></a>
   <a href="https://orcid.org/0000-0002-1320-3486"><img src="https://img.shields.io/badge/ORCID-green?style=flat-square&logo=ORCID&logoColor=white" alt="ORCID"></a>
-  <a href="https://doi.org/10.5281/zenodo.18973405"><img src="https://img.shields.io/badge/DOI-10.5281%2Fzenodo.18973405-blue?style=flat-square&logo=Zenodo&logoColor=white" alt="DOI: 10.5281/zenodo.18973405" style="display: inline-block;">
+  <a href="https://doi.org/10.5281/zenodo.18973405"><img src="https://img.shields.io/badge/DOI-10.5281%2Fzenodo.18973405-blue?style=flat-square&logo=Zenodo&logoColor=white" alt="DOI: 10.5281/zenodo.18973405" style="display: inline-block;"></a>
 </p>
-
 
 
 ## **Content**
@@ -23,14 +21,16 @@
 <img src="https://raw.githubusercontent.com/asadprodhan/blastdbbuilder/main/blastdbbuilder_logo.png"
      width="190"
      align="right">
-     
+
 - [Introduction](#introduction)
 - [blastdbbuilder GUI](#blastdbbuilder-gui)
 - [Features](#features)
 - [Pre-requisite](#pre-requisite)
 - [Installation](#installation)
-- [Introduction of the Buttons and their meaning](#introduction-of-the-buttons-and-their-meaning)
-- [How to use the GUI locally](#how-to-use-the-gui-locally)
+- [Graphical User Interface](#graphical-user-interface)
+- [GUI Controls](#gui-controls)
+- [Workflow 1. Reference Genomes](#workflow-1-reference-genomes)
+- [Workflow 2. Local FASTA Database](#workflow-2-local-fasta-database)
 - [How to use the GUI remotely](#how-to-use-the-gui-remotely)
 - [Checking progress later](#checking-progress-later)
 - [Stopping a job](#stopping-a-job)
@@ -38,109 +38,138 @@
 - [Support](#support)
 
 
-
 ## **Introduction**
 
-A BLASTn database provides the essential reference framework for comparing query sequences, forming the backbone of any sequence-based analysis. Accurate results—whether in diagnostics, biosecurity surveillance, microbial studies, evolutionary research, environmental surveys, or functional genomics—depend on a high-quality, well-curated database.
+A BLASTn database provides the essential reference framework for
+comparing query sequences, forming the backbone of any sequence-based
+analysis. Accurate results---whether in diagnostics, biosecurity
+surveillance, microbial studies, evolutionary research, environmental
+surveys, or functional genomics---depend on a high-quality, well-curated
+database.
 
-Public databases are comprehensive but rapidly expanding, often containing redundant, low-quality or irrelevant entries. This leads to slower searches and reduced search resolution.
+Public databases are comprehensive but rapidly expanding, often
+containing redundant, low-quality, or irrelevant entries. This leads to
+slower searches and reduced search resolution.
 
-In contrast, a custom database is like a well‑organised library where every book is precisely indexed—smaller in volume, faster to search, and more focused in results.
+In contrast, a custom database is like a well-organised library where
+every book is precisely indexed---smaller in volume, faster to search,
+and more focused in results.
 
-To simplify this process for end users, **blastdbbuilder GUI** provides a graphical interface to the proven `blastdbbuilder` backend, allowing fully reproducible database construction without requiring command‑line interaction.
+To simplify this process for end users, **blastdbbuilder GUI** provides
+a graphical interface to the `blastdbbuilder` backend, allowing
+reproducible database construction without requiring command-line
+interaction.
+
+Version 1.2.0 introduces a second database-building workflow, allowing
+users to build a customised BLASTn database directly from their own
+local FASTA files.
 
 ---
+
 
 ## **blastdbbuilder GUI**
 
-`blastdbbuilder GUI` is a Linux graphical front‑end for the `blastdbbuilder` command‑line toolkit.
+`blastdbbuilder GUI` is a Linux graphical front-end for the
+`blastdbbuilder` command-line toolkit.
 
-It enables users to:
+The GUI provides two database-building workflows:
 
-- download public reference genomes
-- concatenate genome FASTA files
-- build customised BLASTn databases
+-   **Reference Genomes** --- download selected NCBI RefSeq genome
+    collections, concatenate FASTA files, and build a customised BLASTn
+    database
 
-using an interactive graphical interface.
+-   **Local FASTA Database** --- build a customised BLASTn database
+    directly from local `.fasta`, `.fa`, `.fna`, or `.fas` files
 
-The GUI internally executes the same backend commands as the original `blastdbbuilder` toolkit.
+The GUI internally executes the same reproducible backend as the
+`blastdbbuilder` command-line toolkit.
 
 ---
+
 
 ## **Features**
 
-- Graphical selection of genome groups (Archaea, Bacteria, Fungi, Virus, Plants)
-- Graphical execution of genome download, FASTA concatenation and BLAST database building
-- Background execution (safe to close the GUI)
-- Reconnect to running jobs
-- Live log monitoring
-- Safe termination and emergency kill options
-- Directory‑based job management
+-   Graphical selection of genome groups (Archaea, Bacteria, Fungi,
+    Virus, Plants)
+
+-   Build customised BLASTn databases directly from local FASTA files
+    (`.fasta`, `.fa`, `.fna`, and `.fas`)
+
+-   Automatic handling of local FASTA collections --- use a single
+    FASTA file directly or concatenate multiple FASTA files before
+    database construction
+
+-   Separate **Reference Genomes** and **Local FASTA Database** tabs
+
+-   Graphical execution of download, concatenation, and BLASTn database
+    construction
+
+-   Background execution
+
+-   Reconnect to running jobs
+
+-   Live log monitoring
+
+-   Safe termination and emergency kill options
+
+-   Directory-based job management
 
 ---
+
 
 ## **Pre-requisite**
 
 **System requirements**
 
-Before installing `blastdbbuilder`, make sure the following are available on your system:
+Before installing `blastdbbuilder-gui`, make sure the following are
+available on your system:
 
 **Python ≥ 3.9**
 
 Check your Python version:
 
-```
+```bash
 python3 --version
 ```
 
-If Python is older than 3.9, install a newer Python using your system package manager.
+If Python is older than 3.9, install a newer Python using your system
+package manager.
 
 Example (Ubuntu):
 
-```
+```bash
 sudo apt install python3
 ```
 
-This installs the latest Python version supported by your operating system.
-
-You do not need to remove the existing Python installation, because Ubuntu uses Python internally for many system tools.
-
-
 **tkinter**
 
-The GUI requires the `tkinter` library for the graphical interface.
+The GUI requires `tkinter`.
 
-To check if tkinter is available:
+Check if it is available:
 
-
-```
+```bash
 python3 -m tkinter
 ```
 
 If a small window appears, tkinter is installed.
 
+If tkinter is missing on Ubuntu:
 
-If tkinter is missing (Ubuntu):
-
-
-```
+```bash
 sudo apt install python3-tk
 ```
 
-
 **unzip**
-
-The program requires the unzip utility to extract downloaded genome archives.
 
 Check if `unzip` is installed:
 
-```
+```bash
 unzip -v
 ```
 
-If the command is not found, install it:
+If missing:
 
-```
+```bash
 sudo apt install unzip
 ```
 
@@ -148,20 +177,20 @@ sudo apt install unzip
 
 One of the following container engines must be installed:
 
-- Apptainer
-
-- SingularityCE ≥ 3.x
+-   Apptainer
+-   SingularityCE ≥ 3.x
 
 Example installation on Ubuntu / Debian:
 
-```
+```bash
 sudo apt install singularity-container
 ```
 
-The program automatically detects which container engine is available on your system and uses it.
+The program automatically detects which supported container engine is
+available and uses it.
 
-On HPC systems (for example ARDC Nectar), Singularity or Apptainer is typically already installed.
-
+On many HPC systems, Singularity or Apptainer is typically already
+installed.
 
 ---
 
@@ -170,152 +199,255 @@ On HPC systems (for example ARDC Nectar), Singularity or Apptainer is typically 
 
 Install `blastdbbuilder-gui` directly from PyPI:
 
-```
+```bash
 pip install blastdbbuilder-gui
 ```
 
-Verify installation
+The GUI package installs the required `blastdbbuilder` core package as a
+dependency.
 
-Check if the installation was successful:
+To upgrade to the latest release:
 
+```bash
+pip install --upgrade blastdbbuilder-gui
 ```
+
+Verify the installation:
+
+```bash
 blastdbbuilder-gui
 ```
 
-If the GUI window opens, then:
+If the GUI window opens, the installation has been successful.
 
-- the `installation` has been successful
-
-- you can run `blastdbbuilder-gui` from any directory on your computer.
-
-
-(Optional) Create a Desktop launcher (Linux)
+**Optional: Create a Desktop launcher (Linux)**
 
 Run once:
 
-
-```
+```bash
 blastdbbuilder-gui-desktop
 ```
 
-This creates a Desktop launcher (Linux). You can then double-click the Desktop icon to start the GUI.
+You can then use the Desktop launcher to start the GUI.
+
+---
+
+
+## **Graphical User Interface**
 
 <br />
+<p align="center">
+<img src="https://raw.githubusercontent.com/asadprodhan/blastdbbuilder/main/gui/GUI_Screenshot.png" width="100%">
+</p>
+
+<p><strong>Figure 1.</strong> blastdbbuilder graphical user interface (GUI) for building customised BLASTn databases from NCBI RefSeq genomes or local FASTA collections.</p>
+
+The **Action** area contains two tabs:
+
+-   **Reference Genomes**
+-   **Local FASTA Database**
+
+Select the workflow appropriate for the database you want to build.
 
 ---
 
-<br /> <p align="center"> <img src="https://raw.githubusercontent.com/asadprodhan/blastdbbuilder/main/gui/GUI_Screenshot.png" width="100%" > </p>
 
-<p><strong>Figure 1.</strong> blastdbbuilder graphical user interface (GUI) automating construction of custom BLASTn reference databases from NCBI RefSeq genomes.</p>
+## **GUI Controls**
+
+**Browse...** Select the working directory for the Reference Genomes
+workflow.
+
+**Detect running job** Reconnect to a running job associated with the
+selected working directory.
+
+**Run** Start the selected action.
+
+**Stop** Gracefully stop the running job.
+
+**Force Kill** Immediately terminate the job and related processes.
+
+**Clear log view** Clear the GUI log window only.
+
+**Exit** Close the GUI window.
+
+The **Local FASTA Database** tab additionally provides controls for
+selecting the FASTA directory and running the local FASTA workflow.
 
 ---
 
-## **Introduction of the Buttons and their meaning**
 
-**Browse...** Select the working directory.
+## **Workflow 1. Reference Genomes**
 
-**Detect running job** Reconnect to a running job in the selected directory.
+Use the **Reference Genomes** tab when you want `blastdbbuilder` to
+download genome collections and construct the database.
 
-**Run** Starts the selected action.
+1. Launch the GUI:
 
-**Stop** Gracefully stops the running job.
-
-**Force Kill** Immediately terminates the job and all related processes.
-
-**Clear log view** Clears the GUI log window only.
-
-**Exit** Closes the GUI window.
-
----
-
-## **How to use the GUI locally**
-
-1. Launch the program using the desktop icon or:
-
-```
+```bash
 blastdbbuilder-gui
 ```
 
-2. Select the working directory through navigating into the directory and DOUBLE-CLICK the folder to select it, and then pressing OK
+2. Click **Browse...** and select the working directory.
 
-> Choose the correct working directory (IMPORTANT). Avoid working inside /home/... because it often has limited storage
+> Choose a working directory with sufficient storage for the downloaded
+> genomes and database files.
 
-3. Choose genome groups:
+3. Choose one or more genome groups:
 
-- Archaea
-- Bacteria
-- Fungi
-- Virus
-- Plants
+-   Archaea
+-   Bacteria
+-   Fungi
+-   Virus
+-   Plants
 
-4. Select action:
+4. Select an action:
 
-- Download only
-- Concat only
-- Build only
-- Run all
+-   Download only
+-   Concat only
+-   Build only
+-   Run all
 
-5. Enable **Run in background**.
+5. Enable **Run in background** when background execution is required.
 
 6. Click **Run**.
 
-Jobs continue running even if the GUI is closed.
+**Run all** executes the complete Reference Genomes workflow:
+download → concatenate → build.
+
+Jobs started in background mode can continue running after the GUI is
+closed.
 
 ---
+
+
+## **Workflow 2. Local FASTA Database**
+
+Use the **Local FASTA Database** tab to build a customised BLASTn
+database from your own FASTA collection.
+
+Supported file extensions are:
+
+-   `.fasta`
+-   `.fa`
+-   `.fna`
+-   `.fas`
+
+### **Step 1. Browse FASTA Directory**
+
+Click **Browse FASTA Directory** and navigate to the directory
+containing the FASTA files.
+
+Select the required directory. The selected path and detected FASTA
+file information are displayed in the GUI.
+
+The directory chooser supports selecting the required folder and then
+confirming it with **Select**.
+
+### **Step 2. Concat only**
+
+If multiple supported FASTA files are detected, **Concat only** can be
+used to concatenate them before database construction.
+
+If exactly one supported FASTA file is detected, concatenation is not
+required and **Concat only** is disabled.
+
+The original FASTA files are preserved.
+
+### **Step 3. Build only**
+
+Click **Build only** to construct the BLASTn database from the selected
+local FASTA input.
+
+The resulting database is written using the `nt` prefix under:
+
+```text
+blastnDB/nt.*
+```
+
+### **Run all**
+
+Click **Run all** to execute the complete local FASTA workflow:
+
+```text
+1. Browse FASTA Directory
+        ↓
+2. Concatenate multiple FASTA files when required
+        ↓
+3. Build BLASTn database
+```
+
+For a directory containing a single FASTA file, the concatenation step
+is skipped automatically and the file is used directly for database
+construction.
+
+---
+
 
 ## **How to use the GUI remotely**
 
-The GUI is fully supported on remote Linux and HPC systems using X11 forwarding.
+The GUI can be used on remote Linux and HPC systems where graphical X11
+forwarding is available.
 
-1. From your local computer, connect to the remote machine:
+From your local computer, connect to the remote machine using X11
+forwarding:
 
-```
+```bash
 ssh -X user@remote_server
 ```
 
-2. Then open a terminal and run the following command
+Then run:
 
-```
+```bash
 blastdbbuilder-gui
 ```
 
-This will open the blastdbbuilder GUI on your local screen. Then, run the job as you would do it locally. See **How to Use the GUI Locally**
+The GUI will open through the X11 session. You can then use either the
+**Reference Genomes** or **Local FASTA Database** workflow as described
+above.
 
 ---
+
 
 ## **Checking progress later**
 
-1. Launch the GUI again by double-clicking on the Desktop icon (if you use it locally) or by running `blastdbbuilder-gui` in a terminal 
-2. Click **Browse…**
-3. Navigate to the **same working directory**
-4. **DOUBLE-CLICK** that directory to select it
-5. Click **Detect running job**
+For a background Reference Genomes job:
 
-The GUI will reconnect and continue displaying the live log.
+1. Launch `blastdbbuilder-gui` again.
+2. Click **Browse...**.
+3. Select the same working directory used to start the job.
+4. Click **Detect running job**.
 
-**This directory selection step is essential. The GUI cannot detect jobs without using the same directory.**
+The GUI will reconnect to the job and continue displaying its live log.
+
+**The same working directory is required for job detection because job
+state is associated with that directory.**
 
 ---
+
 
 ## **Stopping a job**
 
-To stop a running job:
+To stop a running background job:
 
-1. Select the same working directory
-2. Click **Detect running job**
-3. Click **Stop**
+1. Select the same working directory.
+2. Click **Detect running job**.
+3. Click **Stop**.
 
-If the job does not stop (for example, a stalled container), click **Force Kill**.
+If the job does not stop normally, for example because of a stalled
+container process, click **Force Kill**.
 
 ---
+
 
 ## **Citation**
 
 If you use this software in your work, please cite:
 
-Prodhan, M. A. (2025). blastdbbuilder: Building a Customised BLASTn Database. https://doi.org/10.5281/zenodo.18973405
+**Prodhan, M. A.** (2025). blastdbbuilder: Building a Customised BLASTn
+Database. https://doi.org/10.5281/zenodo.18973405
 
 ---
+
 
 ## **Support**
 

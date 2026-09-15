@@ -34,20 +34,19 @@
      width="190"
      align="right">
 
-  
 - [Introduction](#introduction)
 - [blastdbbuilder](#blastdbbuilder)
 - [Features](#features)
+- [What's New in v1.2.0](#whats-new-in-v120)
 - [User Manuals](#user-manuals)
   - [Pre-requisite](#pre-requisite)
   - [Command Line Interface (CLI)](#command-line-interface-cli)
   - [Graphical User Interface (GUI)](#graphical-user-interface-gui)
   - [Windows (WSL) Usage](#windows-wsl-usage)
   - [High Performance Computing (HPC)](#high-performance-computing-hpc)
-  - [Singularity/Apptainer container](#singularityapptainer-container)
+  - [Singularity/Apptainer Container](#singularityapptainer-container)
 - [Citation](#citation)
 - [Support](#support)
-
 
 ## **Introduction**
 
@@ -318,8 +317,6 @@ Database. https://doi.org/10.5281/zenodo.18973405
 
 For issues, bug reports, or feature requests, please contact: **Asad
 Prodhan. E-mail: asad.prodhan@dpird.wa.gov.au, prodhan82@gmail.com**
-
-## v1.2.0 additional feature: build from your own FASTA folder
 
 The existing download, concatenate, build, and Run all workflows are retained. Version 1.2.0 additionally allows a BLASTn database to be built directly from a directory containing one or more `.fasta`, `.fa`, `.fna`, or `.fas` files. Multiple FASTA files are concatenated automatically for the build, original FASTA files are preserved, and output is written as `blastnDB/nt.*`.
 

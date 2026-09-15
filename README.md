@@ -117,6 +117,13 @@ the time of download**.
 -   Automated download of all genomes for virus and the reference
     genomes for Archaea, Bacteria, Fungi, and Plants
 
+-   Build custom BLASTn databases directly from local FASTA files
+    (`.fasta`, `.fa`, `.fna`, and `.fas`)
+
+-   Automatic handling of local FASTA collections --- use a single
+    FASTA directly or concatenate multiple FASTA files before database
+    construction
+
 -   Resume-able BLASTn database creation --- continue from interrupted
     runs
 
@@ -130,6 +137,24 @@ the time of download**.
     files
 
 ---
+
+## **What's New in v1.2.0**
+
+Version 1.2.0 introduces support for building customised BLASTn
+databases directly from local FASTA collections.
+
+-   Build from `.fasta`, `.fa`, `.fna`, and `.fas` files
+
+-   Use a single FASTA file directly or concatenate multiple FASTA files
+
+-   New **Local FASTA Database** workflow in the GUI
+
+-   New CLI support for local FASTA database construction
+
+👉 [**View v1.2.0 Release Notes**](https://github.com/asadprodhan/blastdbbuilder/releases/tag/v1.2.0)
+
+---
+
 
 ## **User Manuals**
 
@@ -195,8 +220,14 @@ is typically already installed.
 
 ## **Command Line Interface (CLI)**
 
-The CLI provides the full automated workflow for downloading genomes,
-concatenating FASTA files, and building BLAST databases.
+The CLI provides the full automated workflow for downloading reference
+genomes, concatenating FASTA files, and building customised BLASTn
+databases.
+
+It also supports building BLASTn databases directly from local FASTA
+collections (`.fasta`, `.fa`, `.fna`, and `.fas`). A single FASTA file
+can be used directly, while multiple FASTA files can be concatenated
+before database construction.
 
 👉 [**CLI User Guide**](https://github.com/asadprodhan/blastdbbuilder/blob/main/docs/CLI_README.md)
 
@@ -206,6 +237,18 @@ concatenating FASTA files, and building BLAST databases.
 
 The GUI provides a guided desktop interface for building customised
 BLASTn databases without requiring command-line experience.
+
+Two database-building workflows are available:
+
+-   **Reference Genomes** --- download selected NCBI RefSeq genome
+    collections and build a customised BLASTn database
+
+-   **Local FASTA Database** --- build a BLASTn database directly from
+    local `.fasta`, `.fa`, `.fna`, or `.fas` files
+
+For local FASTA collections, a single FASTA file can be used directly,
+while multiple FASTA files can be concatenated before database
+construction.
 
 It wraps the same reproducible backend as the CLI while offering an
 interactive environment suitable for diagnostics laboratories, teaching
